@@ -12,7 +12,28 @@ component {
 
 
 	public any function each(obj, iterator, context) {
-	    
+		if (structKeyExists(arguments, 'obj')) {
+			var list = arguments.obj;
+		}
+		else if (structKeyExists(this, 'obj')) {
+			var list = this.obj;
+		}
+		else {
+			return;
+		}
+		if (isArray(list)) {
+			var index = 1;
+			for (element in list) {
+				iterator(element, index, list);
+				index++;
+			}
+		}
+		else {	
+			for (key in list) {
+				var val = list[key];
+				iterator(val, key, list);
+			}
+		}
  	}
 
 	public any function forEach(obj, iterator, context) {
