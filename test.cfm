@@ -49,4 +49,14 @@
 		return memo + num;
 	}, memo = 0);
 	writeDump(reduceArr);	
+
+	even = _.find([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });
+	writeDump(even);
+	writeOutput("<br />");
+
+	any = _.any(obj = [0, 'yes', false], iterator = function(val) {
+		return val;
+	});
+	writeDump(any);
+	writeOutput("<br />");	
 </cfscript>

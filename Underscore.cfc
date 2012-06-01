@@ -119,11 +119,45 @@ component {
  	}
  	
  	
- 	public any function detect(obj, iterator, context) { 
- 		
+ 	public any function detect(obj, iterator) { 
+ 		var result = 0;
+
+		if (structKeyExists(arguments, 'obj')) {
+			var list = arguments.obj;
+		}
+		else if (structKeyExists(this, 'obj')) {
+			var list = this.obj;
+		}
+		else {
+			return result;
+		}
+
+		if (isArray(list)) {
+			var index = 1;
+			for (val in list) {
+				if (iterator(val, index, list)) {
+					result = val;
+					break;
+				}
+				index++;
+			}
+		}
+		else {
+			var index  = 1;
+			for (key in list) {
+				var val = list[key];
+				if (iterator(val, index, list)) {
+					result = val;
+					break;
+				}
+				index++;
+			}
+		}
+
+		return result;
  	}
  	
-  	public any function find(obj, iterator, context) { 
+  	public any function find(obj, iterator) { 
  		return this.detect(argumentCollection = arguments);
  	}
 
@@ -152,7 +186,41 @@ component {
 	
 		
 	public any function any(obj, iterator, context) {
-		
+		var result = false;
+
+		if (structKeyExists(arguments, 'obj')) {
+			var list = arguments.obj;
+		}
+		else if (structKeyExists(this, 'obj')) {
+			var list = this.obj;
+		}
+		else {
+			return result;
+		}
+
+		if (isArray(list)) {
+			var index = 1;
+			for (val in list) {
+				result = iterator(val, index, list);
+				if (result) {
+					break;
+				}
+				index++;
+			}
+		}
+		else {
+			var index  = 1;
+			for (key in list) {
+				var val = list[key];
+				result = iterator(val, index, list);
+				if (result) {
+					break;
+				}
+				index++;
+			}
+		}
+
+		return result;
 	}
 	
 	public any function some(obj, iterator, context) {
