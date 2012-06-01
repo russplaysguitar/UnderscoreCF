@@ -42,7 +42,33 @@ component {
 
 
  	public any function collect(obj, iterator, context) {
- 		
+ 		var result = [];
+		if (structKeyExists(arguments, 'obj')) {
+			var list = arguments.obj;
+		}
+		else if (structKeyExists(this, 'obj')) {
+			var list = this.obj;
+		}
+		else {
+			return result;
+		}
+		if (isArray(list)) {
+			var index = 1;
+			for (element in list) {
+				result[index] = iterator(element, index, list);
+				index++;
+			}
+		}
+		else {
+			var index = 1;
+			for (key in list) {
+				var val = list[key];
+				result[index] = iterator(val, key, list);
+				index++;
+			}
+		}
+
+		return result;
  	}
  	
   	public any function map(obj, iterator, context) {
