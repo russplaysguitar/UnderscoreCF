@@ -200,13 +200,47 @@ component {
 		return result;
  	}
 
-	public any function filter(obj, iterator, context) {
+	public any function filter(obj, iterator) {
 		return this.select(argumentCollection = arguments);
 	}
 	
 
-	public any function reject(obj, iterator, context) {
-		
+	public any function reject(obj, iterator) {
+		var result = [];
+
+		if (structKeyExists(arguments, 'obj')) {
+			var list = arguments.obj;
+		}
+		else if (structKeyExists(this, 'obj')) {
+			var list = this.obj;
+		}
+		else {
+			return result;
+		}
+
+		if (isArray(list)) {
+			var index = 1;
+			for (val in list) {
+				var success = iterator(val, index, list);
+				if (!success) {
+					result[index] = val;
+					index++;
+				}
+			}
+		}
+		else {
+			var index = 1;
+			for (key in list) {
+				var val = list[key];
+				var success = iterator(val, index, list);
+				if (!success) {
+					result[index] = val;
+					index++;
+				}
+			}
+		}
+
+		return result;		
 	}
 
 
