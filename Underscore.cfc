@@ -244,11 +244,45 @@ component {
 	}
 
 
-	public any function all(obj, iterator, context) {
-		
+	public any function all(obj, iterator) {
+		var result = false;
+
+		if (structKeyExists(arguments, 'obj')) {
+			var list = arguments.obj;
+		}
+		else if (structKeyExists(this, 'obj')) {
+			var list = this.obj;
+		}
+		else {
+			return result;
+		}
+
+		if (isArray(list)) {
+			var index = 1;
+			for (val in list) {
+				result = iterator(val, index, list);
+				if (!result) {
+					break;
+				}
+				index++;
+			}
+		}
+		else {
+			var index  = 1;
+			for (key in list) {
+				var val = list[key];
+				result = iterator(val, index, list);
+				if (!result) {
+					break;
+				}
+				index++;
+			}
+		}
+
+		return result;		
 	}
 	
-	public any function every(obj, iterator, context) {
+	public any function every(obj, iterator) {
 		return this.all(argumentCollection = arguments);
 	}
 	
