@@ -11,7 +11,7 @@ component {
 	}
 
 
-	public any function each(obj, iterator, context) {
+	public any function each(obj, iterator) {
 		if (structKeyExists(arguments, 'obj')) {
 			var list = arguments.obj;
 		}
@@ -36,12 +36,12 @@ component {
 		}
  	}
 
-	public any function forEach(obj, iterator, context) {
+	public any function forEach(obj, iterator) {
 	    return this.each(argumentCollection = arguments);
  	}
 
 
- 	public any function collect(obj, iterator, context) {
+ 	public any function collect(obj, iterator) {
  		var result = [];
 		if (structKeyExists(arguments, 'obj')) {
 			var list = arguments.obj;
@@ -71,20 +71,41 @@ component {
 		return result;
  	}
  	
-  	public any function map(obj, iterator, context) {
+  	public any function map(obj, iterator) {
  		return this.collect(argumentCollection = arguments);
  	}
 
 
- 	public any function inject(obj, iterator, memo, context) {
- 		
+ 	public any function inject(obj, iterator, memo) {
+		if (structKeyExists(arguments, 'obj')) {
+			var list = arguments.obj;
+		}
+		else if (structKeyExists(this, 'obj')) {
+			var list = this.obj;
+		}
+		else {
+			return result;
+		}
+		if (isArray(list)) {
+			for (num in list) {
+				memo = iterator(memo, num);
+			}
+		}
+		else {
+			for (key in list) {
+				var num = list[key];
+				memo = iterator(memo, num);
+			}
+		}
+
+		return memo;		
  	}
  	
-  	public any function foldl(obj, iterator, memo, context) {
+  	public any function foldl(obj, iterator, memo) {
  		return this.inject(argumentCollection = arguments);
  	}
  		
-  	public any function reduce(obj, iterator, memo, context) {
+  	public any function reduce(obj, iterator, memo) {
  		return this.inject(argumentCollection = arguments);
  	}
 
