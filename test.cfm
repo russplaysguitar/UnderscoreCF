@@ -59,4 +59,8 @@
 	});
 	writeDump(any);
 	writeOutput("<br />");	
+
+	evens = _.filter([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });
+	writeDump(evens);
+	writeOutput("<br />");	
 </cfscript>

@@ -111,7 +111,7 @@ component {
 
 
   	public any function foldr(obj, iterator, memo, context) {
-
+  		// TODO
    	}
 
  	public any function reduceRight(obj, iterator, memo, context) {
@@ -162,8 +162,42 @@ component {
  	}
 
 
- 	public any function select(obj, iterator, context) {
- 		
+ 	public any function select(obj, iterator) {
+		var result = [];
+
+		if (structKeyExists(arguments, 'obj')) {
+			var list = arguments.obj;
+		}
+		else if (structKeyExists(this, 'obj')) {
+			var list = this.obj;
+		}
+		else {
+			return result;
+		}
+
+		if (isArray(list)) {
+			var index = 1;
+			for (val in list) {
+				var success = iterator(val, index, list);
+				if (success) {
+					result[index] = val;
+					index++;
+				}
+			}
+		}
+		else {
+			var index = 1;
+			for (key in list) {
+				var val = list[key];
+				var success = iterator(val, index, list);
+				if (success) {
+					result[index] = val;
+					index++;
+				}
+			}
+		}
+
+		return result;
  	}
 
 	public any function filter(obj, iterator, context) {
