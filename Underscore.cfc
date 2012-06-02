@@ -256,7 +256,7 @@ component {
 
 	public any function include(obj = this.obj, target) {
 		return this.any(obj, function(value) {
-		  return value == target;
+			return value == target;
 		});
 	}
 
@@ -269,7 +269,8 @@ component {
 	public any function invoke(obj = this.obj, method, args = {}) {
 	    return this.map(obj, function(value) {
 	    	if (this.isFunction(method)) {
-	    		result = method(args);
+	    		// try to call method() directly
+	    		var result = method(args);
 	    		if (isDefined('result')) {
 	    			return result;
 	    		}
@@ -278,10 +279,13 @@ component {
 	    		}
 	    	}
 	    	else if((isObject(value) || isStruct(value)) && structKeyExists(value, method)) {
+	    		// call method as member of obj item
 	    		var fun = value[method];
 	    		return fun(args);
 	    	}
 	    	else {
+	    		// no idea what method() is all about, return value instead
+	    		// note: this might be dangerous
 	    		return value
 	    	}
 	    });
