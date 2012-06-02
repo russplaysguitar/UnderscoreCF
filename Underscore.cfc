@@ -11,27 +11,18 @@ component {
 	}
 
 
-	public any function each(obj, iterator) {
-		if (structKeyExists(arguments, 'obj')) {
-			var list = arguments.obj;
-		}
-		else if (structKeyExists(this, 'obj')) {
-			var list = this.obj;
-		}
-		else {
-			return;
-		}
-		if (isArray(list)) {
+	public any function each(obj = this.obj, iterator = this.identity, context = {}) {
+		if (isArray(obj)) {
 			var index = 1;
-			for (element in list) {
-				iterator(element, index, list);
+			for (element in obj) {
+				iterator(element, index, obj, context);
 				index++;
 			}
 		}
 		else {	
-			for (key in list) {
-				var val = list[key];
-				iterator(val, key, list);
+			for (key in obj) {
+				var val = obj[key];
+				iterator(val, key, obj, context);
 			}
 		}
  	}
@@ -41,29 +32,21 @@ component {
  	}
 
 
- 	public any function collect(obj, iterator) {
+ 	public any function map(obj = this.obj, iterator = this.identity, context = {}) {
  		var result = [];
-		if (structKeyExists(arguments, 'obj')) {
-			var list = arguments.obj;
-		}
-		else if (structKeyExists(this, 'obj')) {
-			var list = this.obj;
-		}
-		else {
-			return result;
-		}
-		if (isArray(list)) {
+
+		if (isArray(obj)) {
 			var index = 1;
-			for (element in list) {
-				result[index] = iterator(element, index, list);
+			for (element in obj) {
+				result[index] = iterator(element, index, obj);
 				index++;
 			}
 		}
 		else {
 			var index = 1;
-			for (key in list) {
-				var val = list[key];
-				result[index] = iterator(val, key, list);
+			for (key in obj) {
+				var val = obj[key];
+				result[index] = iterator(val, key, obj);
 				index++;
 			}
 		}
@@ -71,29 +54,20 @@ component {
 		return result;
  	}
  	
-  	public any function map(obj, iterator) {
- 		return this.collect(argumentCollection = arguments);
+  	public any function collect(obj, iterator, context) {
+ 		return this.map(argumentCollection = arguments);
  	}
 
 
- 	public any function inject(obj, iterator, memo) {
-		if (structKeyExists(arguments, 'obj')) {
-			var list = arguments.obj;
-		}
-		else if (structKeyExists(this, 'obj')) {
-			var list = this.obj;
-		}
-		else {
-			return result;
-		}
-		if (isArray(list)) {
-			for (num in list) {
+ 	public any function reduce(obj = this.obj, iterator, memo, context = {}) {
+		if (isArray(obj)) {
+			for (num in obj) {
 				memo = iterator(memo, num);
 			}
 		}
 		else {
-			for (key in list) {
-				var num = list[key];
+			for (key in obj) {
+				var num = obj[key];
 				memo = iterator(memo, num);
 			}
 		}
@@ -101,41 +75,31 @@ component {
 		return memo;		
  	}
  	
-  	public any function foldl(obj, iterator, memo) {
- 		return this.inject(argumentCollection = arguments);
+  	public any function foldl(obj, iterator, memo, context) {
+ 		return this.reduce(argumentCollection = arguments);
  	}
  		
-  	public any function reduce(obj, iterator, memo) {
- 		return this.inject(argumentCollection = arguments);
+  	public any function inject(obj, iterator, memo, context) {
+ 		return this.reduce(argumentCollection = arguments);
  	}
 
 
-  	public any function foldr(obj, iterator, memo, context) {
+  	public any function reduceRight(obj = this.obj, iterator = this.identity, memo, context = {}) {
   		// TODO
    	}
 
- 	public any function reduceRight(obj, iterator, memo, context) {
- 		return this.foldr(argumentCollection = arguments);
+ 	public any function folr(obj, iterator, memo, context) {
+ 		return this.reduceRight(argumentCollection = arguments);
  	}
  	
  	
- 	public any function detect(obj, iterator) { 
+ 	public any function find(obj = this.obj, iterator = this.identity, context = {}) { 
  		var result = 0;
 
-		if (structKeyExists(arguments, 'obj')) {
-			var list = arguments.obj;
-		}
-		else if (structKeyExists(this, 'obj')) {
-			var list = this.obj;
-		}
-		else {
-			return result;
-		}
-
-		if (isArray(list)) {
+		if (isArray(obj)) {
 			var index = 1;
-			for (val in list) {
-				if (iterator(val, index, list)) {
+			for (val in obj) {
+				if (iterator(val, index, obj)) {
 					result = val;
 					break;
 				}
@@ -144,9 +108,9 @@ component {
 		}
 		else {
 			var index  = 1;
-			for (key in list) {
-				var val = list[key];
-				if (iterator(val, index, list)) {
+			for (key in obj) {
+				var val = obj[key];
+				if (iterator(val, index, obj)) {
 					result = val;
 					break;
 				}
@@ -157,28 +121,18 @@ component {
 		return result;
  	}
  	
-  	public any function find(obj, iterator) { 
- 		return this.detect(argumentCollection = arguments);
+  	public any function detect(obj, iterator, context) { 
+ 		return this.find(argumentCollection = arguments);
  	}
 
 
- 	public any function select(obj, iterator) {
+ 	public any function filter(obj = this.obj, iterator = this.identity, context = {}) {
 		var result = [];
 
-		if (structKeyExists(arguments, 'obj')) {
-			var list = arguments.obj;
-		}
-		else if (structKeyExists(this, 'obj')) {
-			var list = this.obj;
-		}
-		else {
-			return result;
-		}
-
-		if (isArray(list)) {
+		if (isArray(obj)) {
 			var index = 1;
-			for (val in list) {
-				var success = iterator(val, index, list);
+			for (val in obj) {
+				var success = iterator(val, index, obj);
 				if (success) {
 					result[index] = val;
 					index++;
@@ -187,9 +141,9 @@ component {
 		}
 		else {
 			var index = 1;
-			for (key in list) {
-				var val = list[key];
-				var success = iterator(val, index, list);
+			for (key in obj) {
+				var val = obj[key];
+				var success = iterator(val, index, obj);
 				if (success) {
 					result[index] = val;
 					index++;
@@ -200,28 +154,18 @@ component {
 		return result;
  	}
 
-	public any function filter(obj, iterator) {
-		return this.select(argumentCollection = arguments);
+	public any function select(obj, iterator) {
+		return this.filter(argumentCollection = arguments);
 	}
 	
 
-	public any function reject(obj, iterator) {
+	public any function reject(obj = this.obj, iterator = this.identity, context = {}) {
 		var result = [];
 
-		if (structKeyExists(arguments, 'obj')) {
-			var list = arguments.obj;
-		}
-		else if (structKeyExists(this, 'obj')) {
-			var list = this.obj;
-		}
-		else {
-			return result;
-		}
-
-		if (isArray(list)) {
+		if (isArray(obj)) {
 			var index = 1;
-			for (val in list) {
-				var success = iterator(val, index, list);
+			for (val in obj) {
+				var success = iterator(val, index, obj);
 				if (!success) {
 					result[index] = val;
 					index++;
@@ -230,9 +174,9 @@ component {
 		}
 		else {
 			var index = 1;
-			for (key in list) {
-				var val = list[key];
-				var success = iterator(val, index, list);
+			for (key in obj) {
+				var val = obj[key];
+				var success = iterator(val, index, obj);
 				if (!success) {
 					result[index] = val;
 					index++;
@@ -244,23 +188,13 @@ component {
 	}
 
 
-	public any function all(obj, iterator) {
+	public any function all(obj = this.obj, iterator = this.identity, context = {}) {
 		var result = false;
 
-		if (structKeyExists(arguments, 'obj')) {
-			var list = arguments.obj;
-		}
-		else if (structKeyExists(this, 'obj')) {
-			var list = this.obj;
-		}
-		else {
-			return result;
-		}
-
-		if (isArray(list)) {
+		if (isArray(obj)) {
 			var index = 1;
-			for (val in list) {
-				result = iterator(val, index, list);
+			for (val in obj) {
+				result = iterator(val, index, obj);
 				if (!result) {
 					break;
 				}
@@ -269,9 +203,9 @@ component {
 		}
 		else {
 			var index  = 1;
-			for (key in list) {
-				var val = list[key];
-				result = iterator(val, index, list);
+			for (key in obj) {
+				var val = obj[key];
+				result = iterator(val, index, obj);
 				if (!result) {
 					break;
 				}
@@ -282,28 +216,18 @@ component {
 		return result;		
 	}
 	
-	public any function every(obj, iterator) {
+	public any function every(obj, iterator, context) {
 		return this.all(argumentCollection = arguments);
 	}
 	
 		
-	public any function any(obj, iterator, context) {
+	public any function any(obj = this.obj, iterator = this.identity, context = {}) {
 		var result = false;
 
-		if (structKeyExists(arguments, 'obj')) {
-			var list = arguments.obj;
-		}
-		else if (structKeyExists(this, 'obj')) {
-			var list = this.obj;
-		}
-		else {
-			return result;
-		}
-
-		if (isArray(list)) {
+		if (isArray(obj)) {
 			var index = 1;
-			for (val in list) {
-				result = iterator(val, index, list);
+			for (value in obj) {
+				result = iterator(value, index, obj);
 				if (result) {
 					break;
 				}
@@ -312,9 +236,9 @@ component {
 		}
 		else {
 			var index  = 1;
-			for (key in list) {
-				var val = list[key];
-				result = iterator(val, index, list);
+			for (key in obj) {
+				var value = obj[key];
+				result = iterator(value, index, obj);
 				if (result) {
 					break;
 				}
@@ -330,8 +254,10 @@ component {
 	}	
 
 
-	public any function include(obj, target) {
-
+	public any function include(obj = this.obj, target) {
+		return this.any(obj, function(value) {
+		  return value == target;
+		});
 	}
 
 	public any function _contains(obj, target) {
@@ -339,23 +265,47 @@ component {
 	}
 
 
-	public any function invoke(obj, method) {
-		
+	public any function invoke(obj = this.obj, method) {
+		// TODO
 	}
 
 
-	public any function pluck(obj, key) {
-		
+	public any function pluck(obj = this.obj, key) {
+    	return this.map(obj, function(value){
+    		return value[key];
+    	});				
 	}
 
 
-	public any function max(obj, iterator, context) {
-		
+	public any function max(obj = this.obj, iterator = this.identity, context = {}) {
+		var result = {};
+	    this.each(obj, function(value, index, obj) {
+    		var computed = iterator(value, index, obj, context);
+	    	if (isNumeric(computed)) {
+		    	if (!structKeyExists(result, 'computed') || computed >= result.computed) {
+		    		result = {value : value, computed : computed};
+		    	}
+	    	}
+	    });
+	    if (structKeyExists(result, 'value')) {
+		    return result.value;
+	    }
 	}
 
 
-	public any function min(obj, iterator, context) {
-		
+	public any function min(obj = this.obj, iterator = this.identity, context = {}) {
+		var result = {};
+	    this.each(obj, function(value, index, obj) {
+    		var computed = iterator(value, index, obj, context);
+	    	if (isNumeric(computed)) {
+		    	if (!structKeyExists(result, 'computed') || computed <= result.computed) {
+		    		result = {value : value, computed : computed};
+		    	}
+	    	}
+	    });
+	    if (structKeyExists(result, 'value')) {
+		    return result.value;
+	    }		
 	}
 
 
@@ -383,4 +333,9 @@ component {
 	}
 	
 	
+	public any function identity(value) {
+		return value;
+	}
+		
+			
 }

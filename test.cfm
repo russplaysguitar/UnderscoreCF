@@ -73,4 +73,40 @@
 	});
 	writeDump(all);
 	writeOutput("<br />");	
+
+	include = _.include([1, 2, 3], 3);
+	writeDump("include:" & include);
+	writeOutput("<br />");	
+
+	stooges = [{name : 'moe', age : 40}, {name : 'larry', age : 50}, {name : 'curly', age : 60}];
+	pluck = _.pluck(stooges, 'name');
+	writeOutput("pluck");
+	writeDump(pluck);
+	writeOutput("<br />");	
+
+	stooges = [{name : 'moe', age : 40}, {name : 'larry', age : 50}, {name : 'curly', age : 60}];
+	max = _.max(stooges, function(stooge){ return stooge.age; });
+	writeOutput("max");
+	writeDump(max);
+	writeOutput("<br />");	
+
+	max = _.max([1,2,3,4]);
+	writeOutput("max");
+	writeDump(max);
+	writeOutput("<br />");	
+
+	writeOutput("min");
+	writeDump(_.min([10, 5, 100, 2, 1000]));
+	writeOutput("<br />");
+
+	// figure out how to pass context...
+	x = function(ctx, fun) {
+		fun(this = ctx);
+	};	
+c = {t:1};
+	x(c, function (){
+		this.t++;
+		writeDump(this);
+	});
+	writeDump(c);
 </cfscript>
