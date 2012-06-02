@@ -1,4 +1,4 @@
-
+...
 <cfscript>
 	myStruct= {a:1,b:2};
 	myArr = [1,2,3];
@@ -12,6 +12,7 @@
 	_myArr = new Underscore(myArr);
 	_myObj = new Underscore(myObj);
 
+/*
 	_.forEach(myStruct, function(val, key) {
 		writeDump(key & ": " & val);
 	});
@@ -98,8 +99,23 @@
 	writeOutput("min");
 	writeDump(_.min([10, 5, 100, 2, 1000]));
 	writeOutput("<br />");
+*/
+	invokeObj = [
+		{
+			x:1,
+			z:function(){return true;}
+		},{
+			x:2,
+			z:function(){return false;}
+		}
+	];
+	invoke = _.invoke(invokeObj, function (args){return args;}, {z:10});
+	writeDump(invoke);
+	writeOutput("<br />");
+
 
 	// figure out how to pass context...
+	/*
 	x = function(ctx, fun) {
 		fun(this = ctx);
 	};	
@@ -108,5 +124,6 @@ c = {t:1};
 		this.t++;
 		writeDump(this);
 	});
-	writeDump(c);
+	writeDump(c);*/
 </cfscript>
+end tests

@@ -27,7 +27,7 @@ component {
 		}
  	}
 
-	public any function forEach(obj, iterator) {
+	public any function forEach(obj, iterator, context) {
 	    return this.each(argumentCollection = arguments);
  	}
 
@@ -59,7 +59,7 @@ component {
  	}
 
 
- 	public any function reduce(obj = this.obj, iterator, memo, context = {}) {
+ 	public any function reduce(obj = this.obj, iterator = this.identity, memo, context = {}) {
 		if (isArray(obj)) {
 			for (num in obj) {
 				memo = iterator(memo, num);
@@ -154,7 +154,7 @@ component {
 		return result;
  	}
 
-	public any function select(obj, iterator) {
+	public any function select(obj, iterator, context) {
 		return this.filter(argumentCollection = arguments);
 	}
 	
@@ -265,8 +265,26 @@ component {
 	}
 
 
-	public any function invoke(obj = this.obj, method) {
-		// TODO
+	// TODO: make sure this works right
+	public any function invoke(obj = this.obj, method, args = {}) {
+	    return this.map(obj, function(value) {
+	    	if (this.isFunction(method)) {
+	    		result = method(args);
+	    		if (isDefined('result')) {
+	    			return result;
+	    		}
+	    		else {
+	    			return value;
+	    		}
+	    	}
+	    	else if((isObject(value) || isStruct(value)) && structKeyExists(value, method)) {
+	    		var fun = value[method];
+	    		return fun(args);
+	    	}
+	    	else {
+	    		return value
+	    	}
+	    });
 	}
 
 
@@ -337,5 +355,15 @@ component {
 		return value;
 	}
 		
-			
+	// TODO: make sure this is right...
+	public boolean function isFunction(obj) {
+		return isObject(obj);
+	}
+
+	// TODO: determine if this is necessary or rewrite it
+	public boolean function isUndefined(variableName, context) {
+		return structKeyExists(context, variableName);
+	}
+				
+							
 }
