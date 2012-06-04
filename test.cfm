@@ -147,6 +147,10 @@ start tests:<br />
 	writeDump(first);
 	writeOutput("<br />");	
 
+	writeOutput("initial:");
+	initial = _.initial([5, 4, 3, 2, 1],1);
+	writeDump(initial);
+	writeOutput("<br />");	
 
 </cfscript>
 <br />

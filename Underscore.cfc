@@ -546,8 +546,11 @@ component {
 
 	/* ARRAY FUNCTIONS */
 
-	public any function first(array = this.obj, n, guard) {
-		if (structKeyExists(arguments, 'n') && !structKeyExists(arguments, 'guard')) {
+	/*
+		Returns the first element of an array. Passing n will return the first n elements of the array.
+	*/
+	public any function first(array = this.obj, n, guard = false) {
+		if (structKeyExists(arguments, 'n') && !guard) {
 			return this.slice(array, 1, n);
 		}
 		else {
@@ -555,10 +558,12 @@ component {
 		}
 	}
 	
+	// alias of first
 	public any function head(array, n, guard) {
 		return this.first(argumentCollection = arguments);
 	}
 		
+	// alias of first
 	public any function take(array, n, guard) {
 		return this.first(argumentCollection = arguments);
 	}
@@ -576,6 +581,20 @@ component {
 			j++;
 		}
 		return result;
+	}
+	
+	/*
+		Returns everything but the last entry of the array. Especially useful on the arguments object. 
+		Pass n to exclude the last n elements from the result.
+	*/
+	public any function initial(array = this.obj, n = 1, guard = false) {
+		if (guard) {
+			var exclude = 1;
+		}
+		else {
+			var exclude = n;
+		}
+		return this.slice(array, 1, arrayLen(array) - exclude);
 	}
 	
 	
