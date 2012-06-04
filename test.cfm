@@ -118,10 +118,20 @@ start tests:<br />
 
 	toArray = _.toArray({a:10,b:20});
 	writeDump(toArray);
+	writeOutput("<br />");
 
 	sortBy = _.sortBy([7, 2, 3, 1, 5, 6], function(num){ return num; });
 	writeDump(sortBy);
+	writeOutput("<br />");
 
+	writeOutput("groupby:");
+	groupBy = _.groupBy([1.3, 2.1, 2.4], function(num){ return fix(num); });
+	writeDump(groupBy);
+	writeOutput("<br />");
+
+	groupBy2 = _.groupBy([{name:'one', length:3}, {name:'two', length:3}, {name:'three', length:5}], 'length');
+	writeDump(groupBy2);
+	writeOutput("<br />");
 
 </cfscript>
 end tests

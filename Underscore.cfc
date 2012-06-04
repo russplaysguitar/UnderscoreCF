@@ -444,7 +444,7 @@ component {
 	// note: this isn't part of UnderscoreJS, but CF doesn't have a sort() like this
 	public any function sort(obj = this.obj, iterator = this.identity) {
 		var array = this.toArray(obj);
-		// TODO implement a simple sorting mechanism
+		// TODO implement an actual sorting mechanism
 		this.each(array, function(element, index, list) {
 			if (ArrayLen(array) > index) {
 				var current = array[index];
@@ -470,8 +470,22 @@ component {
 		Splits a collection into sets, grouped by the result of running each value through iterator. 
 		If iterator is a string instead of a function, groups by the property named by iterator on each of the values.
 	*/
-	public any function groupBy(obj, val) {
-		
+	public any function groupBy(obj = this.obj, val) {
+		var result = {};
+		if (this.isFunction(val)) {
+			var iterator = val;
+		}
+		else {
+			var iterator = function(obj) { return obj[val]; };
+		}
+		this.each(obj, function(value, index) {
+			var key = iterator(value, index);
+			if (!structKeyExists(result, key)) {
+				result[key] = [];
+			}
+			arrayAppend(result[key], value);
+		});
+		return result;
 	}
 
 	/*
@@ -479,7 +493,13 @@ component {
 		If an iterator is passed, it will be used to compute the sort ranking of each value.
 	*/
 	public any function sortedIndex(array, obj, iterator) {
-		
+		// iterator || (iterator = _.identity);
+		// var low = 0, high = array.length;
+		// while (low < high) {
+		// 	var mid = (low + high) >> 1;
+		// 	iterator(array[mid]) < iterator(obj) ? low = mid + 1 : high = mid;
+		// }
+		// return low;				
 	}
 
 	/*
