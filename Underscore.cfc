@@ -11,6 +11,7 @@ component {
 	}
 
 
+	/* COLLECTION FUNCTIONS (ARRAYS, STRUCTURES, OR OBJECTS)
 	/*
 		Iterates over a list of elements, yielding each in turn to an iterator function. 
 		The iterator is bound to the context object, if one is passed. 
@@ -18,18 +19,20 @@ component {
 		If list is an object, iterator's arguments will be (value, key, list). 
 		Delegates to the native forEach function if it exists.
 	*/
-	public any function each(obj = this.obj, iterator = this.identity, context = {}) {
+	public any function each(obj = this.obj, iterator = this.identity(), context = new Component()) {
+ 		context.iterator = iterator;
+
 		if (isArray(obj)) {
 			var index = 1;
 			for (element in obj) {
-				iterator(element, index, obj, context);
+				context.iterator(element, index, obj);
 				index++;
 			}
 		}
 		else {	
 			for (key in obj) {
 				var val = obj[key];
-				iterator(val, key, obj, context);
+				context.iterator(val, key, obj);
 			}
 		}
  	}
@@ -44,13 +47,14 @@ component {
 		If the native map method exists, it will be used instead. 
 		If list is an object, iterator's arguments will be (value, key, list).
 	*/
- 	public any function map(obj = this.obj, iterator = this.identity, context = {}) {
+ 	public any function map(obj = this.obj, iterator = this.identity(), context = new Component()) {
  		var result = [];
+ 		context.iterator = iterator;
 
 		if (isArray(obj)) {
 			var index = 1;
 			for (element in obj) {
-				result[index] = iterator(element, index, obj);
+				result[index] = context.iterator(element, index, obj);
 				index++;
 			}
 		}
@@ -58,7 +62,7 @@ component {
 			var index = 1;
 			for (key in obj) {
 				var val = obj[key];
-				result[index] = iterator(val, key, obj);
+				result[index] = context.iterator(val, key, obj);
 				index++;
 			}
 		}
@@ -75,16 +79,18 @@ component {
 		Also known as inject and foldl, reduce boils down a list of values into a single value. 
 		Memo is the initial state of the reduction, and each successive step of it should be returned by iterator.
 	*/
- 	public any function reduce(obj = this.obj, iterator = this.identity, memo, context = {}) {
+ 	public any function reduce(obj = this.obj, iterator = this.identity(), memo, context = new Component()) {
+ 		context.iterator = iterator;
+
 		if (isArray(obj)) {
 			for (num in obj) {
-				memo = iterator(memo, num);
+				memo = context.iterator(memo, num);
 			}
 		}
 		else {
 			for (key in obj) {
 				var num = obj[key];
-				memo = iterator(memo, num);
+				memo = context.iterator(memo, num);
 			}
 		}
 
@@ -104,7 +110,7 @@ component {
  	/*
 		The right-associative version of reduce. 
  	*/
-  	public any function reduceRight(obj = this.obj, iterator = this.identity, memo, context = {}) {
+  	public any function reduceRight(obj = this.obj, iterator = this.identity(), memo, context = new Component()) {
   		// TODO
    	}
 
@@ -117,13 +123,14 @@ component {
 		Looks through each value in the list, returning the first one that passes a truth test (iterator). 
 		The function returns as soon as it finds an acceptable element, and doesn't traverse the entire list.
  	*/
- 	public any function find(obj = this.obj, iterator = this.identity, context = {}) { 
+ 	public any function find(obj = this.obj, iterator = this.identity(), context = new Component()) { 
  		var result = 0;
+ 		context.iterator = iterator;
 
 		if (isArray(obj)) {
 			var index = 1;
 			for (val in obj) {
-				if (iterator(val, index, obj)) {
+				if (context.iterator(val, index, obj)) {
 					result = val;
 					break;
 				}
@@ -134,7 +141,7 @@ component {
 			var index  = 1;
 			for (key in obj) {
 				var val = obj[key];
-				if (iterator(val, index, obj)) {
+				if (context.iterator(val, index, obj)) {
 					result = val;
 					break;
 				}
@@ -153,13 +160,14 @@ component {
  	/*
 		Looks through each value in the list, returning an array of all the values that pass a truth test (iterator). 
  	*/
- 	public any function filter(obj = this.obj, iterator = this.identity, context = {}) {
+ 	public any function filter(obj = this.obj, iterator = this.identity(), context = new Component()) {
 		var result = [];
+ 		context.iterator = iterator;
 
 		if (isArray(obj)) {
 			var index = 1;
 			for (val in obj) {
-				var success = iterator(val, index, obj);
+				var success = context.iterator(val, index, obj);
 				if (success) {
 					result[index] = val;
 					index++;
@@ -170,7 +178,7 @@ component {
 			var index = 1;
 			for (key in obj) {
 				var val = obj[key];
-				var success = iterator(val, index, obj);
+				var success = context.iterator(val, index, obj);
 				if (success) {
 					result[index] = val;
 					index++;
@@ -189,13 +197,14 @@ component {
 	/*
 		Returns the values in list without the elements that the truth test (iterator) passes. The opposite of filter.
 	*/
-	public any function reject(obj = this.obj, iterator = this.identity, context = {}) {
+	public any function reject(obj = this.obj, iterator = this.identity(), context = new Component()) {
 		var result = [];
+ 		context.iterator = iterator;
 
 		if (isArray(obj)) {
 			var index = 1;
 			for (val in obj) {
-				var success = iterator(val, index, obj);
+				var success = context.iterator(val, index, obj);
 				if (!success) {
 					result[index] = val;
 					index++;
@@ -206,7 +215,7 @@ component {
 			var index = 1;
 			for (key in obj) {
 				var val = obj[key];
-				var success = iterator(val, index, obj);
+				var success = context.iterator(val, index, obj);
 				if (!success) {
 					result[index] = val;
 					index++;
@@ -221,13 +230,14 @@ component {
 	/*
 		Returns true if all of the values in the list pass the iterator truth test. 
 	*/
-	public any function all(obj = this.obj, iterator = this.identity, context = {}) {
+	public any function all(obj = this.obj, iterator = this.identity(), context = new Component()) {
 		var result = false;
+ 		context.iterator = iterator;
 
 		if (isArray(obj)) {
 			var index = 1;
 			for (val in obj) {
-				result = iterator(val, index, obj);
+				result = context.iterator(val, index, obj);
 				if (!result) {
 					break;
 				}
@@ -238,7 +248,7 @@ component {
 			var index  = 1;
 			for (key in obj) {
 				var val = obj[key];
-				result = iterator(val, index, obj);
+				result = context.iterator(val, index, obj);
 				if (!result) {
 					break;
 				}
@@ -258,13 +268,14 @@ component {
 		Returns true if any of the values in the list pass the iterator truth test. 
 		Short-circuits and stops traversing the list if a true element is found. 
 	*/
-	public any function any(obj = this.obj, iterator = this.identity, context = {}) {
+	public any function any(obj = this.obj, iterator = this.identity(), context = new Component()) {
 		var result = false;
+ 		context.iterator = iterator;
 
 		if (isArray(obj)) {
 			var index = 1;
 			for (value in obj) {
-				result = iterator(value, index, obj);
+				result = context.iterator(value, index, obj);
 				if (result) {
 					break;
 				}
@@ -275,7 +286,7 @@ component {
 			var index  = 1;
 			for (key in obj) {
 				var value = obj[key];
-				result = iterator(value, index, obj);
+				result = context.iterator(value, index, obj);
 				if (result) {
 					break;
 				}
@@ -349,10 +360,12 @@ component {
 		Returns the maximum value in list. 
 		If iterator is passed, it will be used on each value to generate the criterion by which the value is ranked.
 	*/
-	public any function max(obj = this.obj, iterator = this.identity, context = {}) {
+	public any function max(obj = this.obj, iterator = this.identity(), context = new Component()) {
 		var result = {};
+ 		context.iterator = iterator;
+
 	    this.each(obj, function(value, index, obj) {
-    		var computed = iterator(value, index, obj, context);
+    		var computed = context.iterator(value, index, obj, context);
 	    	if (isNumeric(computed)) {
 		    	if (!structKeyExists(result, 'computed') || computed >= result.computed) {
 		    		result = {value : value, computed : computed};
@@ -368,10 +381,12 @@ component {
 		Returns the minimum value in list. 
 		If iterator is passed, it will be used on each value to generate the criterion by which the value is ranked.
 	*/
-	public any function min(obj = this.obj, iterator = this.identity, context = {}) {
+	public any function min(obj = this.obj, iterator = this.identity(), context = new Component()) {
 		var result = {};
+ 		context.iterator = iterator;
+
 	    this.each(obj, function(value, index, obj) {
-    		var computed = iterator(value, index, obj, context);
+    		var computed = context.iterator(value, index, obj, context);
 	    	if (isNumeric(computed)) {
 		    	if (!structKeyExists(result, 'computed') || computed <= result.computed) {
 		    		result = {value : value, computed : computed};
@@ -387,9 +402,69 @@ component {
 		Returns a sorted copy of list, ranked in ascending order by the results of running each value through iterator. 
 		Iterator may also be the string name of the property to sort by (eg. length).
 	*/
-	public any function sortBy(obj, val, context) {
-		
+	public any function sortBy(obj, val, context = new Component()) {
+		if (this.isFunction(val)) {
+			var iterator = val;
+		}
+		else {
+			var iterator = function(obj) {
+				return obj[val];
+			};
+		}
+ 		context.iterator = iterator;
+		var toSort = this.map(obj, function(value, index, list, context) {
+			return {
+				value : value,
+				criteria : context.iterator(value, index, list, context)
+			};
+		});
+		var sorted = this.sort(toSort, function(left, right) {
+			if (!structKeyExists(left, 'criteria')) {
+				return 1;
+			}
+			else if (!structKeyExists(right, 'criteria')) {
+				return -1;
+			}
+			var a = left.criteria;
+			var b = right.criteria;			
+			if (a < b) {
+				return -1;
+			}
+			else if (a > b) {
+				return 1;
+			}
+			else {
+				return 0;
+			}
+		});
+		return this.pluck(sorted, 'value');
 	}
+
+
+	// note: this isn't part of UnderscoreJS, but CF doesn't have a sort() like this
+	public any function sort(obj = this.obj, iterator = this.identity) {
+		var array = this.toArray(obj);
+		// TODO implement a simple sorting mechanism
+		this.each(array, function(element, index, list) {
+			if (ArrayLen(array) > index) {
+				var current = array[index];
+				var next = array[index+1];
+
+				if (iterator(current, next)) {
+					writeOutput("swap: ");
+					writeDump(current);
+					writeOutput(" with ");
+					writeDump(next);
+					writeDump(array);
+					array[index] = next;
+					array[index+1] = current;
+				}
+			}
+		});
+		return array;
+	}
+
+
 
 	/*
 		Splits a collection into sets, grouped by the result of running each value through iterator. 
@@ -410,10 +485,9 @@ component {
 	/*
 		Returns a shuffled copy of the list, using a version of the Fisher-Yates shuffle.
 	*/
-	public any function shuffle(obj) {
+	public any function shuffle(obj = this.obj) {
 		
 	}
-
 
 	/*
 		Converts the list (anything that can be iterated over), into a real Array. Useful for transmuting the arguments object.
@@ -431,22 +505,27 @@ component {
 		}
 	}
 	
-	
-	public any function values(obj) {
-		return this.map(obj, this.identity);
-	}
-	
-	
-
 	/*
-		Returns the same value that is used as the argument. In math: f(x) = x
-		This function looks useless, but is used throughout UnderscoreCF as a default iterator.
+		Return the number of values in the list.
 	*/
-	public any function identity(value) {
-		return value;
+	public any function size(obj = this.obj) {
+		return ArrayLen(this.toArray(obj));
 	}
-		
-	// TODO: make sure this is right...
+
+	/* OBJECT FUNCTIONS */
+	// TODO: stub out all object functions
+	/*
+		Returns true if any of the values in the list pass the iterator truth test. 
+		Short-circuits and stops traversing the list if a true element is found. 
+	*/
+	public any function values(obj = this.obj) {
+		return this.map(obj);
+	}
+	
+	/*
+		Returns true if object is a Function.
+	*/	
+	// TODO: find a better way to do this in Coldfusion?
 	public boolean function isFunction(obj) {
 		return isObject(obj);
 	}
@@ -455,6 +534,19 @@ component {
 	public boolean function isUndefined(variableName, context) {
 		return structKeyExists(context, variableName);
 	}
-				
+			
+	/* UTILITY FUNCTIONS */
+	// TODO: stub out all utlity functions
+	/*
+		Returns the same value that is used as the argument. In math: f(x) = x
+		This function looks useless, but is used throughout UnderscoreCF as a default iterator.
+	*/
+	public any function identity(value) {
+		if (structKeyExists(arguments, 'value'))
+			return value;
+		else
+			return function(val){ return val; };
+	}
+	
 							
 }

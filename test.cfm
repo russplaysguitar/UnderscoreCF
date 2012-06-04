@@ -3,7 +3,7 @@ start tests:<br />
 <cfscript>
 	myStruct= {a:1,b:2};
 	myArr = [1,2,3];
-	myObj = new myClass();
+	myObj = new Component();
 	myObj.a = 1;
 	myObj.b = 2;
 	myObj.c = 3;
@@ -118,6 +118,9 @@ start tests:<br />
 
 	toArray = _.toArray({a:10,b:20});
 	writeDump(toArray);
+
+	sortBy = _.sortBy([7, 2, 3, 1, 5, 6], function(num){ return num; });
+	writeDump(sortBy);
 
 
 </cfscript>
