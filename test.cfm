@@ -142,6 +142,12 @@ start tests:<br />
 	writeDump(shuffle);
 	writeOutput("<br />");	
 
+	writeOutput("first:");
+	first = _.first([5, 4, 3, 2, 1]);
+	writeDump(first);
+	writeOutput("<br />");	
+
+
 </cfscript>
 <br />
 end tests

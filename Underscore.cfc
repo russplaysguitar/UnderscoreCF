@@ -544,6 +544,42 @@ component {
 		return ArrayLen(this.toArray(obj));
 	}
 
+	/* ARRAY FUNCTIONS */
+
+	public any function first(array = this.obj, n, guard) {
+		if (structKeyExists(arguments, 'n') && !structKeyExists(arguments, 'guard')) {
+			return this.slice(array, 1, n);
+		}
+		else {
+			return array[1];
+		}
+	}
+	
+	public any function head(array, n, guard) {
+		return this.first(argumentCollection = arguments);
+	}
+		
+	public any function take(array, n, guard) {
+		return this.first(argumentCollection = arguments);
+	}
+	
+	// note: this isn't part of UnderscoreJS, but it is missing in Coldfusion
+	public any function slice(array = [], from = 1, to = 1) {
+		var result = [];
+		var j = 1;
+		var arrLen = arrayLen(array);
+		if (to > arrLen) {
+			to = arrLen;
+		}
+		for (var i = from; i <= to; i++) {
+			result[j] = array[i];
+			j++;
+		}
+		return result;
+	}
+	
+	
+
 	/* OBJECT FUNCTIONS */
 	// TODO: stub out all object functions
 	/*
