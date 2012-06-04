@@ -137,5 +137,11 @@ start tests:<br />
 	writeDump(sortedIndex);
 	writeOutput("<br />");	
 
+	writeOutput("shuffle: ");
+	shuffle = _.shuffle([1, 2, 3, 4, 5, 6]);
+	writeDump(shuffle);
+	writeOutput("<br />");	
+
 </cfscript>
+<br />
 end tests

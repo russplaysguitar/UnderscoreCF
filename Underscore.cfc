@@ -511,7 +511,14 @@ component {
 		Returns a shuffled copy of the list, using a version of the Fisher-Yates shuffle.
 	*/
 	public any function shuffle(obj = this.obj) {
-		
+	    var shuffled = obj;
+	    var rand = 0;
+	    this.each(obj, function(value, index, list) {
+			rand = fix(1 + (rand() * (index)));
+			shuffled[index] = shuffled[rand];
+			shuffled[rand] = value;
+	    });
+	    return shuffled;		
 	}
 
 	/*
