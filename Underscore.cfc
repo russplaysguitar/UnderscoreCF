@@ -492,14 +492,19 @@ component {
 		Uses a binary search to determine the index at which the value should be inserted into the list in order to maintain the list's sorted order. 
 		If an iterator is passed, it will be used to compute the sort ranking of each value.
 	*/
-	public any function sortedIndex(array, obj, iterator) {
-		// iterator || (iterator = _.identity);
-		// var low = 0, high = array.length;
-		// while (low < high) {
-		// 	var mid = (low + high) >> 1;
-		// 	iterator(array[mid]) < iterator(obj) ? low = mid + 1 : high = mid;
-		// }
-		// return low;				
+	public any function sortedIndex(array = this.obj, obj, iterator = this.identity()) {
+		var low = 0;
+		var high = arrayLen(array);
+		while (low < high) {
+			var mid = BitSHRN((low + high), 1);
+			if (iterator(array[mid]) < iterator(obj) ) {
+				low = mid + 1;
+			}
+			else {
+				high = mid;
+			}
+		}
+		return low;				
 	}
 
 	/*

@@ -133,5 +133,9 @@ start tests:<br />
 	writeDump(groupBy2);
 	writeOutput("<br />");
 
+	sortedIndex = _.sortedIndex([10, 20, 30, 40, 50], 35);
+	writeDump(sortedIndex);
+	writeOutput("<br />");	
+
 </cfscript>
 end tests
