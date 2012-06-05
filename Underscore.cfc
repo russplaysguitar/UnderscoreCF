@@ -88,6 +88,9 @@ component {
 		}
 		else {
 			for (key in obj) {
+				writeDump(key);
+				writeOutput("<br />");
+				writeDump(obj);
 				var num = obj[key];
 				memo = context.iterator(memo, num);
 			}
@@ -676,6 +679,26 @@ component {
 
 		return result;
 	}
+	
+
+	/*
+		Returns a copy of the array with all instances of the values removed. 
+	*/
+	public any function without(array = this.obj, others = []) {
+		return this.difference(array, others);
+	}
+	
+	/*
+		Similar to without, but returns the values from array that are not present in the other arrays.
+	*/
+	public any function difference(array = this.obj, others = []) {
+		var rest = this.flatten(others, true);
+		var include = this.include;
+		return this.filter(array, function(value){
+			return !include(rest, value);
+		});
+	}
+	
 	
 	
 

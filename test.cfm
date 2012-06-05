@@ -181,7 +181,18 @@ start tests:<br />
 
 	flatten2 = _.flatten([1, [2], [3, [[4]]]], true);
 	writeDump(flatten2);
-	writeOutput("<br />");		
+	writeOutput("<br />");	
+
+	writeOutput("without:");
+	without = _.without([1, 2, 1, 0, 3, 1, 4], [0, 1]);
+	writeDump(without);	
+	writeOutput("<br />");	
+
+	writeOutput("difference: ");
+	difference = _.difference([1, 2, 3, 4, 5], [5, 2, 10]);
+	writeDump(difference);	
+	writeOutput("<br />");	
+
 </cfscript>
 <br />
 end tests
