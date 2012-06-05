@@ -173,6 +173,15 @@ start tests:<br />
 	compact = _.compact([0, 1, false, 2, '', 3]);
 	writeDump(compact);
 	writeOutput("<br />");	
+
+	writeOutput("flatten: ");
+	flatten = _.flatten([1, [2], [3, [[4]]]]);
+	writeDump(flatten);
+	writeOutput("<br />");
+
+	flatten2 = _.flatten([1, [2], [3, [[4]]]], true);
+	writeDump(flatten2);
+	writeOutput("<br />");		
 </cfscript>
 <br />
 end tests

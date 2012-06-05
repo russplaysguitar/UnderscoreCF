@@ -631,12 +631,55 @@ component {
 	/*
 		Returns a copy of the array with all falsy values removed. In Coldfusion, false, 0, and "" are all falsy.
 	*/
-	public any function compact(array) {
-		return this.filter(array, function(value){ return val(value); });
+	public any function compact(array = this.obj) {
+		return this.filter(array, function(value){ 
+			return val(value);
+		});
+	}
+	
+	/* 
+		Flattens a nested array (the nesting can be to any depth). If you pass shallow, the array will only be flattened a single level.
+	*/
+	public any function flatten(array = this.obj, shallow = false) {
+		var flatten = this.flatten;
+		return this.reduce(array, function(memo, value) {
+			if (isArray(value)) {
+				if (shallow) {
+					memo = arrayConcat(memo, value);
+				}
+				else {
+					memo = arrayConcat(memo, flatten(value));
+				}
+			}
+			else {
+				var index = arrayLen(memo) + 1;
+				memo[index] = value;
+			}
+			return memo;
+		}, []);
+	}
+	
+	// note: this isn't part of UnderscoreJS, but it is missing in Coldfusion
+	public array function arrayConcat(array1, array2) {
+		var result = [];
+
+		// add all of array1 to result array
+		this.each(array1, function(element, index, list) {
+			var newIndex = arrayLen(result) + 1;
+			result[newIndex] = element;
+		});
+
+		// add all of array2 to result array
+		this.each(array2, function(element, index, list) {
+			var newIndex = arrayLen(result) + 1;
+			result[newIndex] = element;
+		});
+
+		return result;
 	}
 	
 	
-			
+
 
 	/* OBJECT FUNCTIONS */
 	// TODO: stub out all object functions
