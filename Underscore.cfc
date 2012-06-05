@@ -11,13 +11,13 @@ component {
 	}
 
 
-	/* COLLECTION FUNCTIONS (ARRAYS, STRUCTURES, OR OBJECTS)
+	/* COLLECTION FUNCTIONS (ARRAYS, STRUCTURES, OR OBJECTS) */
+
 	/*
 		Iterates over a list of elements, yielding each in turn to an iterator function. 
 		The iterator is bound to the context object, if one is passed. 
 		Each invocation of iterator is called with three arguments: (element, index, list). 
 		If list is an object, iterator's arguments will be (value, key, list). 
-		Delegates to the native forEach function if it exists.
 	*/
 	public any function each(obj = this.obj, iterator = this.identity(), context = new Component()) {
  		context.iterator = iterator;
@@ -44,7 +44,6 @@ component {
 
 	/*
 		Produces a new array of values by mapping each value in list through a transformation function (iterator). 
-		If the native map method exists, it will be used instead. 
 		If list is an object, iterator's arguments will be (value, key, list).
 	*/
  	public any function map(obj = this.obj, iterator = this.identity(), context = new Component()) {
