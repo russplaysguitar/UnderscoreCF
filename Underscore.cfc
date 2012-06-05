@@ -365,7 +365,7 @@ component {
  		context.iterator = iterator;
 
 	    this.each(obj, function(value, index, obj) {
-    		var computed = context.iterator(value, index, obj, context);
+    		var computed = context.iterator(value, index, obj);
 	    	if (isNumeric(computed)) {
 		    	if (!structKeyExists(result, 'computed') || computed >= result.computed) {
 		    		result = {value : value, computed : computed};
@@ -386,7 +386,7 @@ component {
  		context.iterator = iterator;
 
 	    this.each(obj, function(value, index, obj) {
-    		var computed = context.iterator(value, index, obj, context);
+    		var computed = context.iterator(value, index, obj);
 	    	if (isNumeric(computed)) {
 		    	if (!structKeyExists(result, 'computed') || computed <= result.computed) {
 		    		result = {value : value, computed : computed};
@@ -569,11 +569,15 @@ component {
 	}
 	
 	// note: this isn't part of UnderscoreJS, but it is missing in Coldfusion
-	public any function slice(array = [], from = 1, to = 1) {
+	public any function slice(array = [], from = 1, to) {
 		var result = [];
 		var j = 1;
 		var arrLen = arrayLen(array);
-		if (to > arrLen) {
+
+		if (!structKeyExists(arguments, 'to')) {
+			arguments.to = arrLen;
+		}
+		else if (to > arrLen) {
 			to = arrLen;
 		}
 		for (var i = from; i <= to; i++) {
@@ -597,7 +601,35 @@ component {
 		return this.slice(array, 1, arrayLen(array) - exclude);
 	}
 	
+
+	/*
+		Returns the last element of an array. Passing n will return the last n elements of the array.
+	*/
+	public any function last(array = this.obj, n, guard = false) {
+		if (structKeyExists(arguments,'n') && !guard) {
+			return this.slice(array, max(ArrayLen(array) - n + 1, 1));
+		} else {
+			return array[ArrayLen(array)];
+		}
+	}
 	
+	/*
+		Returns the rest of the elements in an array. Pass an index to return the values of the array from that index onward.
+	*/
+	public any function rest(array = this.obj, index = 1, guard = false) {
+		if (guard) {
+			index = 1;
+		}
+		return this.slice(array, index);
+	}
+	
+	// alias of rest
+	public any function tail(array, index, guard) {
+		return this.rest(argumentCollection = arguments);
+	}
+	
+	
+			
 
 	/* OBJECT FUNCTIONS */
 	// TODO: stub out all object functions

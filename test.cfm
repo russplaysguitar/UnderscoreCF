@@ -147,9 +147,26 @@ start tests:<br />
 	writeDump(first);
 	writeOutput("<br />");	
 
+	first2 = _.first([5, 4, 3, 2, 1], 3);
+	writeDump(first2);
+	writeOutput("<br />");	
+
 	writeOutput("initial:");
-	initial = _.initial([5, 4, 3, 2, 1],1);
+	initial = _.initial([5, 4, 3, 2, 1]);
 	writeDump(initial);
+	writeOutput("<br />");	
+
+	initial2 = _.initial([5, 4, 3, 2, 1], 3);
+	writeDump(initial2);
+	writeOutput("<br />");	
+
+	writeOutput("last");
+	last = _.last([5, 4, 3, 2, 1]);
+	writeDump(last);
+	writeOutput("<br />");	
+
+	last2 = _.last([5, 4, 3, 2, 1], 3);
+	writeDump(last2);
 	writeOutput("<br />");	
 
 </cfscript>
