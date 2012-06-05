@@ -169,6 +169,10 @@ start tests:<br />
 	writeDump(last2);
 	writeOutput("<br />");	
 
+	writeOutput("compact: ");
+	compact = _.compact([0, 1, false, 2, '', 3]);
+	writeDump(compact);
+	writeOutput("<br />");	
 </cfscript>
 <br />
 end tests

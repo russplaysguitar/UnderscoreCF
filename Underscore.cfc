@@ -628,6 +628,13 @@ component {
 		return this.rest(argumentCollection = arguments);
 	}
 	
+	/*
+		Returns a copy of the array with all falsy values removed. In Coldfusion, false, 0, and "" are all falsy.
+	*/
+	public any function compact(array) {
+		return this.filter(array, function(value){ return val(value); });
+	}
+	
 	
 			
 
