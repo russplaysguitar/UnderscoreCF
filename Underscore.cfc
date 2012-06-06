@@ -733,7 +733,7 @@ component {
 		var rest = _.rest(args);
 		return _.filter(_.uniq(array), function(item) {
 			return _.every(rest, function(other) {
-				return arrayFind(other, item) > 0;
+				return arrayContains(other, item);
 			});
 		});
 	}
@@ -800,6 +800,32 @@ component {
 	    	results[i] = _.pluck(args, i);
 	    }
 	    return results;
+	}
+	
+	
+	/*
+		Returns the index at which value can be found in the array, or -1 if value is not present in the array. 
+		Uses the native ArrayFind() function. 
+		TODO: If you're working with a large array, and you know that the array is already sorted, pass true for isSorted to use a faster binary search.
+	*/
+	public any function indexOf(array = this.obj, item, isSorted = false) {
+		// TODO: implement a binary search when isSorted is true 
+		return ArrayFind(array, item);
+	}
+	
+	/*
+		Returns the index of the last occurrence of value in the array, or -1 if value is not present. 
+	*/
+	public any function lastIndexOf(array, item) {
+		if (!structKeyExists(arguments, 'array')) {
+			return -1;
+		}
+		for(var i = arrayLen(array); i > 0; i--) {
+			if (array[i] == item) {
+				return i;
+			}
+		}
+		return -1;
 	}
 	
 	

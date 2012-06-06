@@ -229,6 +229,11 @@ start tests:<br />
 	zip = _.zip(['moe', 'larry', 'curly'], [30, 40, 50], [true, false, false]);
 	writeDump(zip);
 	writeOutput("<br />");
+
+	writeOutput("lastIndexOf");
+	lastIndexOf = _.lastIndexOf([1, 2, 3, 1, 2, 3], 2);
+	writeDump(lastIndexOf);
+	writeOutput("<br />");
 </cfscript>
 <br />
 end tests
