@@ -852,6 +852,17 @@ component {
 	}
 		
 			
+	/*
+		Bind a function to a structure, meaning that whenever the function is called, the value of "this" will be the structure. 
+		Optionally, bind arguments to the function to pre-fill them, also known as partial application.
+	*/
+	public any function bind(func, context = {}, args = {}) {
+		return function () {
+			return func(argumentCollection = args, this = context);
+		};
+
+	}
+
 
 
 	/* OBJECT FUNCTIONS */

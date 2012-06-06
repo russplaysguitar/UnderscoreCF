@@ -256,6 +256,14 @@ start tests:<br />
 	writeDump(range5);
 	writeOutput("<br />");
 
+	writeOutput("bind: <br />");
+	func = function(greeting) { 
+		return greeting & ': ' & this.name;
+	};
+	func = _.bind(func, {name:'moe'}, {greeting:'hi'});
+	writeDump(func());
+	writeOutput("<br />");
+
 </cfscript>
 <br />
 end tests
