@@ -205,6 +205,11 @@ start tests:<br />
 	uniq = _.uniq([1, 2, 3, 3, 4, 4, 5], true, function (val) { return val; });
 	writeDump(uniq);
 	writeOutput("<br />");	
+
+	writeOutput("union: ");
+	union = _.union([1, 2, 3], [101, 2, 1, 10], [2, 1]);
+	writeDump(union);
+	writeOutput("<br />");
 </cfscript>
 <br />
 end tests

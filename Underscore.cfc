@@ -543,7 +543,15 @@ component {
 		Return the number of values in the list.
 	*/
 	public any function size(obj = this.obj) {
-		return ArrayLen(this.toArray(obj));
+		if (isObject(obj) || isStruct(obj)) {
+			return structCount(obj);
+		}
+		else if (isArray(obj)) {
+			return arrayLen(obj);
+		}
+		else {
+			throw "size() is only compatible with objects, structs, and arrays.";
+		}
 	}
 
 	/* ARRAY FUNCTIONS */
@@ -683,7 +691,6 @@ component {
 		return result;
 	}
 	
-
 	/*
 		Returns a copy of the array with all instances of the values removed. 
 	*/
@@ -691,6 +698,18 @@ component {
 		return this.difference(array, others);
 	}
 	
+	/*
+		Computes the union of the passed-in arrays: the list of unique items, in order, that are present in one or more of the arrays.
+	*/
+	public any function union() {
+		var numArgs = this.size(arguments);
+		var arrays = [];
+		for(var i = 1; i <= numArgs; i++) {
+			arrays[i] = arguments[i];
+		}
+		return this.uniq(this.flatten(arrays, true));
+	}
+
 	/*
 		Similar to without, but returns the values from array that are not present in the other arrays.
 	*/
