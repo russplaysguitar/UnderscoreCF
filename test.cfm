@@ -224,6 +224,11 @@ start tests:<br />
 	intersection = _.intersection([1, 2, 3], [101, 2, 1, 10], [2, 1]);
 	writeDump(intersection);
 	writeOutput("<br />");
+
+	writeOutput("zip: ");
+	zip = _.zip(['moe', 'larry', 'curly'], [30, 40, 50], [true, false, false]);
+	writeDump(zip);
+	writeOutput("<br />");
 </cfscript>
 <br />
 end tests

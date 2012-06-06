@@ -361,7 +361,12 @@ component {
 	*/
 	public any function pluck(obj = this.obj, key) {
     	return _.map(obj, function(value){
-    		return value[key];
+    		if (_.isFunction(key)) {
+    			return key(value);
+    		}
+    		else {
+	    		return value[key];
+    		}
     	});				
 	}
 
@@ -777,6 +782,24 @@ component {
 			return memo;
 		}, []);
 		return results;
+	}
+	
+	/*
+		Merges together the values of each of the arrays with the values at the corresponding position. 
+		Useful when you have separate data sources that are coordinated through matching array indexes. 
+		If you're working with a matrix of nested arrays, zip.apply can transpose the matrix in a similar fashion.
+	*/
+	public any function zip() {
+	    var args = _.slice(arguments);
+	    var length = _.max(_.pluck(args, function (array) {
+	    		return arrayLen(array);
+	    	})
+	    );
+	    var results = [];
+	    for (var i = 1; i <= length; i++) {
+	    	results[i] = _.pluck(args, i);
+	    }
+	    return results;
 	}
 	
 	
