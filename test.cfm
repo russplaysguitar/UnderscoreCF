@@ -234,6 +234,28 @@ start tests:<br />
 	lastIndexOf = _.lastIndexOf([1, 2, 3, 1, 2, 3], 2);
 	writeDump(lastIndexOf);
 	writeOutput("<br />");
+
+	writeOutput("range: ");
+	range = _.range(10);
+	writeDump(range);
+	writeOutput("<br />");
+
+	range2 = _.range(1, 11);
+	writeDump(range2);
+	writeOutput("<br />");
+
+	range3 = _.range(0, 30, 5);
+	writeDump(range3);
+	writeOutput("<br />");
+
+	range4 = _.range(0, -10, -1);
+	writeDump(range4);
+	writeOutput("<br />");
+
+	range5 = _.range(0);
+	writeDump(range5);
+	writeOutput("<br />");
+
 </cfscript>
 <br />
 end tests

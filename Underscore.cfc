@@ -816,7 +816,7 @@ component {
 	/*
 		Returns the index of the last occurrence of value in the array, or -1 if value is not present. 
 	*/
-	public any function lastIndexOf(array, item) {
+	public any function lastIndexOf(array = this.obj, item) {
 		if (!structKeyExists(arguments, 'array')) {
 			return -1;
 		}
@@ -828,7 +828,30 @@ component {
 		return -1;
 	}
 	
-	
+	/*
+		A function to create flexibly-numbered lists of integers, handy for each and map loops. 
+		start, if omitted, defaults to 0; step defaults to 1. 
+		Returns a list of integers from start to stop, incremented (or decremented) by step, exclusive.
+	*/
+	public any function range(start = 0, stop, step = 1) {
+		if (!structKeyExists(arguments, 'stop')) {
+			stop = start;
+			start = 0;
+		}
+
+	    var len = max(ceiling((stop - start) / step), 0);
+	    var idx = 1;
+	    var range = [];
+
+	    while(idx <= len) {
+			range[idx++] = start;
+			start += step;
+	    }
+
+		return range;
+	}
+		
+			
 
 
 	/* OBJECT FUNCTIONS */
