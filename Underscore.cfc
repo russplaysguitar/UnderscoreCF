@@ -80,19 +80,19 @@ component {
 	*/
  	public any function reduce(obj = this.obj, iterator = this.identity(), memo, context = new Component()) {
  		context.iterator = iterator;
+ 		var i = 1;
 
 		if (isArray(obj)) {
 			for (num in obj) {
-				memo = context.iterator(memo, num);
+				memo = context.iterator(memo, num, i);
+				i++;
 			}
 		}
 		else {
 			for (key in obj) {
-				writeDump(key);
-				writeOutput("<br />");
-				writeDump(obj);
 				var num = obj[key];
-				memo = context.iterator(memo, num);
+				memo = context.iterator(memo, num, i);
+				i++;
 			}
 		}
 
@@ -610,8 +610,11 @@ component {
 	public any function last(array = this.obj, n, guard = false) {
 		if (structKeyExists(arguments,'n') && !guard) {
 			return this.slice(array, max(ArrayLen(array) - n + 1, 1));
-		} else {
+		} else if (arrayLen(array)) {
 			return array[ArrayLen(array)];
+		}
+		else {
+			return JavaCast("null", 0);
 		}
 	}
 	
@@ -699,6 +702,38 @@ component {
 		});
 	}
 	
+	/*
+		Produces a duplicate-free version of the array.
+		If you know in advance that the array is sorted, passing true for isSorted will run a much faster algorithm. 
+		If you want to compute unique items based on a transformation, pass an iterator function.
+	*/
+	public any function uniq(array = this.obj, isSorted = false, iterator) {
+		if (structKeyExists(arguments, 'iterator')) {
+			var initial = this.map(array, iterator);
+		}
+		else {
+			var initial = array;
+		}
+		var results = [];
+		
+		if (arrayLen(array) < 3) {
+			isSorted = true;
+		}
+		var last = this.last;
+		var include = this.include;
+		this.reduce(initial, function (memo, value, index) {
+			if(isSorted && (last(memo) != value || !arrayLen(memo))) {
+			    arrayAppend(memo, value);
+			    arrayAppend(results, array[index]);
+			}
+			else if (!isSorted && !include(memo, value)) {
+			    arrayAppend(memo, value);
+			    arrayAppend(results, array[index]);
+			}
+			return memo;
+		}, []);
+		return results;
+	}
 	
 	
 

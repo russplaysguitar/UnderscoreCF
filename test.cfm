@@ -193,6 +193,18 @@ start tests:<br />
 	writeDump(difference);	
 	writeOutput("<br />");	
 
+	writeOutput("uniq:");
+	uniq = _.uniq([1, 2, 1, 3, 1, 4]);
+	writeDump(uniq);
+	writeOutput("<br />");	
+
+	uniq = _.uniq([1, 2, 3, 3, 4, 4, 5], true);
+	writeDump(uniq);
+	writeOutput("<br />");
+
+	uniq = _.uniq([1, 2, 3, 3, 4, 4, 5], true, function (val) { return val; });
+	writeDump(uniq);
+	writeOutput("<br />");	
 </cfscript>
 <br />
 end tests
