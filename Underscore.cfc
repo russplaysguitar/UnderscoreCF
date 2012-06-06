@@ -860,9 +860,24 @@ component {
 		return function () {
 			return func(argumentCollection = args, this = context);
 		};
-
 	}
 
+
+	public any function bindAll(obj) {
+		writeDump(obj);
+		var funcs = _.slice(arguments, 2);
+		if (arrayLen(funcs) == 0) {
+			funcs = _.functions(obj);
+		}
+		writeDump(funcs);
+		_.each(funcs, function(f) { 
+			var fun =  _.bind(obj[f], obj); 
+			obj[f] = fun;
+		});
+		return obj;
+	}
+	
+	
 
 
 	/* OBJECT FUNCTIONS */
@@ -875,6 +890,20 @@ component {
 		return _.map(obj);
 	}
 	
+
+	public any function functions(obj = this.obj) {
+		var names = [];
+		for (var key in obj) {
+			if (_.isFunction(obj[key])) {
+				arrayAppend(names, key);
+			}
+		}
+		ArraySort(names, "textnocase");
+		return names;
+	}
+
+
+
 	/*
 		Returns true if object is a Function.
 	*/	

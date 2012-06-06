@@ -264,6 +264,17 @@ start tests:<br />
 	writeDump(func());
 	writeOutput("<br />");
 
+	writeOutput("bindAll: ");
+	buttonView = {
+	  label   : 'underscore',
+	  onClick : function(){ writeOutput('clicked: ' & this.label); },
+	  onHover : function(){ writeOutput('hovering: ' & this.label); }
+	};
+	bindAll = _.bindAll(buttonView);
+	writeDump(bindAll);
+	bindAll.onclick();
+	writeOutput("<br />");
+	bindAll.onHover();
 </cfscript>
 <br />
 end tests
