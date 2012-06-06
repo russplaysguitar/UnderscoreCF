@@ -169,6 +169,15 @@ start tests:<br />
 	writeDump(last2);
 	writeOutput("<br />");	
 
+	writeOutput("rest");
+	rest = _.rest([5, 4, 3, 2, 1]);
+	writeDump(rest);
+	writeOutput("<br />");	
+
+	rest2 = _.rest([5, 4, 3, 2, 1], 3);
+	writeDump(rest2);
+	writeOutput("<br />");	
+
 	writeOutput("compact: ");
 	compact = _.compact([0, 1, false, 2, '', 3]);
 	writeDump(compact);
@@ -209,6 +218,11 @@ start tests:<br />
 	writeOutput("union: ");
 	union = _.union([1, 2, 3], [101, 2, 1, 10], [2, 1]);
 	writeDump(union);
+	writeOutput("<br />");
+
+	writeOutput("intersection: ");
+	intersection = _.intersection([1, 2, 3], [101, 2, 1, 10], [2, 1]);
+	writeDump(intersection);
 	writeOutput("<br />");
 </cfscript>
 <br />

@@ -7,6 +7,8 @@ component {
 	public any function init(obj = {}) { 
 		this.obj = obj;
 
+		variables._ = this;
+
 		return this;
 	}
 
@@ -39,7 +41,7 @@ component {
 
  	// alias of each
 	public any function forEach(obj, iterator, context) {
-	    return this.each(argumentCollection = arguments);
+	    return _.each(argumentCollection = arguments);
  	}
 
 	/*
@@ -71,7 +73,7 @@ component {
  	
  	// alias of map
   	public any function collect(obj, iterator, context) {
- 		return this.map(argumentCollection = arguments);
+ 		return _.map(argumentCollection = arguments);
  	}
 
 	/*
@@ -101,12 +103,12 @@ component {
  	
  	// alias of reduce
   	public any function foldl(obj, iterator, memo, context) {
- 		return this.reduce(argumentCollection = arguments);
+ 		return _.reduce(argumentCollection = arguments);
  	}
  	
  	// alias of reduce	
   	public any function inject(obj, iterator, memo, context) {
- 		return this.reduce(argumentCollection = arguments);
+ 		return _.reduce(argumentCollection = arguments);
  	}
 
  	/*
@@ -118,7 +120,7 @@ component {
 
    	// alias of reduceRight
  	public any function foldr(obj, iterator, memo, context) {
- 		return this.reduceRight(argumentCollection = arguments);
+ 		return _.reduceRight(argumentCollection = arguments);
  	}
  	
  	/*
@@ -156,7 +158,7 @@ component {
  	
  	// alias of find
   	public any function detect(obj, iterator, context) { 
- 		return this.find(argumentCollection = arguments);
+ 		return _.find(argumentCollection = arguments);
  	}
 
  	/*
@@ -193,7 +195,7 @@ component {
 
  	// alias of filter
 	public any function select(obj, iterator, context) {
-		return this.filter(argumentCollection = arguments);
+		return _.filter(argumentCollection = arguments);
 	}
 	
 	/*
@@ -263,7 +265,7 @@ component {
 	
 	// alias of all
 	public any function every(obj, iterator, context) {
-		return this.all(argumentCollection = arguments);
+		return _.all(argumentCollection = arguments);
 	}
 	
 	/*
@@ -301,21 +303,26 @@ component {
 	
 	// alias of any
 	public any function some(obj, iterator, context) {
-		return this.any(argumentCollection = arguments);
+		return _.any(argumentCollection = arguments);
 	}	
 
 	/*
 		Returns true if the value is present in the list.
 	*/
 	public any function include(obj = this.obj, target) {
-		return this.any(obj, function(value) {
-			return value == target;
+		return _.any(obj, function(value) {
+			if (!isSimpleValue(value) || !isSimpleValue(target)) {
+				return false;
+			}
+			else {
+				return value == target;
+			}
 		});
 	}
 
 	// alias of include. Note: "contains" is a reserved word in CF.
 	public any function _contains(obj, target) {
-		return this.include(argumentCollection = arguments);
+		return _.include(argumentCollection = arguments);
 	}
 
 
@@ -325,8 +332,8 @@ component {
 	*/
 	// TODO: make sure this works right
 	public any function invoke(obj = this.obj, method, args = {}) {
-	    return this.map(obj, function(value) {
-	    	if (this.isFunction(method)) {
+	    return _.map(obj, function(value) {
+	    	if (_.isFunction(method)) {
 	    		// try to call method() directly
 	    		var result = method(args);
 	    		if (isDefined('result')) {
@@ -353,7 +360,7 @@ component {
 		A convenient version of what is perhaps the most common use-case for map: extracting a list of property values.
 	*/
 	public any function pluck(obj = this.obj, key) {
-    	return this.map(obj, function(value){
+    	return _.map(obj, function(value){
     		return value[key];
     	});				
 	}
@@ -366,7 +373,7 @@ component {
 		var result = {};
  		context.iterator = iterator;
 
-	    this.each(obj, function(value, index, obj) {
+	    _.each(obj, function(value, index, obj) {
     		var computed = context.iterator(value, index, obj);
 	    	if (isNumeric(computed)) {
 		    	if (!structKeyExists(result, 'computed') || computed >= result.computed) {
@@ -387,7 +394,7 @@ component {
 		var result = {};
  		context.iterator = iterator;
 
-	    this.each(obj, function(value, index, obj) {
+	    _.each(obj, function(value, index, obj) {
     		var computed = context.iterator(value, index, obj);
 	    	if (isNumeric(computed)) {
 		    	if (!structKeyExists(result, 'computed') || computed <= result.computed) {
@@ -405,7 +412,7 @@ component {
 		Iterator may also be the string name of the property to sort by (eg. length).
 	*/
 	public any function sortBy(obj, val, context = new Component()) {
-		if (this.isFunction(val)) {
+		if (_.isFunction(val)) {
 			var iterator = val;
 		}
 		else {
@@ -414,13 +421,13 @@ component {
 			};
 		}
  		context.iterator = iterator;
-		var toSort = this.map(obj, function(value, index, list, context) {
+		var toSort = _.map(obj, function(value, index, list, context) {
 			return {
 				value : value,
 				criteria : context.iterator(value, index, list, context)
 			};
 		});
-		var sorted = this.sort(toSort, function(left, right) {
+		var sorted = _.sort(toSort, function(left, right) {
 			if (!structKeyExists(left, 'criteria')) {
 				return 1;
 			}
@@ -439,15 +446,15 @@ component {
 				return 0;
 			}
 		});
-		return this.pluck(sorted, 'value');
+		return _.pluck(sorted, 'value');
 	}
 
 
 	// note: this isn't part of UnderscoreJS, but CF doesn't have a sort() like this
-	public any function sort(obj = this.obj, iterator = this.identity) {
-		var array = this.toArray(obj);
+	public any function sort(obj = this.obj, iterator = this.identity()) {
+		var array = _.toArray(obj);
 		// TODO implement an actual sorting mechanism
-		this.each(array, function(element, index, list) {
+		_.each(array, function(element, index, list) {
 			if (ArrayLen(array) > index) {
 				var current = array[index];
 				var next = array[index+1];
@@ -474,13 +481,13 @@ component {
 	*/
 	public any function groupBy(obj = this.obj, val) {
 		var result = {};
-		if (this.isFunction(val)) {
+		if (_.isFunction(val)) {
 			var iterator = val;
 		}
 		else {
 			var iterator = function(obj) { return obj[val]; };
 		}
-		this.each(obj, function(value, index) {
+		_.each(obj, function(value, index) {
 			var key = iterator(value, index);
 			if (!structKeyExists(result, key)) {
 				result[key] = [];
@@ -515,7 +522,7 @@ component {
 	public any function shuffle(obj = this.obj) {
 	    var shuffled = obj;
 	    var rand = 0;
-	    this.each(obj, function(value, index, list) {
+	    _.each(obj, function(value, index, list) {
 			rand = fix(1 + (rand() * (index)));
 			shuffled[index] = shuffled[rand];
 			shuffled[rand] = value;
@@ -531,7 +538,7 @@ component {
 			return obj;
 		}
 		else if (isObject(obj) || isStruct(obj)) {
-			return this.values(obj);
+			return _.values(obj);
 		}
 		else {
 			// TODO: make sure this is right
@@ -561,7 +568,7 @@ component {
 	*/
 	public any function first(array = this.obj, n, guard = false) {
 		if (structKeyExists(arguments, 'n') && !guard) {
-			return this.slice(array, 1, n);
+			return _.slice(array, 1, n);
 		}
 		else {
 			return array[1];
@@ -570,12 +577,12 @@ component {
 	
 	// alias of first
 	public any function head(array, n, guard) {
-		return this.first(argumentCollection = arguments);
+		return _.first(argumentCollection = arguments);
 	}
 		
 	// alias of first
 	public any function take(array, n, guard) {
-		return this.first(argumentCollection = arguments);
+		return _.first(argumentCollection = arguments);
 	}
 	
 	// note: this isn't part of UnderscoreJS, but it is missing in Coldfusion
@@ -608,7 +615,7 @@ component {
 		else {
 			var exclude = n;
 		}
-		return this.slice(array, 1, arrayLen(array) - exclude);
+		return _.slice(array, 1, arrayLen(array) - exclude);
 	}
 	
 
@@ -617,7 +624,7 @@ component {
 	*/
 	public any function last(array = this.obj, n, guard = false) {
 		if (structKeyExists(arguments,'n') && !guard) {
-			return this.slice(array, max(ArrayLen(array) - n + 1, 1));
+			return _.slice(array, max(ArrayLen(array) - n + 1, 1));
 		} else if (arrayLen(array)) {
 			return array[ArrayLen(array)];
 		}
@@ -629,23 +636,23 @@ component {
 	/*
 		Returns the rest of the elements in an array. Pass an index to return the values of the array from that index onward.
 	*/
-	public any function rest(array = this.obj, index = 1, guard = false) {
+	public any function rest(array = this.obj, index = 2, guard = false) {
 		if (guard) {
 			index = 1;
 		}
-		return this.slice(array, index);
+		return _.slice(array, index);
 	}
 	
 	// alias of rest
 	public any function tail(array, index, guard) {
-		return this.rest(argumentCollection = arguments);
+		return _.rest(argumentCollection = arguments);
 	}
 	
 	/*
 		Returns a copy of the array with all falsy values removed. In Coldfusion, false, 0, and "" are all falsy.
 	*/
 	public any function compact(array = this.obj) {
-		return this.filter(array, function(value){ 
+		return _.filter(array, function(value){ 
 			return val(value);
 		});
 	}
@@ -654,14 +661,13 @@ component {
 		Flattens a nested array (the nesting can be to any depth). If you pass shallow, the array will only be flattened a single level.
 	*/
 	public any function flatten(array = this.obj, shallow = false) {
-		var flatten = this.flatten;
-		return this.reduce(array, function(memo, value) {
+		return _.reduce(array, function(memo, value) {
 			if (isArray(value)) {
 				if (shallow) {
-					memo = arrayConcat(memo, value);
+					memo = _.arrayConcat(memo, value);
 				}
 				else {
-					memo = arrayConcat(memo, flatten(value));
+					memo = _.arrayConcat(memo, _.flatten(value));
 				}
 			}
 			else {
@@ -677,13 +683,13 @@ component {
 		var result = [];
 
 		// add all of array1 to result array
-		this.each(array1, function(element, index, list) {
+		_.each(array1, function(element, index, list) {
 			var newIndex = arrayLen(result) + 1;
 			result[newIndex] = element;
 		});
 
 		// add all of array2 to result array
-		this.each(array2, function(element, index, list) {
+		_.each(array2, function(element, index, list) {
 			var newIndex = arrayLen(result) + 1;
 			result[newIndex] = element;
 		});
@@ -695,29 +701,50 @@ component {
 		Returns a copy of the array with all instances of the values removed. 
 	*/
 	public any function without(array = this.obj, others = []) {
-		return this.difference(array, others);
+		return _.difference(array, others);
 	}
 	
 	/*
 		Computes the union of the passed-in arrays: the list of unique items, in order, that are present in one or more of the arrays.
 	*/
 	public any function union() {
-		var numArgs = this.size(arguments);
+		var numArgs = _.size(arguments);
 		var arrays = [];
 		for(var i = 1; i <= numArgs; i++) {
 			arrays[i] = arguments[i];
 		}
-		return this.uniq(this.flatten(arrays, true));
+		return _.uniq(_.flatten(arrays, true));
+	}
+
+	/*
+		Computes the list of values that are the intersection of all the arrays. Each value in the result is present in each of the arrays.
+	*/
+	public any function intersection(array = this.obj) {
+		var numArgs = _.size(arguments);
+		var args = [];
+		for(var i = 1; i <= numArgs; i++) {
+			args[i] = arguments[i];
+		}
+		var rest = _.rest(args);
+		return _.filter(_.uniq(array), function(item) {
+			return _.every(rest, function(other) {
+				return arrayFind(other, item) > 0;
+			});
+		});
+	}
+
+	// alias of intersection
+	public any function intersect(array) {
+		return _.intersection(argumentCollection = arguments);
 	}
 
 	/*
 		Similar to without, but returns the values from array that are not present in the other arrays.
 	*/
 	public any function difference(array = this.obj, others = []) {
-		var rest = this.flatten(others, true);
-		var include = this.include;
-		return this.filter(array, function(value){
-			return !include(rest, value);
+		var rest = _.flatten(others, true);
+		return _.filter(array, function(value){
+			return !_.include(rest, value);
 		});
 	}
 	
@@ -728,7 +755,7 @@ component {
 	*/
 	public any function uniq(array = this.obj, isSorted = false, iterator) {
 		if (structKeyExists(arguments, 'iterator')) {
-			var initial = this.map(array, iterator);
+			var initial = _.map(array, iterator);
 		}
 		else {
 			var initial = array;
@@ -738,14 +765,12 @@ component {
 		if (arrayLen(array) < 3) {
 			isSorted = true;
 		}
-		var last = this.last;
-		var include = this.include;
-		this.reduce(initial, function (memo, value, index) {
-			if(isSorted && (last(memo) != value || !arrayLen(memo))) {
+		_.reduce(initial, function (memo, value, index) {
+			if(isSorted && (_.last(memo) != value || !arrayLen(memo))) {
 			    arrayAppend(memo, value);
 			    arrayAppend(results, array[index]);
 			}
-			else if (!isSorted && !include(memo, value)) {
+			else if (!isSorted && !_.include(memo, value)) {
 			    arrayAppend(memo, value);
 			    arrayAppend(results, array[index]);
 			}
@@ -764,7 +789,7 @@ component {
 		Short-circuits and stops traversing the list if a true element is found. 
 	*/
 	public any function values(obj = this.obj) {
-		return this.map(obj);
+		return _.map(obj);
 	}
 	
 	/*
