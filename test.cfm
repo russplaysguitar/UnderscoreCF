@@ -1,3 +1,7 @@
+<cffunction name="flush">
+	<cfflush />
+</cffunction>
+
 start tests:<br />
 <br />
 <cfscript>
@@ -13,7 +17,7 @@ start tests:<br />
 	_myArr = new Underscore(myArr);
 	_myObj = new Underscore(myObj);
 
-
+/*
 	_.forEach(myStruct, function(val, key) {
 		writeDump(key & ": " & val);
 	});
@@ -101,7 +105,7 @@ start tests:<br />
 	writeDump(_.min([10, 5, 100, 2, 1000]));
 	writeOutput("<br />");
 
-/*
+
 	invokeObj = [
 		{
 			x:1,
@@ -114,7 +118,7 @@ start tests:<br />
 	invoke = _.invoke(invokeObj, function (args){return args;}, {z:10});
 	writeDump(invoke);
 	writeOutput("<br />");
-*/
+
 
 	toArray = _.toArray({a:10,b:20});
 	writeDump(toArray);
@@ -275,6 +279,51 @@ start tests:<br />
 	bindAll.onclick();
 	writeOutput("<br />");
 	bindAll.onHover();
+*/
+
+	// writeOutput("<br />");
+	// a = {};
+	// b = [1];
+	// a[b] = 2;
+	// writeDump(a);
+
+
+	x = {};
+	k = {"1":5.0};
+	sk = serializeJSON(k);
+	x[sk] = 1;
+	writeDump(x);
+	writeDump(x[sk]);
+
+	writeOutput("<br />");
+	writeOutput("memoize:");
+	fibonacci = function(n) {
+		// writeDump(n);
+		if (n < 2) {
+			return n;
+		}
+		else {
+			return fibonacci(n - 1) + fibonacci(n - 2);
+		}
+	};
+	num = 22;
+	writeDump(fibonacci(num));	
+	flush();
+	fib = _.memoize(function(n) {
+		// writeDump(n);
+		if (n < 2) {
+			return n;
+		}
+		else {
+			return fib(n - 1) + fib(n - 2);
+		}
+	});
+	writeDump(fib(num));	
+	flush();
+	writeOutput("<br />");
+
+	delay = _.delay(function () {return arguments;}, 1000, {a = "delay"});
+	writeDump(delay);
 </cfscript>
 <br />
 end tests

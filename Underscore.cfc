@@ -864,12 +864,10 @@ component {
 
 
 	public any function bindAll(obj) {
-		writeDump(obj);
 		var funcs = _.slice(arguments, 2);
 		if (arrayLen(funcs) == 0) {
 			funcs = _.functions(obj);
 		}
-		writeDump(funcs);
 		_.each(funcs, function(f) { 
 			var fun =  _.bind(obj[f], obj); 
 			obj[f] = fun;
@@ -877,7 +875,45 @@ component {
 		return obj;
 	}
 	
+	/*
+		Memoizes a given function by caching the computed result. Useful for speeding up slow-running computations. 
+		If passed an optional hashFunction, it will be used to compute the hash key for storing the result, based on the arguments to the original function. 
+		The default hashFunction just uses the first argument to the memoized function as the key.
+	*/
+	public any function memoize(func, hasher) {
+		var memo = {};
+		if (!structKeyExists(arguments, 'hasher')) {
+			arguments.hasher = function(x) {
+				return _.first(x);
+			};
+		}
+		return function() {
+			var key = hasher(arguments);
+			if (!structKeyExists(memo, key)) {
+				memo[key] = func(argumentCollection = arguments);
+			}
+			return memo[key];
+		};
+	}
 	
+	/*
+		Delays a function for the given number of milliseconds, and then calls
+		it with the arguments supplied in the args struct.
+  	*/
+	public any function delay(func, wait, args) {
+	    sleep(wait);
+	    return arguments.func(argumentCollection=args);
+	}
+	
+	/*
+		 Defers a function, scheduling it to run after the current call stack has cleared.
+	*/
+	public any function defer(func, args) {
+		// TODO: make sure this works, if it is possible in CF
+		return _.delay(func, 0, args);
+	}
+	
+		
 
 
 	/* OBJECT FUNCTIONS */
@@ -903,6 +939,14 @@ component {
 	}
 
 
+	// TODO: implement this better...
+	public any function has(obj = this.obj, key) {
+
+		return _.include(obj, key);
+		
+	}
+	
+	
 
 	/*
 		Returns true if object is a Function.
