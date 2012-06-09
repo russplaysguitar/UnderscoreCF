@@ -862,7 +862,9 @@ component {
 		};
 	}
 
-
+	/*
+		Bind all of an object's methods to that object. Useful for ensuring that all callbacks defined on an object belong to it.
+	*/
 	public any function bindAll(obj) {
 		var funcs = _.slice(arguments, 2);
 		if (arrayLen(funcs) == 0) {
