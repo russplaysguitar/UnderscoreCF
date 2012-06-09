@@ -850,7 +850,6 @@ component {
 
 		return range;
 	}
-		
 			
 	/*
 		Bind a function to a structure, meaning that whenever the function is called, the value of "this" will be the structure. 

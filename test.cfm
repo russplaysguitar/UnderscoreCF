@@ -287,7 +287,6 @@ start tests:<br />
 	// a[b] = 2;
 	// writeDump(a);
 
-
 	x = {};
 	k = {"1":5.0};
 	sk = serializeJSON(k);
