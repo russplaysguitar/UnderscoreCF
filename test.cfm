@@ -17,7 +17,7 @@ start tests:<br />
 	_myArr = new Underscore(myArr);
 	_myObj = new Underscore(myObj);
 
-/*
+
 	_.forEach(myStruct, function(val, key) {
 		writeDump(key & ": " & val);
 	});
@@ -279,7 +279,7 @@ start tests:<br />
 	bindAll.onclick();
 	writeOutput("<br />");
 	bindAll.onHover();
-*/
+
 
 	// writeOutput("<br />");
 	// a = {};
@@ -298,7 +298,6 @@ start tests:<br />
 	writeOutput("<br />");
 	writeOutput("memoize:");
 	fibonacci = function(n) {
-		// writeDump(n);
 		if (n < 2) {
 			return n;
 		}
@@ -322,7 +321,7 @@ start tests:<br />
 	flush();
 	writeOutput("<br />");
 
-	delay = _.delay(function () {return arguments;}, 1000, {a = "delay"});
+	delay = _.delay(function (msg) {return msg;}, 1000, {msg = "hi"});
 	writeDump(delay);
 </cfscript>
 <br />
