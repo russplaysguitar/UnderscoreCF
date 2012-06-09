@@ -802,7 +802,6 @@ component {
 	    return results;
 	}
 	
-	
 	/*
 		Returns the index at which value can be found in the array, or -1 if value is not present in the array. 
 		Uses the native ArrayFind() function. 
@@ -914,7 +913,63 @@ component {
 		return _.delay(func, 0, args);
 	}
 	
+	/*
+		Returns a function, that, when invoked, will only be triggered at most once
+		during a given window of time.
+  	*/
+	public any function throttle(func, wait) {
+		// TODO
+		return;
+	}
+	
+	/*
+		Returns a function, that, as long as it continues to be invoked, will not
+		be triggered. The function will be called after it stops being called for
+		N milliseconds. If `immediate` is passed, trigger the function on the
+		leading edge, instead of the trailing.
+	*/
+	public any function debounce(func, wait, immediate) {
+		// TODO
+		return;
+	}
+
+	/*
+		Returns a function that will be executed at most one time, no matter how
+		often you call it. Useful for lazy initialization.
+	*/
+	public any function once(func) {
+		// TODO		
+		return;
+	}
+
+	/*
+		Returns the first function passed as an argument to the second,
+		allowing you to adjust arguments, run code before and after, and
+		conditionally execute the original function.
+	*/
+	public any function wrap(func, wrapper) {
+		// TODO		
+		return;
+	}
+
+	/*
+		Returns a function that is the composition of a list of functions, each
+		consuming the return value of the function that follows.
+	*/
+	public any function compose() {
+		// TODO	
+		return;
+	}
+
+	/*
+		Returns a function that will only be executed after being called N times.
+	*/
+	public any function after(times, func) {
 		
+		return;
+	}
+
+
 
 
 	/* OBJECT FUNCTIONS */
