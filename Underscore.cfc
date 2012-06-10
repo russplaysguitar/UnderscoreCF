@@ -965,9 +965,12 @@ component {
 		allowing you to adjust arguments, run code before and after, and
 		conditionally execute the original function.
 	*/
+	// TODO make sure this handles arguments correctly
 	public any function wrap(func, wrapper) {
-		// TODO		
-		return;
+		var args = arguments;
+		return function() {
+			return wrapper(argumentCollection=arguments, func=args.func);
+		};
 	}
 
 	/*

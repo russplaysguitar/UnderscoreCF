@@ -342,6 +342,17 @@ start tests:<br />
 	writeDump(once2);
 	once3 = once();
 	writeDump(once3);
+	writeoutput("<br />");
+
+	writeOutput("wrap: ");
+	hello = function(name) { 
+		return "hello: " & name; 
+	};
+	hello2 = _.wrap(hello, function(func) {
+		return "before, " & func("moe") & ", after";
+	});
+	wrap = hello2();	
+	writeDump(wrap);
 </cfscript>
 <br />
 end tests
