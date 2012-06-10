@@ -432,7 +432,7 @@ component {
 				criteria : context.iterator(value, index, list, context)
 			};
 		});
-		var sorted = _.sort(toSort, function(left, right) {
+		var sorted = this.sort(toSort, function(left, right) {
 			if (!structKeyExists(left, 'criteria')) {
 				return 1;
 			}
@@ -440,46 +440,66 @@ component {
 				return -1;
 			}
 			var a = left.criteria;
-			var b = right.criteria;			
-			if (a < b) {
-				return -1;
-			}
-			else if (a > b) {
-				return 1;
-			}
-			else {
-				return 0;
-			}
+			var b = right.criteria;	
+			return _.comparison(a, b);
 		});
 		return _.pluck(sorted, 'value');
 	}
 
-
-	// note: this isn't part of UnderscoreJS, but CF doesn't have a sort() like this
-	public any function sort(obj = this.obj, iterator = this.identity()) {
+	// for sortBy()
+	// note: this isn't part of UnderscoreJS, but CF doesn't have a sort() that can use a custom comparison function
+	public any function sort(obj = this.obj, iterator = this.comparison) {
 		var array = _.toArray(obj);
-		// TODO implement an actual sorting mechanism
-		_.each(array, function(element, index, list) {
-			if (ArrayLen(array) > index) {
-				var current = array[index];
-				var next = array[index+1];
-
-				if (iterator(current, next)) {
-					writeOutput("swap: ");
-					writeDump(current);
-					writeOutput(" with ");
-					writeDump(next);
-					writeDump(array);
-					array[index] = next;
-					array[index+1] = current;
-				}
-			}
-		});
-		return array;
+		if(arraylen(array) < 2) {
+			return array;
+		}
+		var middle = ceiling(arraylen(array) / 2);
+		var left = sort(_.slice(array, 1, middle), iterator);
+		var right = sort(_.slice(array, middle+1), iterator);
+		var merge = this.merge(left, right, iterator);
+		return merge;
 	}
 
+	// for sort()
+	public any function merge(left, right, comparison = this.comparison)
+	{
+		var result = [];
+		while((arraylen(left) > 0) && (arraylen(right) > 0))
+		{
+			if(comparison(left[1],right[1]) <= 0) {
+				var item = left[1];
+				arrayDeleteAt(left, 1);
+				arrayAppend(result, item);
+			}
+			else {
+				var item = right[1];
+				arrayDeleteAt(right, 1);
+				arrayAppend(result, item);
+			}
+		}
+		while(arraylen(left) > 0) {
+			var item = left[1];
+			arrayDeleteAt(left, 1);
+			arrayAppend(result, item);
+		}
+		while(arraylen(right) > 0) {
+			var item = right[1];
+			arrayDeleteAt(right, 1);
+			arrayAppend(result, item);
+		}
+		return result;
+	}
 
-
+	// for merge()
+	public any function comparison(left, right) {		
+		if(left == right)
+			return 0;
+		else if(left < right)
+			return -1;
+		else
+			return 1;
+	}
+	
 	/*
 		Splits a collection into sets, grouped by the result of running each value through iterator. 
 		If iterator is a string instead of a function, groups by the property named by iterator on each of the values.
@@ -602,6 +622,7 @@ component {
 		else if (to > arrLen) {
 			to = arrLen;
 		}
+
 		for (var i = from; i <= to; i++) {
 			result[j] = array[i];
 			j++;

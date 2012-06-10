@@ -128,6 +128,20 @@ start tests:<br />
 	writeDump(toArray);
 	writeOutput("<br />");
 
+	writeOutput("slice: ");
+	slice1 = _.slice([1,2,3,4,5,6],1);
+	writeDump(slice1);
+	slice2 = _.slice([1,2,3,4,5,6],2,3);
+	writeDump(slice2);
+	slice3 = _.slice([1,2,3,4,5,6],7);
+	writeDump(slice3);
+
+	writeOutput("sort:");
+	sort = _.sort([10,1,5,20,15,3]);
+	writeDump(sort);
+	writeOutput("<br />");	
+
+	writeOutput("sort by:");
 	sortBy = _.sortBy([7, 2, 3, 1, 5, 6], function(num){ return num; });
 	writeDump(sortBy);
 	writeOutput("<br />");
