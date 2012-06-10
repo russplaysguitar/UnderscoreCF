@@ -84,11 +84,15 @@ start tests:<br />
 	writeDump("include:" & include);
 	writeOutput("<br />");	
 
+	writeOutput("pluck: ");
 	stooges = [{name : 'moe', age : 40}, {name : 'larry', age : 50}, {name : 'curly', age : 60}];
 	pluck = _.pluck(stooges, 'name');
-	writeOutput("pluck");
 	writeDump(pluck);
 	writeOutput("<br />");	
+	stooges = [{name : 'moe', age : 40}, {name : 'larry', age : 50}, {name : 'curly', age : 60}];
+	pluck2 = _.pluck(stooges, function (elem) { return elem.name;});
+	writeDump(pluck2);
+	writeOutput("<br />");
 
 	stooges = [{name : 'moe', age : 40}, {name : 'larry', age : 50}, {name : 'curly', age : 60}];
 	max = _.max(stooges, function(stooge){ return stooge.age; });
