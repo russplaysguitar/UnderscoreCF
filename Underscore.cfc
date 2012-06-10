@@ -416,7 +416,7 @@ component {
 		Returns a sorted copy of list, ranked in ascending order by the results of running each value through iterator. 
 		Iterator may also be the string name of the property to sort by (eg. length).
 	*/
-	public any function sortBy(obj, val, context = new Component()) {
+	public any function sortBy(obj = this.obj, val, context = new Component()) {
 		if (_.isFunction(val)) {
 			var iterator = val;
 		}
@@ -1001,6 +1001,14 @@ component {
 
 	/* OBJECT FUNCTIONS */
 	// TODO: stub out all object functions
+
+	/*
+		Retrieve all the names of the object's properties.
+	*/
+	public any function keys(obj = this.obj) {
+		return listToArray(structKeyList(obj));
+	}
+
 	/*
 		Returns true if any of the values in the list pass the iterator truth test. 
 		Short-circuits and stops traversing the list if a true element is found. 
@@ -1009,7 +1017,10 @@ component {
 		return _.map(obj);
 	}
 	
-
+	/*
+		Returns a sorted list of the names of every method in an object — 
+		that is to say, the name of every function property of the object.
+	*/
 	public any function functions(obj = this.obj) {
 		var names = [];
 		for (var key in obj) {
@@ -1022,11 +1033,94 @@ component {
 	}
 
 
+	/*
+		Copy all of the properties in the source objects over to the destination object, and return the destination object. 
+		It's in-order, so the last source will override properties of the same name in previous arguments.
+	*/
+	public any function extend(obj = this.obj) {
+		_.each(slice(arguments, 2), function(source) {
+			for (var prop in source) {
+				obj[prop] = source[prop];
+			}
+		});
+		return obj;
+	}
+
+	/*
+		Return a copy of the object, filtered to only have values for the whitelisted keys (or array of valid keys).
+	*/
+	public any function pick(obj = this.obj) {
+		var result = {};
+		_.each(_.flatten(slice(arguments, 2)), function(key) {
+			if (structKeyExists(obj, key)) {
+				result[key] = obj[key];
+			}
+		});
+		return result;
+	}
+	
+	/*
+		Fill in missing properties in object with default values from the defaults objects, and return the object. 
+		As soon as the property is filled, further defaults will have no effect.
+	*/
+	public any function defaults(obj = this.obj) {
+		_.each(_.slice(arguments, 2), function(source) {
+			for (var prop in source) {
+				if (!structKeyExists(obj, prop)) {
+					obj[prop] = source[prop];
+				}
+			}
+		});
+		return obj;
+	}
+		
+	/*
+		Create a shallow-copied clone of the object. Any nested objects or arrays will be copied by reference, not duplicated.
+	*/
+	public any function clone(obj = this.obj) {
+		if (!_.isObject(obj)) {
+			return obj;
+		}
+		else if (_.isArray(obj)) {
+			return _.slice(obj);
+		}
+		else {
+			return _.extend({}, obj);
+		}
+	}
+		
+	/*
+		Invokes interceptor with the object, and then returns object. 
+		The primary purpose of this method is to "tap into" a method chain, in order to perform operations on intermediate 
+		results within the chain.
+	*/
+	public any function tap(obj = this.obj, interceptor = this.identity()) {
+		interceptor(obj);
+		return obj;
+	}
+				
+	/*
+		Returns a wrapped object. Calling methods on this object will continue to return wrapped objects until value is used.
+	*/
+	public any function chain(obj) {
+		var _obj = new Underscore(obj);
+		return _.wrap(_obj, function (func) {
+			return new Underscore(func(arguments));
+		});
+ 	}
+							
+													
+
 	// TODO: implement this better...
 	public any function has(obj = this.obj, key) {
-
 		return _.include(obj, key);
-		
+	}
+	
+	/* 
+		Returns true if value is an Object.
+	*/
+	public any function isObject(obj = this.obj) {
+		return isObject(obj);
 	}
 	
 	

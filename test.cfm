@@ -364,6 +364,57 @@ start tests:<br />
 	_.each(notes, function(note) {
 		renderNotes();
 	});	
+	writeoutput("<br />");
+	
+	writeOutput("keys: ");
+	keys = _.keys({one : 1, two : 2, three : 3});
+	writeDump(keys);
+	writeoutput("<br />");
+	
+	writeOutput("extend: ");
+	extend = _.extend({name : 'moe'}, {age : 50});
+	writeDump(extend);
+	writeoutput("<br />");
+	
+	writeOutput("pick: ");
+	pick = _.pick({name : 'moe', age: 50, userid : 'moe1'}, 'name', 'age');
+	writeDump(pick);
+	writeoutput("<br />");
+
+	writeOutput("defaults: ");
+	iceCream = {flavor : "chocolate"};
+	defaults = _.defaults(iceCream, {flavor : "vanilla", sprinkles : "lots"});	
+	writeDump(defaults);
+	writeoutput("<br />");
+
+	writeOutput("clone: ");
+	clone = _.clone({name : 'moe'});
+	writeDump(clone);
+	writeoutput("<br />");
+
+/*
+	writeOutput("tap: ");
+	tap = _.chain([1,2,3,200]).filter(function(num) {
+		return num % 2 == 0;
+	}).tap(function () {
+		writeDump(arguments);
+	}).map(function(num) { 
+		return num * num; 
+	}).value();
+	writeDump(tap);
+	writeoutput("<br />");
+*/
+
+/*
+	writeOutput("chain: ");
+	stooges = [{name : 'curly', age : 25}, {name : 'moe', age : 21}, {name : 'larry', age : 23}];
+	chain = _.chain(stooges);
+	writeDump(chain);
+	youngest = chain.map(iterator = function(stooge){
+		return stooge.name & ' is ' & stooge.age; 
+	});//.first().value();
+	writeDump(youngest);	
+*/
 </cfscript>
 <br />
 end tests
