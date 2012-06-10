@@ -334,6 +334,14 @@ start tests:<br />
 
 	delay = _.delay(function (msg) {return msg;}, 1000, {msg = "hi"});
 	writeDump(delay);
+	writeoutput("<br />");
+
+	writeOutput("once: ");
+	once = _.once(function () { writeDump("should only see this once"); return 1; });
+	once2 = once();
+	writeDump(once2);
+	once3 = once();
+	writeDump(once3);
 </cfscript>
 <br />
 end tests

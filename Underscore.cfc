@@ -805,7 +805,7 @@ component {
 	/*
 		Returns the index at which value can be found in the array, or -1 if value is not present in the array. 
 		Uses the native ArrayFind() function. 
-		TODO: If you're working with a large array, and you know that the array is already sorted, pass true for isSorted to use a faster binary search.
+		If you're working with a large array, and you know that the array is already sorted, pass true for isSorted to use a faster binary search.
 	*/
 	public any function indexOf(array = this.obj, item, isSorted = false) {
 		if (isSorted) {
@@ -948,8 +948,16 @@ component {
 		often you call it. Useful for lazy initialization.
 	*/
 	public any function once(func) {
-		// TODO		
-		return;
+		var ran = false; 
+		var memo = {};
+		return function() {
+			if (ran) {
+				return memo;
+			}
+			ran = true;
+			memo = func(arguments);
+			return memo;
+		};
 	}
 
 	/*
