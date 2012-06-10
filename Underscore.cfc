@@ -986,8 +986,14 @@ component {
 		Returns a function that will only be executed after being called N times.
 	*/
 	public any function after(times, func) {
-		
-		return;
+		if (times <= 0) {
+			return func();
+		}
+		return function() {
+			if (--times < 1) { 
+				return func(arguments); 
+			}
+		};
 	}
 
 

@@ -353,6 +353,17 @@ start tests:<br />
 	});
 	wrap = hello2();	
 	writeDump(wrap);
+	writeoutput("<br />");
+
+	writeOutput("after: ");
+	notes = ["one","two"];
+	render = function () {
+		writeDump("render should only happen once");
+	};
+	renderNotes = _.after(arrayLen(notes), render);
+	_.each(notes, function(note) {
+		renderNotes();
+	});	
 </cfscript>
 <br />
 end tests
