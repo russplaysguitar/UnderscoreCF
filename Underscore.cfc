@@ -808,8 +808,18 @@ component {
 		TODO: If you're working with a large array, and you know that the array is already sorted, pass true for isSorted to use a faster binary search.
 	*/
 	public any function indexOf(array = this.obj, item, isSorted = false) {
-		// TODO: implement a binary search when isSorted is true 
-		return ArrayFind(array, item);
+		if (isSorted) {
+			var i = _.sortedIndex(array, item);
+			if (array[i] == item) {
+				return i;
+			}
+			else {
+				return -1;
+			}
+		}
+		else {
+			return ArrayFind(array, item);
+		}
 	}
 	
 	/*
@@ -1009,7 +1019,7 @@ component {
 	*/	
 	// TODO: find a better way to do this in Coldfusion?
 	public boolean function isFunction(obj) {
-		return isObject(obj);
+		return isClosure(obj);
 	}
 
 	// TODO: determine if this is necessary or rewrite it

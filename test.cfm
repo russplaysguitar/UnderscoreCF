@@ -234,6 +234,14 @@ start tests:<br />
 	writeDump(zip);
 	writeOutput("<br />");
 
+	writeOutput("indexOf: ");
+	lastIndexOf = _.lastIndexOf([10, 2, 3, 4, 3, 11], 10, false);
+	writeDump(lastIndexOf);
+	writeOutput("<br />");
+	lastIndexOf = _.lastIndexOf([1, 2, 3, 4, 6, 10], 10, true);
+	writeDump(lastIndexOf);
+	writeOutput("<br />");
+
 	writeOutput("lastIndexOf");
 	lastIndexOf = _.lastIndexOf([1, 2, 3, 1, 2, 3], 2);
 	writeDump(lastIndexOf);
