@@ -429,6 +429,29 @@ start tests:<br />
 	});//.first().value();
 	writeDump(youngest);	
 */
+
+	// writeOutput("isEqual: ");
+	// moe   = {name : 'moe', luckyNumbers : [13, 27, 34]};
+	// clone = {name : 'moe', luckyNumbers : [13, 27, 34]};
+	// writeDump(moe == clone);
+
+	writeOutput("isString: ");
+	isstring = _.isString("asdf");
+	writeDump(isstring);
+	isstring = _.isString(1);
+	writeDump(isstring);
+	isstring = _.isString({x:1});
+	writeDump(isstring);
+	isstring = _.isString([1]);
+	writeDump(isstring);
+	isstring = _.isString("");
+	writeDump(isstring);		
+
+	writeOutput("<br />");
+	writeOutput("times: ");
+	context = new Component();
+	context.x = 1;
+	_.times(3, function(i){ writeDump(this.x+i); }, context);
 </cfscript>
 <br />
 end tests

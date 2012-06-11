@@ -9,6 +9,8 @@ component {
 
 		variables._ = this;
 
+		_.identity = function(x) { return x; };
+
 		return this;
 	}
 
@@ -21,7 +23,7 @@ component {
 		Each invocation of iterator is called with three arguments: (element, index, list). 
 		If list is an object, iterator's arguments will be (value, key, list). 
 	*/
-	public any function each(obj = this.obj, iterator = this.identity(), context = new Component()) {
+	public any function each(obj = this.obj, iterator = _.identity, context = new Component()) {
  		context.iterator = iterator;
 
 		if (isArray(obj)) {
@@ -48,7 +50,7 @@ component {
 		Produces a new array of values by mapping each value in list through a transformation function (iterator). 
 		If list is an object, iterator's arguments will be (value, key, list).
 	*/
- 	public any function map(obj = this.obj, iterator = this.identity(), context = new Component()) {
+ 	public any function map(obj = this.obj, iterator = _.identity, context = new Component()) {
  		var result = [];
  		context.iterator = iterator;
 
@@ -80,7 +82,7 @@ component {
 		Also known as inject and foldl, reduce boils down a list of values into a single value. 
 		Memo is the initial state of the reduction, and each successive step of it should be returned by iterator.
 	*/
- 	public any function reduce(obj = this.obj, iterator = this.identity(), memo, context = new Component()) {
+ 	public any function reduce(obj = this.obj, iterator = _.identity, memo, context = new Component()) {
  		context.iterator = iterator;
  		var i = 1;
 
@@ -114,7 +116,7 @@ component {
  	/*
 		The right-associative version of reduce. 
  	*/
-  	public any function reduceRight(obj = this.obj, iterator = this.identity(), memo, context = new Component()) {
+  	public any function reduceRight(obj = this.obj, iterator = _.identity, memo, context = new Component()) {
   		// TODO
    	}
 
@@ -127,7 +129,7 @@ component {
 		Looks through each value in the list, returning the first one that passes a truth test (iterator). 
 		The function returns as soon as it finds an acceptable element, and doesn't traverse the entire list.
  	*/
- 	public any function find(obj = this.obj, iterator = this.identity(), context = new Component()) { 
+ 	public any function find(obj = this.obj, iterator = _.identity, context = new Component()) { 
  		var result = 0;
  		context.iterator = iterator;
 
@@ -164,7 +166,7 @@ component {
  	/*
 		Looks through each value in the list, returning an array of all the values that pass a truth test (iterator). 
  	*/
- 	public any function filter(obj = this.obj, iterator = this.identity(), context = new Component()) {
+ 	public any function filter(obj = this.obj, iterator = _.identity, context = new Component()) {
 		var result = [];
  		context.iterator = iterator;
 
@@ -201,7 +203,7 @@ component {
 	/*
 		Returns the values in list without the elements that the truth test (iterator) passes. The opposite of filter.
 	*/
-	public any function reject(obj = this.obj, iterator = this.identity(), context = new Component()) {
+	public any function reject(obj = this.obj, iterator = _.identity, context = new Component()) {
 		var result = [];
  		context.iterator = iterator;
 
@@ -234,7 +236,7 @@ component {
 	/*
 		Returns true if all of the values in the list pass the iterator truth test. 
 	*/
-	public any function all(obj = this.obj, iterator = this.identity(), context = new Component()) {
+	public any function all(obj = this.obj, iterator = _.identity, context = new Component()) {
 		var result = false;
  		context.iterator = iterator;
 
@@ -272,7 +274,7 @@ component {
 		Returns true if any of the values in the list pass the iterator truth test. 
 		Short-circuits and stops traversing the list if a true element is found. 
 	*/
-	public any function any(obj = this.obj, iterator = this.identity(), context = new Component()) {
+	public any function any(obj = this.obj, iterator = _.identity, context = new Component()) {
 		var result = false;
  		context.iterator = iterator;
 
@@ -331,6 +333,7 @@ component {
 		The args struct passed to invoke will be forwarded on to the method invocation.
 	*/
 	// TODO: make sure this works right
+	// TODO: decide whether or not to replace with native invoke()
 	public any function invoke(obj = this.obj, method, args = {}) {
 	    return _.map(obj, function(value) {
 	    	if (_.isFunction(method)) {
@@ -374,7 +377,7 @@ component {
 		Returns the maximum value in list. 
 		If iterator is passed, it will be used on each value to generate the criterion by which the value is ranked.
 	*/
-	public any function max(obj = this.obj, iterator = this.identity(), context = new Component()) {
+	public any function max(obj = this.obj, iterator = _.identity, context = new Component()) {
 		var result = {};
  		context.iterator = iterator;
 
@@ -395,7 +398,7 @@ component {
 		Returns the minimum value in list. 
 		If iterator is passed, it will be used on each value to generate the criterion by which the value is ranked.
 	*/
-	public any function min(obj = this.obj, iterator = this.identity(), context = new Component()) {
+	public any function min(obj = this.obj, iterator = _.identity, context = new Component()) {
 		var result = {};
  		context.iterator = iterator;
 
@@ -526,7 +529,7 @@ component {
 		Uses a binary search to determine the index at which the value should be inserted into the list in order to maintain the list's sorted order. 
 		If an iterator is passed, it will be used to compute the sort ranking of each value.
 	*/
-	public any function sortedIndex(array = this.obj, obj, iterator = this.identity()) {
+	public any function sortedIndex(array = this.obj, obj, iterator = _.identity) {
 		var low = 0;
 		var high = arrayLen(array);
 		while (low < high) {
@@ -610,7 +613,8 @@ component {
 		return _.first(argumentCollection = arguments);
 	}
 	
-	// note: this isn't part of UnderscoreJS, but it is missing in Coldfusion
+	// note: I originally wrote this because I didn't know about CF 10's arraySlice()
+	// TODO: replace this with native arraySlice()
 	public any function slice(array = [], from = 1, to) {
 		var result = [];
 		var j = 1;
@@ -1115,14 +1119,159 @@ component {
 		The primary purpose of this method is to "tap into" a method chain, in order to perform operations on intermediate 
 		results within the chain.
 	*/
-	public any function tap(obj = this.obj, interceptor = this.identity()) {
+	// TODO: make this work
+	public any function tap(obj = this.obj, interceptor = _.identity) {
 		interceptor(obj);
 		return obj;
 	}
-				
+	
+	/*
+		Does the object contain the given key? 
+	*/
+	// TODO: implement this better...
+	public any function has(obj = this.obj, key) {
+		return _.include(obj, key);
+	}
+
+	/*
+		Performs an optimized deep comparison between the two objects, to determine if they should be considered equal.
+	*/
+	// TODO: implement this
+	public any function isEqual(a = this.obj, b) {
+		// return eq(a, b, []);
+	}
+
+	/*
+		Returns true if object contains no values.
+		Delegates to structIsEmpty()
+	*/
+	public any function isEmpty(obj = this.obj) {		
+		return structIsEmpty(obj);
+	}
+
+	/*
+		Returns true if object is a DOM element.
+		Note: This makes no sense in Coldfusion, so it returns undefined.
+	*/
+	public any function isElement(obj = this.obj) {
+		return;
+	}
+	
+	/*
+		Returns true if object is an Array.
+		Delegates to native isArray();
+	*/
+	public any function isArray(obj = this.obj) {
+		return isArray(obj);
+	}
+	
+	/* 
+		Returns true if value is an Object.
+		Delegates to native isObject()
+	*/
+	public any function isObject(obj = this.obj) {
+		return isObject(obj);
+	}
+	
+	/* 
+		Returns true if object is an Arguments object.
+		Not yet implemented. Returns undefined.
+	*/
+	// note: I don't think this is possible in Coldfusion
+	public any function isArguments(obj = this.obj) {
+		return;
+	}
+	
+	/*
+		Returns true if object is a Function.
+		Delegates to native isClosure()
+	*/	
+	// TODO: find a better way to do this in Coldfusion?
+	public boolean function isFunction(obj = this.obj) {
+		return isClosure(obj);
+	}
+	
+	/*
+		Returns true if object is a String.
+		Note: There is no isString() is CF, so we use process of elimination.
+	*/
+	public any function isString(obj = this.obj) {
+		return isSimpleValue(obj) && !isBinary(obj) && !isNumeric(obj) && !isBoolean(obj) && !isDate(obj);
+	}
+
+	/*
+		Returns true if object is a number.
+		Delegates to native isNumeric()
+	*/
+	public any function isNumber(obj = this.obj) {
+		return isNumerc(obj);
+	}
+
+	/*
+		Returns true if object is a finite Number.
+		Note: Coldfusion doesn't support Infinity or -Infinity, so this function is unimplemented.
+	*/
+	public any function isFinite(obj = this.obj) {
+		return;
+	}
+	
+	/*
+		Returns true if object is a boolean.
+		Delegates to native isBoolean()
+	*/
+	public any function isBoolean(obj = this.obj) {
+		return isBoolean(obj);
+	}
+	
+	/*
+		Returns true if object is a date.
+		Delegates to native isDate()
+	*/
+	public any function isDate(obj = this.obj) {
+		return isDate(obj);
+	}
+	
+	/*
+		Returns true if object is a regular expression.
+		Note: Not implemented since CF doesn't have RegEx objects.
+	*/	
+	public any function isRegExp(obj = this.obj) {
+		return;
+	}
+	
+	/*
+		Returns true if object is not a number.
+		Delegates to native isNumeric()
+	*/
+	public any function isNaN(obj = this.obj) {
+		return !isNumeric(obj);
+	}
+	
+	/*
+		Returns true if object is null.
+		Compares object to Java null.
+	*/
+	// TODO: implement this
+	public any function isNull(obj = this.obj) {
+		// return obj == JavaCast("null", 0);
+	}
+	
+	/*
+		Returns true if key is undefined in context.
+	*/	
+	// TODO: determine if this is necessary or rewrite it
+	public boolean function isUndefined(variableName, context) {
+		return structKeyExists(context, variableName);
+	}
+			
+	
+	
+
+
 	/*
 		Returns a wrapped object. Calling methods on this object will continue to return wrapped objects until value is used.
 	*/
+	// TODO: make this work
 	public any function chain(obj) {
 		var _obj = new Underscore(obj);
 		return _.wrap(_obj, function (func) {
@@ -1130,47 +1279,25 @@ component {
 		});
  	}
 							
-													
-
-	// TODO: implement this better...
-	public any function has(obj = this.obj, key) {
-		return _.include(obj, key);
-	}
 	
-	/* 
-		Returns true if value is an Object.
-	*/
-	public any function isObject(obj = this.obj) {
-		return isObject(obj);
-	}
-	
-	
-
-	/*
-		Returns true if object is a Function.
-	*/	
-	// TODO: find a better way to do this in Coldfusion?
-	public boolean function isFunction(obj) {
-		return isClosure(obj);
-	}
-
-	// TODO: determine if this is necessary or rewrite it
-	public boolean function isUndefined(variableName, context) {
-		return structKeyExists(context, variableName);
-	}
-			
 	/* UTILITY FUNCTIONS */
 	// TODO: stub out all utlity functions
 	/*
 		Returns the same value that is used as the argument. In math: f(x) = x
 		This function looks useless, but is used throughout UnderscoreCF as a default iterator.
 	*/
-	public any function identity(value) {
-		if (structKeyExists(arguments, 'value'))
-			return value;
-		else
-			return function(val){ return val; };
+	// pointless: noConflict()
+	
+	/*
+		Invokes the given iterator function n times.
+	*/
+	public any function times(n, iterator, context) {
+		context.iterator = iterator;
+
+		for (var i = 0; i < n; i++) {
+			context.iterator(i);
+		}
 	}
 	
-							
+	
 }
