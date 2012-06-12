@@ -1299,5 +1299,15 @@ component {
 		}
 	}
 	
+	/*
+		Allows you to extend Underscore with your own utility functions. 
+		Pass a struct of {name: function} definitions to have your functions added to the Underscore object, as well as the OOP wrapper.
+	*/
+	// TODO: make this also work for the OOP wrapper
+	public any function mixin(object) {
+		_.each(object, function (val, key, obj) {
+			_[key] = val;
+		});		
+	}
 	
 }

@@ -13,10 +13,10 @@ start tests:<br />
 	myObj.c = 3;
 
 	_ = new Underscore();
+
 	_myStruct = new Underscore(myStruct);
 	_myArr = new Underscore(myArr);
 	_myObj = new Underscore(myObj);
-
 
 	_.forEach(myStruct, function(val, key) {
 		writeDump(key & ": " & val);
@@ -452,6 +452,16 @@ start tests:<br />
 	context = new Component();
 	context.x = 1;
 	_.times(3, function(i){ writeDump(this.x+i); }, context);
+
+	writeOutput("<br />");
+	writeOutput("mixin: ");
+	_.mixin({
+		upper: function(string) {
+			return uCase(string);
+		}
+	});
+	fabio = _.upper("fabio");
+	writeDump(fabio);
 </cfscript>
 <br />
 end tests
