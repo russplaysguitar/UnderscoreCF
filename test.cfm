@@ -462,6 +462,36 @@ start tests:<br />
 	});
 	fabio = _.upper("fabio");
 	writeDump(fabio);
+
+	writeOutput("<br />");
+	writeOutput("unshift: ");
+	unshift = _.unshift([3,4],"1","2");
+	writeDump(unshift);
+
+	writeOutput("<br />");
+	writeOutput("result: ");
+	object = {cheese: 'crumpets', stuff: function(){ return 'nonsense'; }};
+	result = _.result(object, 'cheese');	
+	writeDump(result);
+	writeOutput("<br />");
+	result2 = _.result(object, 'stuff');
+	writeDump(result2);
+
+	list = [{one : 1}, {two : 2}];
+	writeDump(_.without(list, list[1]));
+
+	list = [];
+    // list[2] = javaCast("null", 0);
+    // list[3] = javaCast("null", 0);
+    list[8] = 2;
+    list[10] = 2;
+    list[11] = 5;
+    list[14] = 5;
+    list[16] = 8;
+    list[19] = 8;
+    list[33] = "hi";
+
+    writeDump(list);
 </cfscript>
 <br />
 end tests

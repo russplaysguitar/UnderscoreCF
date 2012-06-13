@@ -15,6 +15,16 @@ component {
 	}
 
 
+	public any function unshift(obj = this.obj) {
+		var elements = _.slice(arguments, 2);
+		for (var i = arrayLen(elements); i > 0; i--) {
+			arrayPrepend(obj, elements[i]);
+		}
+		return obj;
+	}
+	
+	
+
 	/* COLLECTION FUNCTIONS (ARRAYS, STRUCTURES, OR OBJECTS) */
 
 	/*
@@ -88,7 +98,9 @@ component {
 
 		if (isArray(obj)) {
 			for (num in obj) {
-				memo = context.iterator(memo, num, i);
+				if (isDefined("num")) {
+					memo = context.iterator(memo, num, i);
+				}
 				i++;
 			}
 		}
@@ -815,7 +827,7 @@ component {
 		If you're working with a matrix of nested arrays, zip.apply can transpose the matrix in a similar fashion.
 	*/
 	public any function zip() {
-	    var args = _.slice(arguments);
+	    var args = _.slice(arguments, 1);
 	    var length = _.max(_.pluck(args, function (array) {
 	    		return arrayLen(array);
 	    	})
@@ -1107,7 +1119,7 @@ component {
 			return obj;
 		}
 		else if (_.isArray(obj)) {
-			return _.slice(obj);
+			return _.slice(obj, 1);
 		}
 		else {
 			return _.extend({}, obj);
@@ -1307,7 +1319,25 @@ component {
 	public any function mixin(object) {
 		_.each(object, function (val, key, obj) {
 			_[key] = val;
-		});		
+		});			
 	}
 	
+	/*
+		If the value of the named property is a function then invoke it; otherwise, return it.
+	*/
+	public any function result(object, property) {
+		// if (_.isNull(object)) {
+		// 	return JavaCast("null", 0);
+		// }
+		var value = object[property];
+
+		if (_.isFunction(value)) {
+			return value(object);
+		}
+		else {
+			return value;
+		}
+	}
+	
+		
 }
