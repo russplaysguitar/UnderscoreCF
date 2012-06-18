@@ -1,5 +1,9 @@
 <cffunction name="flush">
-	<cfflush />
+	<cfflush>
+</cffunction>
+
+<cffunction name="abort">
+	<cfabort>
 </cffunction>
 
 start tests:<br />
@@ -13,6 +17,28 @@ start tests:<br />
 	myObj.c = 3;
 
 	_ = new Underscore();
+
+	metadata = getComponentMetaData("github.UnderscoreCF.Underscore");
+	// writeDump(metadata);
+
+	writeOutput("<ul>");
+	_.each(metadata.functions, function(val, key) {
+		if(structKeyExists(val, "hint")) {
+			writeOutput("<li>");
+			writeOutput("<b>" & val.name & "</b> ");
+			if(structKeyExists(val, "header")) {
+				writeOutput(val.header);
+			}
+			writeOutput("<br />" & val.hint & "<br />");
+			if(structKeyExists(val, "example")) {
+				writeOutput(val.example);
+			}
+			writeOutput("</li>");
+		}
+	});
+	writeOutput("</ul>");
+
+	abort();
 
 	_myStruct = new Underscore(myStruct);
 	_myArr = new Underscore(myArr);
