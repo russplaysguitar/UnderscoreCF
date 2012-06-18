@@ -1,6 +1,7 @@
 /** 
-* Underscore.cfc
-* A port of UnderscoreJS for Coldfusion
+* @name Underscore.cfc 
+* @hint A port of Underscore.js for Coldfusion
+* @introduction Underscore.cfc is a port of <a href="http://underscore.js">Underscore.js</a> for Coldfusion. It is a utility-belt library that provides a lot of the functional programming support that you would expect in Prototype.js (or Ruby). <br /><br />Underscore provides dozens of functions that support both the usual functional suspects: map, select, invoke - as well as more specialized helpers: function binding, <s>templating, deep equality testing,</s> and so on. It delegates to built-in functions where applicable.<br /><br />UnderscoreCF is currently only tested on Adobe Coldfusion 10. <b>It is still in progress, so please be extra-careful using it.</b><br /><br />Some unit tests are included, but much work needs to be done there.<br /><br />The project is <a href="http://github.com/russplaysguitar/underscorecf">hosted on GitHub</a>. Contributions are welcome. 
 */ 
 component { 
 
@@ -13,17 +14,6 @@ component {
 
 		return this;
 	}
-
-
-	public any function unshift(obj = this.obj) {
-		var elements = _.slice(arguments, 2);
-		for (var i = arrayLen(elements); i > 0; i--) {
-			arrayPrepend(obj, elements[i]);
-		}
-		return obj;
-	}
-	
-	
 
 	/* COLLECTION FUNCTIONS (ARRAYS, STRUCTURES, OR OBJECTS) */
 
@@ -686,6 +676,15 @@ component {
 			j++;
 		}
 		return result;
+	}
+
+	// wrote this for some reason, then didn't end up needing it?
+	public any function unshift(obj = this.obj) {
+		var elements = _.slice(arguments, 2);
+		for (var i = arrayLen(elements); i > 0; i--) {
+			arrayPrepend(obj, elements[i]);
+		}
+		return obj;
 	}
 	
 	/**

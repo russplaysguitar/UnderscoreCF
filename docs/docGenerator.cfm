@@ -3,7 +3,6 @@
 	_ = new github.UnderscoreCF.Underscore();
 
 	metadata = getComponentMetaData("github.UnderscoreCF.Underscore");
-	// writeDump(metadata);
 
 	collectionFunctions = "each,map,reduce,find,filter,reject,all,any,include,pluck,max,min,sortBy,groupBy,sortedIndex,shuffle,toArray,size";
 
@@ -86,6 +85,10 @@
     	</cfloop>
 	</div>
 	<div class="container">
+		<h1>Underscore.cfc</h1>
+		<p id="Introduction">
+			<cfoutput>#metadata.introduction#</cfoutput>
+		</p>
 		<h2 id="Collections">Collection Functions (Arrays or Objects)</h2>
 		<cfset display(metadata, collectionFunctions) >
 		<h2 id="Arrays">Array Functions</h2>
