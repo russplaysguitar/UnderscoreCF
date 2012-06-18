@@ -18,28 +18,6 @@ start tests:<br />
 
 	_ = new Underscore();
 
-	metadata = getComponentMetaData("github.UnderscoreCF.Underscore");
-	// writeDump(metadata);
-
-	writeOutput("<ul>");
-	_.each(metadata.functions, function(val, key) {
-		if(structKeyExists(val, "hint")) {
-			writeOutput("<li>");
-			writeOutput("<b>" & val.name & "</b> ");
-			if(structKeyExists(val, "header")) {
-				writeOutput(val.header);
-			}
-			writeOutput("<br />" & val.hint & "<br />");
-			if(structKeyExists(val, "example")) {
-				writeOutput(val.example);
-			}
-			writeOutput("</li>");
-		}
-	});
-	writeOutput("</ul>");
-
-	abort();
-
 	_myStruct = new Underscore(myStruct);
 	_myArr = new Underscore(myArr);
 	_myObj = new Underscore(myObj);
@@ -472,6 +450,9 @@ start tests:<br />
 	writeDump(isstring);
 	isstring = _.isString("");
 	writeDump(isstring);		
+
+	writeOutput("isDate: ");
+	writeDump(_.isDate(now()));
 
 	writeOutput("<br />");
 	writeOutput("times: ");

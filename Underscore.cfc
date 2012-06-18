@@ -30,7 +30,7 @@ component {
 	/**
 	* 	@header _.each(list, iterator, [context])
 	*	@hint Iterates over a list of elements, yielding each in turn to an iterator function. The iterator is bound to the context object, if one is passed. Each invocation of iterator is called with three arguments: (element, index, list). If list is an object, iterator's arguments will be (value, key, list). 
-	* 	@example _.each([1, 2, 3], function(num){ writeDump(num); }); <br /> => dumps each number in turn... <br /> _.each({one : 1, two : 2, three : 3}, function(num, key){ writeDump(num); });<br /> => dumps each number in turn...
+	* 	@example _.each([1, 2, 3], function(num){ writeDump(num); }); <br />=> dumps each number in turn... <br />_.each({one : 1, two : 2, three : 3}, function(num, key){ writeDump(num); });<br />=> dumps each number in turn...
 	*/
 	public any function each(obj = this.obj, iterator = _.identity, context = new Component()) {
  		context.iterator = iterator;
@@ -60,7 +60,7 @@ component {
 	/**
 	* 	@header _.map(list, iterator, [context])
 	*	@hint Produces a new array of values by mapping each value in list through a transformation function (iterator). If list is an object, iterator's arguments will be (value, key, list).
-	* 	@example _.map([1, 2, 3], function(num){ return num * 3; }); <br /> => [3, 6, 9] <br /> _.map({one : 1, two : 2, three : 3}, function(num, key){ return num * 3; });<br /> => [3, 6, 9]
+	* 	@example _.map([1, 2, 3], function(num){ return num * 3; }); <br />=> [3, 6, 9] <br />_.map({one : 1, two : 2, three : 3}, function(num, key){ return num * 3; });<br />=> [3, 6, 9]
 	*/
  	public any function map(obj = this.obj, iterator = _.identity, context = new Component()) {
  		var result = [];
@@ -95,7 +95,7 @@ component {
 	/**
 	* 	@header _.reduce(list, iterator, memo, [context])
 	*	@hint Also known as inject and foldl, reduce boils down a list of values into a single value. Memo is the initial state of the reduction, and each successive step of it should be returned by iterator.
-	* 	@example sum = _.reduce([1, 2, 3], function(memo, num){ return memo + num; }, 0);<br /> => 6
+	* 	@example sum = _.reduce([1, 2, 3], function(memo, num){ return memo + num; }, 0);<br />=> 6
 	*/
  	public any function reduce(obj = this.obj, iterator = _.identity, memo, context = new Component()) {
  		context.iterator = iterator;
@@ -150,7 +150,7 @@ component {
  	/**
 	* 	@header _.find(list, iterator, [context])
 	*	@hint Looks through each value in the list, returning the first one that passes a truth test (iterator). The function returns as soon as it finds an acceptable element, and doesn't traverse the entire list.
-	* 	@example even = _.find([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });<br /> => 2
+	* 	@example even = _.find([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });<br />=> 2
  	*/
  	public any function find(obj = this.obj, iterator = _.identity, context = new Component()) { 
  		var result = 0;
@@ -191,7 +191,7 @@ component {
  	/**
 	* 	@header _.filter(list, iterator, [context])
 	*	@hint Looks through each value in the list, returning an array of all the values that pass a truth test (iterator). 
-	* 	@example evens = _.filter([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });<br /> => [2, 4, 6]
+	* 	@example evens = _.filter([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });<br />=> [2, 4, 6]
  	*/
  	public any function filter(obj = this.obj, iterator = _.identity, context = new Component()) {
 		var result = [];
@@ -232,7 +232,7 @@ component {
 	/**
 	* 	@header _.reject(list, iterator, [context])
 	*	@hint Returns the values in list without the elements that the truth test (iterator) passes. The opposite of filter.
-	* 	@example odds = _.reject([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });<br /> => [1, 3, 5]
+	* 	@example odds = _.reject([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });<br />=> [1, 3, 5]
 	*/
 	public any function reject(obj = this.obj, iterator = _.identity, context = new Component()) {
 		var result = [];
@@ -267,7 +267,7 @@ component {
 	/**
 	* 	@header _.all(list, iterator, [context])
 	*	@hint Returns true if all of the values in the list pass the iterator truth test. 
-	* 	@example _.all([true, 1, 'yes'], _.identity);<br /> => false
+	* 	@example _.all([true, 1, 'yes'], _.identity);<br />=> false
 	*/
 	public any function all(obj = this.obj, iterator = _.identity, context = new Component()) {
 		var result = false;
@@ -308,7 +308,7 @@ component {
 	/**
 	* 	@header _.any(list, [iterator], [context])
 	*	@hint Returns true if any of the values in the list pass the iterator truth test. Short-circuits and stops traversing the list if a true element is found. 
-	* 	@example _.any([0, 'yes', false]);<br /> => true
+	* 	@example _.any([0, 'yes', false]);<br />=> true
 	*/
 	public any function any(obj = this.obj, iterator = _.identity, context = new Component()) {
 		var result = false;
@@ -349,7 +349,7 @@ component {
 	/**
 	* 	@header _.include(list, value)
 	*	@hint Returns true if the value is present in the list.
-	* 	@example _.include([1, 2, 3], 3);<br /> => true
+	* 	@example _.include([1, 2, 3], 3);<br />=> true
 	*/
 	public any function include(obj = this.obj, target) {
 		return _.any(obj, function(value) {
@@ -365,7 +365,7 @@ component {
 	/**
 	* 	@header _.invoke(list, methodName, [*arguments])
 	*	@hint Calls the method named by methodName on each value in the list. The args struct passed to invoke will be forwarded on to the method invocation. 
-	* 	@example _.invoke([{fun: function(){ return 1; }}], 'fun');<br /> => [1]
+	* 	@example _.invoke([{fun: function(){ return 1; }}], 'fun');<br />=> [1]
 	*/
 	// TODO: make sure this works right
 	// TODO: decide whether or not to replace with native invoke()
@@ -413,7 +413,7 @@ component {
 	/**
 	* 	@header _.max(list, [iterator], [context]) 
 	*	@hint Returns the maximum value in list. If iterator is passed, it will be used on each value to generate the criterion by which the value is ranked.
-	* 	@example stooges = [{name : 'moe', age : 40}, {name : 'larry', age : 50}, {name : 'curly', age : 60}];<br /> _.max(stooges, function(stooge){ return stooge.age; });<br /> => {name : 'curly', age : 60};
+	* 	@example stooges = [{name : 'moe', age : 40}, {name : 'larry', age : 50}, {name : 'curly', age : 60}];<br />_.max(stooges, function(stooge){ return stooge.age; });<br />=> {name : 'curly', age : 60};
 	*/
 	public any function max(obj = this.obj, iterator = _.identity, context = new Component()) {
 		var result = {};
@@ -435,7 +435,7 @@ component {
 	/**
 	* 	@header _.min(list, [iterator], [context]) 
 	*	@hint Returns the minimum value in list. If iterator is passed, it will be used on each value to generate the criterion by which the value is ranked.
-	* 	@example numbers = [10, 5, 100, 2, 1000];<br /> _.min(numbers);<br /> => 2
+	* 	@example numbers = [10, 5, 100, 2, 1000];<br />_.min(numbers);<br />=> 2
 	*/
 	public any function min(obj = this.obj, iterator = _.identity, context = new Component()) {
 		var result = {};
@@ -457,7 +457,7 @@ component {
 	/**
 	* 	@header _.sortBy(list, iterator, [context]) 
 	*	@hint Returns a sorted copy of list, ranked in ascending order by the results of running each value through iterator. Iterator may also be the string name of the property to sort by (eg. length).
-	* 	@example _.sortBy([1, 2, 3, 4, 5, 6], function(num){ return Math.sin(num); });<br /> => [5, 4, 6, 3, 1, 2]
+	* 	@example _.sortBy([1, 2, 3, 4, 5, 6], function(num){ return Math.sin(num); });<br />=> [5, 4, 6, 3, 1, 2]
 	*/
 	public any function sortBy(obj = this.obj, val, context = new Component()) {
 		if (_.isFunction(val)) {
@@ -546,7 +546,7 @@ component {
 	/**
 	* 	@header _.groupBy(list, iterator) 
 	*	@hint Splits a collection into sets, grouped by the result of running each value through iterator. If iterator is a string instead of a function, groups by the property named by iterator on each of the values.
-	*	@example _.groupBy([1.3, 2.1, 2.4], function(num){ return fix(num); });<br /> => {1: [1.3], 2: [2.1, 2.4]}<br /><br /> _.groupBy(['one', 'two', 'three'], function(num) { return len(num); });<br /> => {3: ["one", "two"], 5: ["three"]}
+	*	@example _.groupBy([1.3, 2.1, 2.4], function(num){ return fix(num); });<br />=> {1: [1.3], 2: [2.1, 2.4]}<br /><br />_.groupBy(['one', 'two', 'three'], function(num) { return len(num); });<br />=> {3: ["one", "two"], 5: ["three"]}
 	*/
 	public any function groupBy(obj = this.obj, val) {
 		var result = {};
@@ -569,7 +569,7 @@ component {
 	/**
 	* 	@header _.sortedIndex(list, value, [iterator]) 
 	*	@hint Uses a binary search to determine the index at which the value should be inserted into the list in order to maintain the list's sorted order. If an iterator is passed, it will be used to compute the sort ranking of each value.
-	* 	@example _.sortedIndex([10, 20, 30, 40, 50], 35);<br /> => 3
+	* 	@example _.sortedIndex([10, 20, 30, 40, 50], 35);<br />=> 3
 	*/
 	public any function sortedIndex(array = this.obj, obj, iterator = _.identity) {
 		var low = 0;
@@ -589,7 +589,7 @@ component {
 	/**
 	* 	@header _.shuffle(list) 
 	*	@hint Returns a shuffled copy of the list, using a version of the Fisher-Yates shuffle.
-	* 	@example _.shuffle([1, 2, 3, 4, 5, 6]);<br /> => [4, 1, 6, 3, 5, 2]
+	* 	@example _.shuffle([1, 2, 3, 4, 5, 6]);<br />=> [4, 1, 6, 3, 5, 2]
 	*/
 	public any function shuffle(obj = this.obj) {
 	    var shuffled = obj;
@@ -605,7 +605,7 @@ component {
 	/**
 	*	@header _.toArray(list) 
 	*	@hint Converts the list (anything that can be iterated over), into a real Array. Useful for transmuting the arguments object.
-	* 	@example _.toArray({a:10,b:20});<br /> => [10, 20]
+	* 	@example _.toArray({a:10,b:20});<br />=> [10, 20]
 	*/
 	public any function toArray(obj = this.obj) {
 		if (isArray(obj)) {
@@ -623,7 +623,7 @@ component {
 	/**
 	* 	@header _.size(list) 
 	*	@hint Return the number of values in the list.
-	* 	@example _.size({one : 1, two : 2, three : 3});<br /> => 3
+	* 	@example _.size({one : 1, two : 2, three : 3});<br />=> 3
 	*/
 	public any function size(obj = this.obj) {
 		if (isObject(obj) || isStruct(obj)) {
@@ -639,8 +639,10 @@ component {
 
 	/* ARRAY FUNCTIONS */
 
-	/*
-		Returns the first element of an array. Passing n will return the first n elements of the array.
+	/**
+	* 	@header _.first(array, [n])
+	*	@hint Returns the first element of an array. Passing n will return the first n elements of the array.
+	* 	@example _.first([5, 4, 3, 2, 1]);<br />=> 5
 	*/
 	public any function first(array = this.obj, n, guard = false) {
 		if (structKeyExists(arguments, 'n') && !guard) {
@@ -651,19 +653,23 @@ component {
 		}
 	}
 	
-	// alias of first
+	/**
+	*	@alias first
+	*/ 
 	public any function head(array, n, guard) {
 		return _.first(argumentCollection = arguments);
 	}
 		
-	// alias of first
+	/**
+	*	@alias first
+	*/ 
 	public any function take(array, n, guard) {
 		return _.first(argumentCollection = arguments);
 	}
 	
 	// note: I originally wrote this because I didn't know about CF 10's arraySlice()
 	// TODO: replace this with native arraySlice()
-	public any function slice(array = [], from = 1, to) {
+	public any function slice(array = [], from = 2, to) {
 		var result = [];
 		var j = 1;
 		var arrLen = arrayLen(array);
@@ -682,9 +688,10 @@ component {
 		return result;
 	}
 	
-	/*
-		Returns everything but the last entry of the array. Especially useful on the arguments object. 
-		Pass n to exclude the last n elements from the result.
+	/**
+	* 	@header _.initial(array, [n]) 
+	*	@hint Returns everything but the last entry of the array. Especially useful on the arguments object. Pass n to exclude the last n elements from the result. Note: CF arrays start at an index of 1
+	* 	@example _.initial([5, 4, 3, 2, 1]);<br />=> [5, 4, 3, 2]
 	*/
 	public any function initial(array = this.obj, n = 1, guard = false) {
 		if (guard) {
@@ -697,8 +704,10 @@ component {
 	}
 	
 
-	/*
-		Returns the last element of an array. Passing n will return the last n elements of the array.
+	/**
+	* 	@header _.last(array, [n]) 
+	*	@hint Returns the last element of an array. Passing n will return the last n elements of the array.
+	* 	@example _.last([5, 4, 3, 2, 1]);<br />=> 1
 	*/
 	public any function last(array = this.obj, n, guard = false) {
 		if (structKeyExists(arguments,'n') && !guard) {
@@ -711,8 +720,10 @@ component {
 		}
 	}
 	
-	/*
-		Returns the rest of the elements in an array. Pass an index to return the values of the array from that index onward.
+	/**
+	* 	@header _.rest(array, [index])
+	*	@hint Returns the rest of the elements in an array. Pass an index to return the values of the array from that index onward.
+	* 	@example _.rest([5, 4, 3, 2, 1]);<br />=> [4, 3, 2, 1]
 	*/
 	public any function rest(array = this.obj, index = 2, guard = false) {
 		if (guard) {
@@ -721,13 +732,17 @@ component {
 		return _.slice(array, index);
 	}
 	
-	// alias of rest
+	/**
+	*	@alias rest
+	*/ 
 	public any function tail(array, index, guard) {
 		return _.rest(argumentCollection = arguments);
 	}
 	
-	/*
-		Returns a copy of the array with all falsy values removed. In Coldfusion, false, 0, and "" are all falsy.
+	/**
+	* 	@header _.compact(array) 
+	*	@hint Returns a copy of the array with all falsy values removed. In Coldfusion, false, 0, and "" are all falsy.
+	* 	@example _.compact([0, 1, false, 2, '', 3]);<br />=> [1, 2, 3]
 	*/
 	public any function compact(array = this.obj) {
 		return _.filter(array, function(value){ 
@@ -735,8 +750,10 @@ component {
 		});
 	}
 	
-	/* 
-		Flattens a nested array (the nesting can be to any depth). If you pass shallow, the array will only be flattened a single level.
+	/** 
+	* 	@header _.flatten(array, [shallow]) 
+	*	@hint Flattens a nested array (the nesting can be to any depth). If you pass shallow, the array will only be flattened a single level.
+	* 	@example _.flatten([1, [2], [3, [[4]]]]);<br />=> [1, 2, 3, 4];<br /><br />_.flatten([1, [2], [3, [[4]]]], true);<br />=> [1, 2, 3, [[4]]];
 	*/
 	public any function flatten(array = this.obj, shallow = false) {
 		return _.reduce(array, function(memo, value) {
@@ -775,15 +792,19 @@ component {
 		return result;
 	}
 	
-	/*
-		Returns a copy of the array with all instances of the values removed. 
+	/**
+	* 	@header _.without(array, [*values]) 
+	*	@hint Returns a copy of the array with all instances of the values removed. 
+	* 	@example _.without([1, 2, 1, 0, 3, 1, 4], 0, 1);<br />=> [2, 3, 4]
 	*/
 	public any function without(array = this.obj, others = []) {
 		return _.difference(array, others);
 	}
 	
-	/*
-		Computes the union of the passed-in arrays: the list of unique items, in order, that are present in one or more of the arrays.
+	/**
+	* 	@header _.union(*arrays) 
+	*	@hint Computes the union of the passed-in arrays: the list of unique items, in order, that are present in one or more of the arrays.
+	* 	@example _.union([1, 2, 3], [101, 2, 1, 10], [2, 1]);<br />=> [1, 2, 3, 101, 10]
 	*/
 	public any function union() {
 		var numArgs = _.size(arguments);
@@ -794,8 +815,10 @@ component {
 		return _.uniq(_.flatten(arrays, true));
 	}
 
-	/*
-		Computes the list of values that are the intersection of all the arrays. Each value in the result is present in each of the arrays.
+	/**
+	* 	@header _.intersection(*arrays)
+	*	@hint Computes the list of values that are the intersection of all the arrays. Each value in the result is present in each of the arrays.
+	* 	@example _.intersection([1, 2, 3], [101, 2, 1, 10], [2, 1]);<br />=> [1, 2]
 	*/
 	public any function intersection(array = this.obj) {
 		var numArgs = _.size(arguments);
@@ -811,13 +834,17 @@ component {
 		});
 	}
 
-	// alias of intersection
+	/**
+	* 	@alias intersection
+	*/ 
 	public any function intersect(array) {
 		return _.intersection(argumentCollection = arguments);
 	}
 
-	/*
-		Similar to without, but returns the values from array that are not present in the other arrays.
+	/**
+	* 	@header _.difference(array, *others) 
+	*	@hint Similar to without, but returns the values from array that are not present in the other arrays.
+	* 	@example _.difference([1, 2, 3, 4, 5], [5, 2, 10]);<br />=> [1, 3, 4]
 	*/
 	public any function difference(array = this.obj, others = []) {
 		var rest = _.flatten(others, true);
@@ -826,10 +853,10 @@ component {
 		});
 	}
 	
-	/*
-		Produces a duplicate-free version of the array.
-		If you know in advance that the array is sorted, passing true for isSorted will run a much faster algorithm. 
-		If you want to compute unique items based on a transformation, pass an iterator function.
+	/**
+	* 	@header _.uniq(array, [isSorted], [iterator]) 
+	*	@hint Produces a duplicate-free version of the array. If you know in advance that the array is sorted, passing true for isSorted will run a much faster algorithm. If you want to compute unique items based on a transformation, pass an iterator function.
+	* 	@example _.uniq([1, 2, 1, 3, 1, 4]);<br />=> [1, 2, 3, 4]
 	*/
 	public any function uniq(array = this.obj, isSorted = false, iterator) {
 		if (structKeyExists(arguments, 'iterator')) {
@@ -857,10 +884,10 @@ component {
 		return results;
 	}
 	
-	/*
-		Merges together the values of each of the arrays with the values at the corresponding position. 
-		Useful when you have separate data sources that are coordinated through matching array indexes. 
-		If you're working with a matrix of nested arrays, zip.apply can transpose the matrix in a similar fashion.
+	/**
+	* 	@header _.zip(*arrays) 
+	*	@hint Merges together the values of each of the arrays with the values at the corresponding position. Useful when you have separate data sources that are coordinated through matching array indexes. If you're working with a matrix of nested arrays, zip.apply can transpose the matrix in a similar fashion.
+	* 	@example _.zip(['moe', 'larry', 'curly'], [30, 40, 50], [true, false, false]);<br />=> [["moe", 30, true], ["larry", 40, false], ["curly", 50, false]]
 	*/
 	public any function zip() {
 	    var args = _.slice(arguments, 1);
@@ -875,10 +902,10 @@ component {
 	    return results;
 	}
 	
-	/*
-		Returns the index at which value can be found in the array, or -1 if value is not present in the array. 
-		Uses the native ArrayFind() function. 
-		If you're working with a large array, and you know that the array is already sorted, pass true for isSorted to use a faster binary search.
+	/**
+	* 	@header _.indexOf(array, value, [isSorted]) 
+	*	@hint Returns the index at which value can be found in the array, or -1 if value is not present in the array. Uses the native ArrayFind() function. If you're working with a large array, and you know that the array is already sorted, pass true for isSorted to use a faster binary search.
+	* 	@example _.indexOf([1, 2, 3], 2);<br />=> 1
 	*/
 	public any function indexOf(array = this.obj, item, isSorted = false) {
 		if (isSorted) {
@@ -895,8 +922,10 @@ component {
 		}
 	}
 	
-	/*
-		Returns the index of the last occurrence of value in the array, or -1 if value is not present. 
+	/**
+	* 	@header _.lastIndexOf(array, value)  
+	*	@hint Returns the index of the last occurrence of value in the array, or -1 if value is not present. 
+	* 	@example _.lastIndexOf([1, 2, 3, 1, 2, 3], 2);<br />=> 4
 	*/
 	public any function lastIndexOf(array = this.obj, item) {
 		if (!structKeyExists(arguments, 'array')) {
@@ -910,10 +939,10 @@ component {
 		return -1;
 	}
 	
-	/*
-		A function to create flexibly-numbered lists of integers, handy for each and map loops. 
-		start, if omitted, defaults to 0; step defaults to 1. 
-		Returns a list of integers from start to stop, incremented (or decremented) by step, exclusive.
+	/**
+	* 	@header _.range([start], stop, [step]) 
+	*	@hint A function to create flexibly-numbered lists of integers, handy for each and map loops. start, if omitted, defaults to 0; step defaults to 1. Returns a list of integers from start to stop, incremented (or decremented) by step, exclusive.
+	* 	@example _.range(10);<br />=> [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]<br />_.range(1, 11);<br />=> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]<br />_.range(0, 30, 5);<br />=> [0, 5, 10, 15, 20, 25]<br />_.range(0, -10, -1);<br />=> [0, -1, -2, -3, -4, -5, -6, -7, -8, -9]<br />_.range(0);<br />=> []
 	*/
 	public any function range(start = 0, stop, step = 1) {
 		if (!structKeyExists(arguments, 'stop')) {
@@ -933,18 +962,22 @@ component {
 		return range;
 	}
 			
-	/*
-		Bind a function to a structure, meaning that whenever the function is called, the value of "this" will be the structure. 
-		Optionally, bind arguments to the function to pre-fill them, also known as partial application.
+	/**
+	* 	@header _.bind(function, object, arguments) 
+	*	@hint Bind a function to a structure, meaning that whenever the function is called, the value of "this" will be the structure. Optionally, bind arguments to the function to pre-fill them, also known as partial application.
+	* 	@example "func = function(greeting){ return greeting + ': ' + this.name };<br />func = _.bind(func, {name : 'moe'}, {greeting: 'hi'});<br />func();<br />=> 'hi: moe'"
 	*/
 	public any function bind(func, context = {}, args = {}) {
+		// TODO: convert arguments after func and context into an arguments struct, rather than forcing the user to pass args as a struct
 		return function () {
 			return func(argumentCollection = args, this = context);
 		};
 	}
 
-	/*
-		Bind all of an object's methods to that object. Useful for ensuring that all callbacks defined on an object belong to it.
+	/**
+	* 	@header _.bindAll(object, [*methodNames]) 
+	*	@hint Bind all of an object's methods to that object. Useful for ensuring that all callbacks defined on an object belong to it.
+	* 	@example "buttonView = {label: 'button', onClick : function(){ return 'clicked: ' & this.label; }}<br />_.bindAll(buttonView);<br />_.bindAll(buttonView);<br />=> 'clicked: button'"
 	*/
 	public any function bindAll(obj) {
 		var funcs = _.slice(arguments, 2);
@@ -958,10 +991,10 @@ component {
 		return obj;
 	}
 	
-	/*
-		Memoizes a given function by caching the computed result. Useful for speeding up slow-running computations. 
-		If passed an optional hashFunction, it will be used to compute the hash key for storing the result, based on the arguments to the original function. 
-		The default hashFunction just uses the first argument to the memoized function as the key.
+	/**
+	* 	@header _.memoize(function, [hashFunction]) 
+	*	@hint Memoizes a given function by caching the computed result. Useful for speeding up slow-running computations. If passed an optional hashFunction, it will be used to compute the hash key for storing the result, based on the arguments to the original function. The default hashFunction just uses the first argument to the memoized function as the key.
+	* 	@example fibonacci = _.memoize(function(n) {  return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2); });
 	*/
 	public any function memoize(func, hasher) {
 		var memo = {};
@@ -979,17 +1012,21 @@ component {
 		};
 	}
 	
-	/*
-		Delays a function for the given number of milliseconds, and then calls
-		it with the arguments supplied in the args struct.
+	/**
+	* 	@header _.delay(function, wait, arguments) 
+	*	@hint Delays a function for the given number of milliseconds, and then calls it with the arguments supplied in the args struct.
+	* 	@example _.delay(function (msg) {return msg;}, 1000, {msg = "hi"});<br />=> "hi" // appears after one second
   	*/
 	public any function delay(func, wait, args) {
+		// TODO: make this accept multiple arguments after func and wait, which will get put into an args struct instead of forcing the user to pass arguments as a struct
 	    sleep(wait);
-	    return arguments.func(argumentCollection=args);
+	    return arguments.func(argumentCollection = args);
 	}
 	
 	/*
-		 Defers a function, scheduling it to run after the current call stack has cleared.
+	* 	@header _.defer(function, arguments) 
+	*	@hint Defers a function, scheduling it to run after the current call stack has cleared.
+	* 	@example 
 	*/
 	public any function defer(func, args) {
 		// TODO: make sure this works, if it is possible in CF
@@ -1016,9 +1053,10 @@ component {
 		return;
 	}
 
-	/*
-		Returns a function that will be executed at most one time, no matter how
-		often you call it. Useful for lazy initialization.
+	/**
+	* 	@header _.once(function) 
+	*	@hint Returns a function that will be executed at most one time, no matter how often you call it. Useful for lazy initialization.
+	* 	@example _.once(function () { return "should only see this once"; });<br />once();<br />=> "should only see this once"<br />once();<br />=> // nothing
 	*/
 	public any function once(func) {
 		var ran = false; 
@@ -1033,13 +1071,13 @@ component {
 		};
 	}
 
-	/*
-		Returns the first function passed as an argument to the second,
-		allowing you to adjust arguments, run code before and after, and
-		conditionally execute the original function.
+	/**
+	* 	@header _.wrap(function, wrapper) 
+	*	@hint Returns the first function passed as an argument to the second, allowing you to adjust arguments, run code before and after, and conditionally execute the original function.
+	* 	@example "hello = function(name) { return "hello: " + name; };<br />hello = _.wrap(hello, function(func) {<br />return "before, " + func("moe") + ", after";<br />});<br />hello();<br />=> 'before, hello: moe, after'"
 	*/
-	// TODO make sure this handles arguments correctly
 	public any function wrap(func, wrapper) {
+		// TODO make sure this handles arguments correctly
 		var args = arguments;
 		return function() {
 			return wrapper(argumentCollection=arguments, func=args.func);
@@ -1047,7 +1085,7 @@ component {
 	}
 
 	/*
-		Returns a function that is the composition of a list of functions, each
+		@hint Returns a function that is the composition of a list of functions, each
 		consuming the return value of the function that follows.
 	*/
 	public any function compose() {
@@ -1055,8 +1093,10 @@ component {
 		return;
 	}
 
-	/*
-		Returns a function that will only be executed after being called N times.
+	/**
+	* 	@header _.after(count, function) 
+	*	@hint Returns a function that will only be executed after being called N times.
+	* 	@example "notes = ["one","two"];<br />render = function () {<br />return "render should only happen once";<br />};<br />renderNotes = _.after(arrayLen(notes), render);<br />_.each(notes, function(note) {<br />renderNotes();<br />});<br />=> 'render should only happen once'"	
 	*/
 	public any function after(times, func) {
 		if (times <= 0) {
@@ -1075,24 +1115,28 @@ component {
 	/* OBJECT FUNCTIONS */
 	// TODO: stub out all object functions
 
-	/*
-		Retrieve all the names of the object's properties.
+	/**
+	* 	@header _.keys(object) 
+	*	@hint Retrieve all the names of the object's properties.
+	* 	@example _.keys({one : 1, two : 2, three : 3});<br />=> ["one", "two", "three"]
 	*/
 	public any function keys(obj = this.obj) {
 		return listToArray(structKeyList(obj));
 	}
 
-	/*
-		Returns true if any of the values in the list pass the iterator truth test. 
-		Short-circuits and stops traversing the list if a true element is found. 
+	/**
+	* 	@header _.values(object) 
+	*	@hint Returns true if any of the values in the list pass the iterator truth test. Short-circuits and stops traversing the list if a true element is found. 
+	* 	@example _.values({one : 1, two : 2, three : 3});<br />=> [1, 2, 3]
 	*/
 	public any function values(obj = this.obj) {
 		return _.map(obj);
 	}
 	
-	/*
-		Returns a sorted list of the names of every method in an object — 
-		that is to say, the name of every function property of the object.
+	/**
+	* 	@header _.functions(object) 
+	*	@hint Returns a sorted list of the names of every method in an object — that is to say, the name of every function property of the object.
+	* 	@example _.functions(_);<br />=> ["all", "any", "bind", "bindAll", "clone", "compact", "compose" ...
 	*/
 	public any function functions(obj = this.obj) {
 		var names = [];
@@ -1105,10 +1149,17 @@ component {
 		return names;
 	}
 
-
-	/*
-		Copy all of the properties in the source objects over to the destination object, and return the destination object. 
-		It's in-order, so the last source will override properties of the same name in previous arguments.
+	/**
+	* 	@alias functions
+	*/ 
+	public any function methods() {
+		return functions(argumentCollection = arguments);
+	}
+	
+	/**
+	* 	@header _.extend(destination, *sources) 
+	*	@hint Copy all of the properties in the source objects over to the destination object, and return the destination object. It's in-order, so the last source will override properties of the same name in previous arguments.
+	* 	@example _.extend({name : 'moe'}, {age : 50});<br />=> {name : 'moe', age : 50}
 	*/
 	public any function extend(obj = this.obj) {
 		_.each(slice(arguments, 2), function(source) {
@@ -1119,8 +1170,10 @@ component {
 		return obj;
 	}
 
-	/*
-		Return a copy of the object, filtered to only have values for the whitelisted keys (or array of valid keys).
+	/**
+	* 	@header _.pick(object, *keys) 
+	*	@hint Return a copy of the object, filtered to only have values for the whitelisted keys (or array of valid keys).
+	* 	@example _.pick({name : 'moe', age: 50, userid : 'moe1'}, 'name', 'age');<br />=> {name : 'moe', age : 50}
 	*/
 	public any function pick(obj = this.obj) {
 		var result = {};
@@ -1132,9 +1185,10 @@ component {
 		return result;
 	}
 	
-	/*
-		Fill in missing properties in object with default values from the defaults objects, and return the object. 
-		As soon as the property is filled, further defaults will have no effect.
+	/**
+	* 	@header _.defaults(object, *defaults) 
+	*	@hint Fill in missing properties in object with default values from the defaults objects, and return the object. As soon as the property is filled, further defaults will have no effect.
+	* 	@example iceCream = {flavor : "chocolate"};<br />_.defaults(iceCream, {flavor : "vanilla", sprinkles : "lots"});<br />=> {flavor : "chocolate", sprinkles : "lots"}
 	*/
 	public any function defaults(obj = this.obj) {
 		_.each(_.slice(arguments, 2), function(source) {
@@ -1147,8 +1201,10 @@ component {
 		return obj;
 	}
 		
-	/*
-		Create a shallow-copied clone of the object. Any nested objects or arrays will be copied by reference, not duplicated.
+	/**
+	* 	@header _.clone(object) 
+	*	@hint Create a shallow-copied clone of the object. Any nested objects or arrays will be copied by reference, not duplicated.
+	* 	@example _.clone({name : 'moe'});<br />=> {name : 'moe'};
 	*/
 	public any function clone(obj = this.obj) {
 		if (!_.isObject(obj)) {
@@ -1163,9 +1219,9 @@ component {
 	}
 		
 	/*
-		Invokes interceptor with the object, and then returns object. 
-		The primary purpose of this method is to "tap into" a method chain, in order to perform operations on intermediate 
-		results within the chain.
+	* 	@header _.tap(object, interceptor) 
+	*	@hint Invokes interceptor with the object, and then returns object. The primary purpose of this method is to "tap into" a method chain, in order to perform operations on intermediate results within the chain.
+	* 	@example 
 	*/
 	// TODO: make this work
 	public any function tap(obj = this.obj, interceptor = _.identity) {
@@ -1173,123 +1229,104 @@ component {
 		return obj;
 	}
 	
-	/*
-		Does the object contain the given key? 
+	/**
+	* 	@header _.has(object, key) 
+	*	@hint Does the object contain the given key? 
+	* 	@example _.has({a: 1, b: 2, c: 3}, "b");<br />=> true
 	*/
-	// TODO: implement this better...
 	public any function has(obj = this.obj, key) {
+		// TODO: implement this better...
 		return _.include(obj, key);
 	}
 
 	/*
-		Performs an optimized deep comparison between the two objects, to determine if they should be considered equal.
+	*	@header _.isEqual(object, other) 
+	*	@hint Performs an optimized deep comparison between the two objects, to determine if they should be considered equal.
+	*	@example moe = {name : 'moe', luckyNumbers : [13, 27, 34]};<br />clone = {name : 'moe', luckyNumbers : [13, 27, 34]};<br />moe == clone;<br />=> false<br />_.isEqual(moe, clone);<br />=> true
 	*/
 	// TODO: implement this
 	public any function isEqual(a = this.obj, b) {
 		// return eq(a, b, []);
 	}
 
-	/*
-		Returns true if object contains no values.
-		Delegates to structIsEmpty()
+	/**
+	* 	@header _.isEmpty(object) 
+	*	@hint Returns true if object contains no values. Delegates to structIsEmpty()
+	* 	@example _.isEmpty([1, 2, 3]);<br />=> false<br />_.isEmpty({});<br />=> true
 	*/
 	public any function isEmpty(obj = this.obj) {		
 		return structIsEmpty(obj);
 	}
 
-	/*
-		Returns true if object is a DOM element.
-		Note: This makes no sense in Coldfusion, so it returns undefined.
-	*/
-	public any function isElement(obj = this.obj) {
-		return;
-	}
-	
-	/*
-		Returns true if object is an Array.
-		Delegates to native isArray();
+	/**
+	* 	@header _.isArray(object) 
+	*	@hint Returns true if object is an Array. Delegates to native isArray();
+	* 	@example _.isArray({one: 1});<br />=> false<br />_.isArray([1,2,3]);<br />=> true
 	*/
 	public any function isArray(obj = this.obj) {
 		return isArray(obj);
 	}
 	
-	/* 
-		Returns true if value is an Object.
-		Delegates to native isObject()
+	/** 
+	* 	@header _.isObject(object)
+	*	@hint Returns true if value is an Object. Delegates to native isObject()
+	* 	@example _.isObject({});<br />=> true <br />_.isObject(1);<br />=> false
 	*/
 	public any function isObject(obj = this.obj) {
 		return isObject(obj);
 	}
 	
-	/* 
-		Returns true if object is an Arguments object.
-		Not yet implemented. Returns undefined.
-	*/
-	// note: I don't think this is possible in Coldfusion
-	public any function isArguments(obj = this.obj) {
-		return;
-	}
-	
-	/*
-		Returns true if object is a Function.
-		Delegates to native isClosure()
+	/**
+	* 	@header _.isFunction(object)
+	*	@hint Returns true if object is a Function.	Delegates to native isClosure()
+	* 	@example _.isFunction(function(){return 1;});<br />=> true
 	*/	
-	// TODO: find a better way to do this in Coldfusion?
 	public boolean function isFunction(obj = this.obj) {
+		// TODO: find a better way to do this in Coldfusion?
 		return isClosure(obj);
 	}
 	
-	/*
-		Returns true if object is a String.
-		Note: There is no isString() is CF, so we use process of elimination.
+	/**
+	* 	@header _.isString(object)
+	*	@hint Returns true if object is a String. 
+	* 	@example _.isString("moe");<br />=> true
 	*/
 	public any function isString(obj = this.obj) {
+		// Note: There is no isString() is CF, so we use process of elimination.
 		return isSimpleValue(obj) && !isBinary(obj) && !isNumeric(obj) && !isBoolean(obj) && !isDate(obj);
 	}
 
-	/*
-		Returns true if object is a number.
-		Delegates to native isNumeric()
+	/**
+	* 	@header _.isNumber(object)
+	*	@hint Returns true if object is a number. Delegates to native isNumeric()
+	* 	@example _.isNumber(8.4 + 5);<br />=> true
 	*/
 	public any function isNumber(obj = this.obj) {
 		return isNumerc(obj);
 	}
-
-	/*
-		Returns true if object is a finite Number.
-		Note: Coldfusion doesn't support Infinity or -Infinity, so this function is unimplemented.
-	*/
-	public any function isFinite(obj = this.obj) {
-		return;
-	}
 	
-	/*
-		Returns true if object is a boolean.
-		Delegates to native isBoolean()
+	/**
+	* 	@header _.isBoolean(object)
+	*	@hint Returns true if object is a boolean. Delegates to native isBoolean()
+	* 	@example _.isBoolean(false);<br />=> true
 	*/
 	public any function isBoolean(obj = this.obj) {
 		return isBoolean(obj);
 	}
 	
-	/*
-		Returns true if object is a date.
-		Delegates to native isDate()
+	/**
+	* 	@header _.isDate(object)
+	*	@hint Returns true if object is a date. Delegates to native isDate()
+	* 	@example _,isDate(now());<br />=> true
 	*/
 	public any function isDate(obj = this.obj) {
 		return isDate(obj);
 	}
 	
-	/*
-		Returns true if object is a regular expression.
-		Note: Not implemented since CF doesn't have RegEx objects.
-	*/	
-	public any function isRegExp(obj = this.obj) {
-		return;
-	}
-	
-	/*
-		Returns true if object is not a number.
-		Delegates to native isNumeric()
+	/**
+	* 	@header _.isNaN(object)
+	*	@hint Returns true if object is not a number. Delegates to native isNumeric()
+	* 	@example _.isNaN("string");<br />=> true
 	*/
 	public any function isNaN(obj = this.obj) {
 		return !isNumeric(obj);
@@ -1336,8 +1373,10 @@ component {
 	*/
 	// pointless: noConflict()
 	
-	/*
-		Invokes the given iterator function n times.
+	/**
+	* 	@header _.times(n, iterator) 
+	*	@hint Invokes the given iterator function n times.
+	* 	@example _.times(3, function(){ genie.grantWish(); });
 	*/
 	public any function times(n, iterator, context) {
 		context.iterator = iterator;
@@ -1347,19 +1386,22 @@ component {
 		}
 	}
 	
-	/*
-		Allows you to extend Underscore with your own utility functions. 
-		Pass a struct of {name: function} definitions to have your functions added to the Underscore object, as well as the OOP wrapper.
+	/**
+	* 	@header _.mixin(object)
+	*	@hint Allows you to extend Underscore with your own utility functions. Pass a struct of {name: function} definitions to have your functions added to the Underscore object, <s>as well as the OOP wrapper.</s>
+	* 	@example _.mixin({ <br />upper: function(string) { return uCase(string); }<br />});<br />_.upper("fabio");<br />=> "Fabio"'
 	*/
-	// TODO: make this also work for the OOP wrapper
 	public any function mixin(object) {
+		// TODO: make this also work for the OOP wrapper
 		_.each(object, function (val, key, obj) {
 			_[key] = val;
 		});			
 	}
 	
-	/*
-		If the value of the named property is a function then invoke it; otherwise, return it.
+	/**
+	* 	@header _.result(object, property) 
+	*	@hint If the value of the named property is a function then invoke it; otherwise, return it.
+	* 	@example 'object = {cheese: 'crumpets', stuff: function(){ return 'nonsense'; }};<br />_.result(object, 'cheese');<br />=> "crumpets"<br />_.result(object, 'stuff');<br />=> "nonsense"'
 	*/
 	public any function result(object, property) {
 		// if (_.isNull(object)) {
