@@ -1,7 +1,7 @@
 /** 
 * @name Underscore.cfc 
 * @hint A port of Underscore.js for Coldfusion
-* @introduction Underscore.cfc is a port of <a href="http://underscore.js">Underscore.js</a> for Coldfusion. It is a utility-belt library that provides a lot of the functional programming support that you would expect in Prototype.js (or Ruby). <br /><br />Underscore provides dozens of functions that support both the usual functional suspects: map, select, invoke - as well as more specialized helpers: function binding, <s>templating, deep equality testing,</s> and so on. It delegates to built-in functions where applicable.<br /><br />UnderscoreCF is currently only tested on Adobe Coldfusion 10. <b>It is still in progress, so please be extra-careful using it.</b><br /><br />Some unit tests are included, but much work needs to be done there.<br /><br />The project is <a href="http://github.com/russplaysguitar/underscorecf">hosted on GitHub</a>. Contributions are welcome. 
+* @introduction Underscore.cfc is a port of <a href="http://underscorejs.org">Underscore.js</a> for Coldfusion. It is a utility-belt library that provides a lot of the functional programming support that you would expect in Prototype.js (or Ruby). <br /><br />Underscore provides dozens of functions that support both the usual functional suspects: map, select, invoke - as well as more specialized helpers: function binding, <s>templating, deep equality testing,</s> and so on. It delegates to built-in functions where applicable.<br /><br />UnderscoreCF is currently only tested on Adobe Coldfusion 10. <b>It is still in progress, so please be extra-careful using it.</b><br /><br />Some unit tests are included, but much work needs to be done there.<br /><br />The project is <a href="http://github.com/russplaysguitar/underscorecf">hosted on GitHub</a>. Contributions are welcome. 
 */ 
 component { 
 
@@ -447,7 +447,7 @@ component {
 	/**
 	* 	@header _.sortBy(list, iterator, [context]) 
 	*	@hint Returns a sorted copy of list, ranked in ascending order by the results of running each value through iterator. Iterator may also be the string name of the property to sort by (eg. length).
-	* 	@example _.sortBy([1, 2, 3, 4, 5, 6], function(num){ return Math.sin(num); });<br />=> [5, 4, 6, 3, 1, 2]
+	* 	@example _.sortBy([6, 2, 4, 3, 5, 1], function(num){ return num; });<br />=> [1, 2, 3, 4, 5, 6]
 	*/
 	public any function sortBy(obj = this.obj, val, context = new Component()) {
 		if (_.isFunction(val)) {
