@@ -5,7 +5,7 @@
 	
 	<meta http-equiv="X-UA-Compatible" content="chrome=1">
 	<meta name="viewport" content="width=device-width">
-	<link rel="stylesheet" type="text/css" href="./index_files/style.css">
+	<link rel="stylesheet" type="text/css" href="index_files/style.css">
 </head>
 <body>
 	<div id="sidebar" class="interface">
@@ -73,5 +73,6 @@
 		<h2 id="Utilities">Utility Functions</h2>
 		<p id="times"><b class="header">times</b> <code>_.times(n, iterator)</code><br>Invokes the given iterator function n times.<br></p><pre>_.times(3, function(){ genie.grantWish(); });</pre><p></p><p id="mixin"><b class="header">mixin</b> <code>_.mixin(object)</code><br>Allows you to extend Underscore with your own utility functions. Pass a struct of {name: function} definitions to have your functions added to the Underscore object, <s>as well as the OOP wrapper.</s><br></p><pre>_.mixin({ <br>upper: function(string) { return uCase(string); }<br>});<br>_.upper("fabio");<br>=&gt; "Fabio"</pre><p></p><p id="result"><b class="header">result</b> <code>_.result(object, property)</code><br>If the value of the named property is a function then invoke it; otherwise, return it.<br></p><pre>object = {cheese: 'crumpets', stuff: function(){ return 'nonsense'; }};<br>_.result(object, 'cheese');<br>=&gt; "crumpets"<br>_.result(object, 'stuff');<br>=&gt; "nonsense"</pre><p></p>
 	</div>
+	<a href="http://github.com/russplaysguitar/underscorecf"><img style="position: absolute; top: 0; right: 0; border: 0;" src="index_files/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
 
 </body><style type="text/css">embed[type*="application/x-shockwave-flash"],embed[src*=".swf"],object[type*="application/x-shockwave-flash"],object[codetype*="application/x-shockwave-flash"],object[src*=".swf"],object[codebase*="swflash.cab"],object[classid*="D27CDB6E-AE6D-11cf-96B8-444553540000"],object[classid*="d27cdb6e-ae6d-11cf-96b8-444553540000"],object[classid*="D27CDB6E-AE6D-11cf-96B8-444553540000"]{	display: none !important;}</style></html>
