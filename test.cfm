@@ -1,3 +1,10 @@
+<!--- 
+
+	This file is just a bunch of tests I wrote to try out functions as I wrote the library.
+	Please refer to the unit tests for actual stuff.
+
+--->
+
 <cffunction name="flush">
 	<cfflush>
 </cffunction>
@@ -458,6 +465,7 @@ start tests:<br />
 	writeOutput("times: ");
 	context = new Component();
 	context.x = 1;
+	// context = function () {this.x = 1;};
 	_.times(3, function(i){ writeDump(this.x+i); }, context);
 
 	writeOutput("<br />");

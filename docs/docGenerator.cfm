@@ -55,7 +55,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>UnderscoreCF</title>
+	<title>Underscore.cfc</title>
 	<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="chrome=1" />
 	<meta name="viewport" content="width=device-width" />
@@ -64,7 +64,7 @@
 <body>
 	<div id="sidebar" class="interface">
 		<a class="toc_title" href="#">
-		    UnderscoreCF <span class="version">(.01)</span>
+		    Underscore.cfc <span class="version">(.01)</span>
 	    </a>
 	    <a class="toc_title" href="#">
 	    	Introduction
@@ -89,11 +89,11 @@
 		<p id="Introduction">
 			<cfoutput>#metadata.introduction#</cfoutput>
 		</p>
-		<h2 id="Collections">Collection Functions (Arrays or Objects)</h2>
+		<h2 id="Collections">Collection Functions (Arrays, Structs or Objects)</h2>
 		<cfset display(metadata, collectionFunctions) >
 		<h2 id="Arrays">Array Functions</h2>
 		<cfset display(metadata, arrayFunctions) >
-		<h2 id="Objects">Object Functions</h2>
+		<h2 id="Objects">Object/Struct Functions</h2>
 		<cfset display(metadata, objectFunctions) >
 		<h2 id="Functions">Function (uh, ahem) Functions</h2>
 		<cfset display(metadata, funcFunctions) >
