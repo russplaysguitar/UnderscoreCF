@@ -258,7 +258,7 @@ component {
 	/**
 	* 	@header _.all(list, iterator, [context]) : boolean
 	*	@hint Returns true if all of the values in the list pass the iterator truth test. 
-	* 	@example _.all([true, 1, 'yes'], _.identity);<br />=> false
+	* 	@example _.all([true, 1, 'no'], _.identity);<br />=> false
 	*/
 	public boolean function all(obj = this.obj, iterator = _.identity, context = new Component()) {
 		var result = false;
@@ -286,7 +286,7 @@ component {
 			}
 		}
 
-		return result;		
+		return toBoolean(result);		
 	}
 	
 	/** 
@@ -327,7 +327,7 @@ component {
 			}
 		}
 
-		return result;
+		return toBoolean(result);
 	}
 	
 	/**
@@ -560,7 +560,7 @@ component {
 	/**
 	* 	@header _.sortedIndex(list, value, [iterator]) : numeric
 	*	@hint Uses a binary search to determine the index at which the value should be inserted into the list in order to maintain the list's sorted order. If an iterator is passed, it will be used to compute the sort ranking of each value.
-	* 	@example _.sortedIndex([10, 20, 30, 40, 50], 35);<br />=> 3
+	* 	@example _.sortedIndex([10, 20, 30, 40, 50], 35);<br />=> 4
 	*/
 	public numeric function sortedIndex(array = this.obj, obj, iterator = _.identity) {
 		var low = 0;
@@ -905,7 +905,7 @@ component {
 	/**
 	* 	@header _.indexOf(array, value, [isSorted]) : numeric
 	*	@hint Returns the index at which value can be found in the array, or -1 if value is not present in the array. Uses the native ArrayFind() function. If you're working with a large array, and you know that the array is already sorted, pass true for isSorted to use a faster binary search.
-	* 	@example _.indexOf([1, 2, 3], 2);<br />=> 1
+	* 	@example _.indexOf([1, 2, 3], 2);<br />=> 2
 	*/
 	public numeric function indexOf(array = this.obj, item, isSorted = false) {
 		if (isSorted) {
@@ -925,7 +925,7 @@ component {
 	/**
 	* 	@header _.lastIndexOf(array, value) : numeric  
 	*	@hint Returns the index of the last occurrence of value in the array, or -1 if value is not present. 
-	* 	@example _.lastIndexOf([1, 2, 3, 1, 2, 3], 2);<br />=> 4
+	* 	@example _.lastIndexOf([1, 2, 3, 1, 2, 3], 2);<br />=> 5
 	*/
 	public numeric function lastIndexOf(array = this.obj, item) {
 		if (!structKeyExists(arguments, 'array')) {
@@ -1415,5 +1415,10 @@ component {
 		else {
 			return value;
 		}
+	}
+
+	// useful
+	private boolean function toBoolean(obj) {
+		return !!obj;
 	}
 }

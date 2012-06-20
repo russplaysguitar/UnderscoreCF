@@ -1,6 +1,7 @@
-<cfcomponent extends = "mxunit.framework.TestCase">
-	<cfscript>
-
+/**
+*	@extends mxunit.framework.TestCase
+*/
+component {
 	public void function testArraysFirst() {
 	    var firstWrapper = function (x) {return _.first(x);};
 	    assertEquals(_.first([1,2,3]), 1, 'can pull out the first element of an array');
@@ -103,7 +104,4 @@
 		structDelete(variables, "_");
 	}
 	
-	
-	
-	</cfscript>
-</cfcomponent>
+}
