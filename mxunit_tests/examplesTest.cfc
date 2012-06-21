@@ -200,6 +200,61 @@ component {
 		assertEquals([], result);
 	}
 	
+	public void function testBind() {
+		var func = function(greeting){ return greeting & ': ' & this.name; };
+		func = _.bind(func, {name : 'moe'}, {greeting: 'hi'});
+		var result = func();
+		assertEquals('hi: moe', result);
+	}
+	
+	public void function testBindAll() {
+		var buttonView = {label: 'button', onClick : function(){ return 'clicked: ' & this.label; }};
+		_.bindAll(buttonView);
+		var result = buttonView.onClick();
+		assertEquals('clicked: button', result);
+	}
+	
+	public void function testMemoize() {
+		var fibonacci = function(n) {  return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2); };
+		var fibonacciMemoized = _.memoize(fibonacci);
+		var expected = fibonacci(15);
+		var actual = fibonacciMemoized(15);
+		assertEquals(expected, actual);
+	}
+	
+	public void function testDelay() {
+		var result = _.delay(function (msg) {return msg;}, 1000, {msg = "hi"});
+		assertEquals("hi", result);
+		//TODO: add assertion for the delay time
+	}
+	
+	public void function testOnce() {
+		var i = 0;
+		var once = _.once(function () { i = i+1; return i; });
+		var result = once();
+		assertEquals(1, result);
+		var result2 = once();
+		assertEquals(1, result2);
+	}
+	
+	public void function testAfter() {
+		var funcWasCalled = false;
+		var func = function () {
+			funcWasCalled = true;
+		};
+		var callFuncAfterTwo = _.after(2, func);
+		callFuncAfterTwo();
+		assertEquals(false, funcWasCalled);
+		callFuncAfterTwo();
+		assertEquals(true, funcWasCalled);
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

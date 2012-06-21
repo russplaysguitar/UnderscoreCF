@@ -965,7 +965,7 @@ component {
 	/**
 	* 	@header _.bind(function, object, arguments) : any
 	*	@hint Bind a function to a structure, meaning that whenever the function is called, the value of "this" will be the structure. Optionally, bind arguments to the function to pre-fill them, also known as partial application.
-	* 	@example "func = function(greeting){ return greeting & ': ' & this.name };<br />func = _.bind(func, {name : 'moe'}, {greeting: 'hi'});<br />func();<br />=> 'hi: moe'"
+	* 	@example "func = function(greeting){ return greeting & ': ' & this.name; };<br />func = _.bind(func, {name : 'moe'}, {greeting: 'hi'});<br />func();<br />=> 'hi: moe'"
 	*/
 	public any function bind(func, context = {}, args = {}) {
 		// TODO: convert arguments after func and context into an arguments struct, rather than forcing the user to pass args as a struct
@@ -977,7 +977,7 @@ component {
 	/**
 	* 	@header _.bindAll(object, [*methodNames]) : any
 	*	@hint Bind all of an object's methods to that object. Useful for ensuring that all callbacks defined on an object belong to it.
-	* 	@example "buttonView = {label: 'button', onClick : function(){ return 'clicked: ' & this.label; }}<br />_.bindAll(buttonView);<br />_.bindAll(buttonView);<br />=> 'clicked: button'"
+	* 	@example "buttonView = {label: 'button', onClick : function(){ return 'clicked: ' & this.label; }};<br />_.bindAll(buttonView);<br />buttonView.onClick();<br />=> 'clicked: button'"
 	*/
 	public any function bindAll(obj) {
 		var funcs = _.slice(arguments, 2);
@@ -1056,7 +1056,7 @@ component {
 	/**
 	* 	@header _.once(function) : any
 	*	@hint Returns a function that will be executed at most one time, no matter how often you call it. Useful for lazy initialization.
-	* 	@example _.once(function () { return "should only see this once"; });<br />once();<br />=> "should only see this once"<br />once();<br />=> // nothing
+	* 	@example i = 0;<br />once = _.once(function () { i = i+1; return i; });<br />once();<br />=> 1<br />once();<br />=> 1
 	*/
 	public any function once(func) {
 		var ran = false; 
@@ -1096,7 +1096,7 @@ component {
 	/**
 	* 	@header _.after(count, function) : any
 	*	@hint Returns a function that will only be executed after being called N times.
-	* 	@example "notes = ["one","two"];<br />render = function () {<br />return "render should only happen once";<br />};<br />renderNotes = _.after(arrayLen(notes), render);<br />_.each(notes, function(note) {<br />renderNotes();<br />});<br />=> 'render should only happen once'"	
+	* 	@example "func = function () { writeOutput("hi"); };<br />callFuncAfterTwo = _.after(2, func);<br />callFuncAfterTwo();<br />=> // nothing<br />callFuncAfterTwo();<br />=> 'hi'"
 	*/
 	public any function after(times, func) {
 		if (times <= 0) {
