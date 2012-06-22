@@ -1333,15 +1333,6 @@ component {
 		return isDate(obj);
 	}
 	
-	/**
-	* 	@header _.isNaN(object) : boolean
-	*	@hint Returns true if object is not a number. Delegates to native isNumeric()
-	* 	@example _.isNaN("string");<br />=> true
-	*/
-	public boolean function isNaN(obj = this.obj) {
-		return !isNumeric(obj);
-	}
-	
 	/*
 		Returns true if object is null.
 		Compares object to Java null.

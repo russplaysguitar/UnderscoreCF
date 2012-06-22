@@ -365,45 +365,39 @@ component {
 	public void function testIsFunction() {
 		var result = _.isFunction(function(){ return 1; });
 		assertTrue(result);
+		result = _.isFunction(1);
+		assertFalse(result);
 	}
 	
 	public void function testIsString() {
 		var result = _.isString("moe");
 		assertTrue(result);
+		result = _.isString(1);
+		assertFalse(result);
 	}
 	
 	public void function testIsNumber() {
 		var result = _.isNumber(8.4 + 5);
 		assertTrue(result);
+		result = _.isNumber("not a number");
+		assertFalse(result);
 	}
 	
+	public void function testIsBoolean() {
+		var result = _.isBoolean(false);
+		assertTrue(result);
+		result = _.isBoolean("not a bool");
+		assertFalse(result);
+	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-		
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	public void function testIsDate() {
+		var result = _.isDate(now());
+		assertTrue(result);
+		result = _.isDate("not a date");
+		assertFalse(result);
+		result = _.isDate(1);
+		assertFalse(result);
+	}
 	
 	
 	

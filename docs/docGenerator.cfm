@@ -89,14 +89,16 @@
 		<p id="Introduction">
 			<cfoutput>#metadata.introduction#</cfoutput>
 		</p>
+		<h2>Download</h2>
+		<div><a href="https://github.com/russplaysguitar/UnderscoreCF/downloads">Beta Version (.01)</a> - <i>Links to GitHub Download page</i></div>
 		<h2 id="Collections">Collection Functions (Arrays, Structs or Objects)</h2>
 		<cfset display(metadata, collectionFunctions) >
 		<h2 id="Arrays">Array Functions</h2>
 		<cfset display(metadata, arrayFunctions) >
-		<h2 id="Objects">Object/Struct Functions</h2>
-		<cfset display(metadata, objectFunctions) >
 		<h2 id="Functions">Function (uh, ahem) Functions</h2>
 		<cfset display(metadata, funcFunctions) >
+		<h2 id="Objects">Object/Struct Functions</h2>
+		<cfset display(metadata, objectFunctions) >
 		<h2 id="Utilities">Utility Functions</h2>
 		<cfset display(metadata, utilFunctions) >
 	</div>
