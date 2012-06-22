@@ -91,7 +91,7 @@
 		</p>
 		<h2>Download</h2>
 		<div><a href="https://github.com/russplaysguitar/UnderscoreCF/downloads">Beta Version (.01)</a> - <i>Links to GitHub Download page</i></div>
-		<h2 id="Collections">Collection Functions (Arrays, Structs or Objects)</h2>
+		<h2 id="Collections">Collection Functions (Arrays, Structs, Queries, or Objects)</h2>
 		<cfset display(metadata, collectionFunctions) >
 		<h2 id="Arrays">Array Functions</h2>
 		<cfset display(metadata, arrayFunctions) >
