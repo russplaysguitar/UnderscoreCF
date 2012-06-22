@@ -507,6 +507,27 @@ start tests:<br />
     list[33] = "hi";
 
     writeDump(list);
+
+
+    writeOutput("q of q<br />");
+	q = queryNew('id,name');
+	queryAddRow(
+		q,
+		[1, "Anna"]
+	);
+	queryAddRow(
+		q,
+		[2, "Joe"]
+	);
+	qry = new Query(dbtype='query', sql='select * from q');
+	qry.setAttributes(q=q);
+	result = qry.execute().getResult();
+
+	_.each(result, function(el, idx, obj){
+		writeDump(el);
+		writeDump(idx);
+		writeDump(obj);
+	});
 </cfscript>
 <br />
 end tests

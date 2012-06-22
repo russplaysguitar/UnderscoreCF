@@ -33,11 +33,15 @@ component {
 				index++;
 			}
 		}
-		else {	
+		else if (isObject(obj) || isStruct(obj)) {	
 			for (key in obj) {
 				var val = obj[key];
 				context.iterator(val, key, obj);
 			}
+		}
+		else {
+			// query or something else? convert to array and recurse
+			_.each(toArray(obj), iterator, context);			
 		}
  	}
 
@@ -45,7 +49,7 @@ component {
  	* 	@alias each
  	*/
 	public void function forEach(obj, iterator, context) {
-	    return _.each(argumentCollection = arguments);
+	    _.each(argumentCollection = arguments);
  	}
 
 	/**
@@ -64,13 +68,17 @@ component {
 				index++;
 			}
 		}
-		else {
+		else if (isObject(obj) || isStruct(obj)) {	
 			var index = 1;
 			for (key in obj) {
 				var val = obj[key];
 				result[index] = context.iterator(val, key, obj);
 				index++;
 			}
+		}
+		else {
+			// query or something else? convert to array and recurse
+			result = _.map(toArray(obj), iterator, context);			
 		}
 
 		return result;
@@ -100,12 +108,16 @@ component {
 				i++;
 			}
 		}
-		else {
+		else if (isObject(obj) || isStruct(obj)) {	
 			for (key in obj) {
 				var num = obj[key];
 				memo = context.iterator(memo, num, i);
 				i++;
 			}
+		}
+		else {
+			// query or something else? convert to array and recurse
+			return _.reduce(toArray(obj), iterator, memo, context);			
 		}
 
 		return memo;		
@@ -157,7 +169,7 @@ component {
 				index++;
 			}
 		}
-		else {
+		else if (isObject(obj) || isStruct(obj)) {	
 			var index  = 1;
 			for (key in obj) {
 				var val = obj[key];
@@ -167,6 +179,10 @@ component {
 				}
 				index++;
 			}
+		}
+		else {
+			// query or something else? convert to array and recurse
+			return _.find(toArray(obj), iterator, context);			
 		}
 
 		return result;
@@ -198,7 +214,7 @@ component {
 				}
 			}
 		}
-		else {
+		else if (isObject(obj) || isStruct(obj)) {	
 			var index = 1;
 			for (key in obj) {
 				var val = obj[key];
@@ -208,6 +224,10 @@ component {
 					index++;
 				}
 			}
+		}
+		else {
+			// query or something else? convert to array and recurse
+			return _.filter(toArray(obj), iterator, context);			
 		}
 
 		return result;
@@ -239,7 +259,7 @@ component {
 				}
 			}
 		}
-		else {
+		else if (isObject(obj) || isStruct(obj)) {	
 			var index = 1;
 			for (key in obj) {
 				var val = obj[key];
@@ -249,6 +269,10 @@ component {
 					index++;
 				}
 			}
+		}
+		else {
+			// query or something else? convert to array and recurse
+			return _.reject(toArray(obj), iterator, context);			
 		}
 
 		return result;		
@@ -274,7 +298,7 @@ component {
 				index++;
 			}
 		}
-		else {
+		else if (isObject(obj) || isStruct(obj)) {	
 			var index  = 1;
 			for (key in obj) {
 				var val = obj[key];
@@ -284,6 +308,9 @@ component {
 				}
 				index++;
 			}
+		}
+		else {
+			return _.all(toArray(obj), iterator, context);			
 		}
 
 		return toBoolean(result);		
@@ -315,7 +342,7 @@ component {
 				index++;
 			}
 		}
-		else {
+		else if (isObject(obj) || isStruct(obj)) {	
 			var index  = 1;
 			for (key in obj) {
 				var value = obj[key];
@@ -325,6 +352,9 @@ component {
 				}
 				index++;
 			}
+		}
+		else {
+			return _.any(toArray(obj), iterator, context);			
 		}
 
 		return toBoolean(result);
@@ -602,6 +632,17 @@ component {
 		if (isArray(obj)) {
 			return obj;
 		}
+		else if (isQuery(obj)) {
+			var result = [];
+			for (index = 1; index <= obj.RecordCount; index++) {
+				var row = {};
+				for (var colName in obj.columnList) {
+					row[colName] = obj[colName][index];
+				}
+				result[index] = row;
+			}
+			return result;	
+		}
 		else if (isObject(obj) || isStruct(obj)) {
 			return _.values(obj);
 		}
@@ -622,6 +663,9 @@ component {
 		}
 		else if (isArray(obj)) {
 			return arrayLen(obj);
+		}
+		else if (isQuery(obj)) {
+			return obj.recordCount;
 		}
 		else {
 			throw "size() is only compatible with objects, structs, and arrays.";
@@ -1207,6 +1251,7 @@ component {
 	* 	@example _.clone({name : 'moe'});<br />=> {name : 'moe'}
 	*/
 	public any function clone(obj = this.obj) {
+		// TODO: ensure this adds references to nested objects or arrays...
 		if (!_.isObject(obj)) {
 			return obj;
 		}
@@ -1239,8 +1284,11 @@ component {
 		if (isArray(obj)) {
 			return _.include(obj, key);
 		}
-		else {
+		else if (isObject(obj) || isStruct(obj)) {
 			return structKeyExists(obj, key);
+		}
+		else {
+			return _.has(toArray(obj), key);
 		}
 	}
 
