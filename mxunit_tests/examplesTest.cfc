@@ -249,6 +249,116 @@ component {
 		assertEquals(true, funcWasCalled);
 	}
 	
+	public void function testWrap() {
+		var hello = function(name) { return "hello: " & name; };
+		hello = _.wrap(hello, function(func) {
+			return "before, " & func("moe") & ", after";
+		});
+		var result = hello();
+		assertEquals('before, hello: moe, after', result);
+	}
+	
+	public void function testTimes() {
+		var results = [];
+		var i = 1;
+		var genie = {
+			grantWish: function () {
+				arrayAppend(results, i);
+				i++;
+			}
+		};
+		_.times(3, function(){ genie.grantWish(); });
+		assertEquals([1, 2, 3], results);
+	}
+	
+	public void function testMixin() {
+		_.mixin({ 
+			upper: function(string) { return uCase(string); }
+		});
+		var result = _.upper("fabio");
+		assertEquals("Fabio", result);
+	}
+	
+	public void function testResult() {
+		var object = {cheese: 'crumpets', stuff: function(){ return 'nonsense'; }};
+		var result = _.result(object, 'cheese');
+		assertEquals("crumpets", result);
+		result = _.result(object, 'stuff');
+		assertEquals("nonsense", result);
+	}
+	
+	public void function testKeys() {
+		var result = _.keys({one : 1, two : 2, three : 3});
+		assertEquals(["one", "two", "three"], result);
+	}
+	
+	public void function testValues() {
+		var result = _.values({one : 1, two : 2, three : 3});
+ 		assertEquals([1, 2, 3], result);
+	}
+	
+	public void function testFunctions() {
+		var obj = {
+			one: "not a function",
+			two: function () { return 0; },
+			three: function () { return 1; }
+		};
+		var result = _.functions(obj);
+		assertEquals(["three", "two"], result);
+	}
+	
+	public void function testExtend() {
+		var result = _.extend({name : 'moe'}, {age : 50});
+		assertEquals({name : 'moe', age : 50}, result);
+	}
+	
+	public void function testPick() {
+		var result = _.pick({name : 'moe', age: 50, userid : 'moe1'}, 'name', 'age');
+		assertEquals({name : 'moe', age : 50}, result);
+	}
+	
+	public void function testDefaults() {
+		var iceCream = {flavor : "chocolate"};
+		var result = _.defaults(iceCream, {flavor : "vanilla", sprinkles : "lots"});
+		assertEquals({flavor : "chocolate", sprinkles : "lots"}, result);
+	}
+	
+	public void function testClone() {
+		var result = _.clone({name : 'moe'});
+		assertEquals({name : 'moe'}, result);
+	}
+	
+	public void function testHas() {
+		var result = _.has({a: 1, b: 2, c: 3}, "b");
+		assertEquals(true, result);
+		result = _.has([1, 2, 3], 3);
+		assertEquals(true, result);
+		result = _.has({a: 1, b: 2, c: 3}, "d");
+		assertEquals(false, result);
+		result = _.has([1, 2, 3], 4);
+		assertEquals(false, result);
+	}
+	
+	public void function testIsEmpty() {
+		var result = _.isEmpty([1, 2, 3]);
+		assertEquals(false, result);
+		result = _.isEmpty({});
+		assertEquals(true, result);		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+	
+	
+	
 	
 	
 	

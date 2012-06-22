@@ -1135,7 +1135,7 @@ component {
 	
 	/**
 	* 	@header _.functions(object) : array
-	*	@hint Returns a sorted array of the names of every method in an object — that is to say, the name of every function property of the object.
+	*	@hint Returns a sorted array of the names of every method in an object -- that is to say, the name of every function property of the object.
 	* 	@example _.functions(_);<br />=> ["all", "any", "bind", "bindAll", "clone", "compact", "compose" ...
 	*/
 	public array function functions(obj = this.obj) {
@@ -1204,7 +1204,7 @@ component {
 	/**
 	* 	@header _.clone(object) : any
 	*	@hint Create a shallow-copied clone of the object. Any nested objects or arrays will be copied by reference, not duplicated (note: this is yet to be tested).
-	* 	@example _.clone({name : 'moe'});<br />=> {name : 'moe'};
+	* 	@example _.clone({name : 'moe'});<br />=> {name : 'moe'}
 	*/
 	public any function clone(obj = this.obj) {
 		if (!_.isObject(obj)) {
@@ -1231,12 +1231,17 @@ component {
 	
 	/**
 	* 	@header _.has(object, key) : boolean
-	*	@hint Does the object contain the given key? 
+	*	@hint Does the object contain the given key? Delegates to _.include() for arrays or native structKeyExists() for objects.
 	* 	@example _.has({a: 1, b: 2, c: 3}, "b");<br />=> true
 	*/
 	public boolean function has(obj = this.obj, key) {
-		// TODO: implement this better...
-		return _.include(obj, key);
+		// TODO: implement this better?
+		if (isArray(obj)) {
+			return _.include(obj, key);
+		}
+		else {
+			return structKeyExists(obj, key);
+		}
 	}
 
 	/*
