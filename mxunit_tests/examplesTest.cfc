@@ -346,6 +346,42 @@ component {
 		assertEquals(true, result);		
 	}
 	
+	public void function testIsArray() {
+		var result = _.isArray({one: 1});
+		assertFalse(result);
+		result = _.isArray([1,2,3]);
+		assertTrue(result);
+	}
+	
+	public void function testIsObject() {
+		var result = _.isObject({});
+		assertFalse(result); 
+		result = _.isObject(1);
+		assertFalse(result);
+		result = _.isObject(new Component());
+		assertTrue(result);
+	}
+	
+	public void function testIsFunction() {
+		var result = _.isFunction(function(){ return 1; });
+		assertTrue(result);
+	}
+	
+	public void function testIsString() {
+		var result = _.isString("moe");
+		assertTrue(result);
+	}
+	
+	public void function testIsNumber() {
+		var result = _.isNumber(8.4 + 5);
+		assertTrue(result);
+	}
+	
+	
+	
+	
+	
+	
 	
 	
 	

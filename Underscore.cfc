@@ -1256,11 +1256,16 @@ component {
 
 	/**
 	* 	@header _.isEmpty(object) : boolean
-	*	@hint Returns true if object contains no values. Delegates to structIsEmpty()
+	*	@hint Returns true if object contains no values. Delegates ArrayLen for arrays, structIsEmpty() otherwise.
 	* 	@example _.isEmpty([1, 2, 3]);<br />=> false<br />_.isEmpty({});<br />=> true
 	*/
-	public boolean function isEmpty(obj = this.obj) {		
-		return structIsEmpty(obj);
+	public boolean function isEmpty(obj = this.obj) {
+		if (isArray(obj)) {
+			return (ArrayLen(obj) == 0);
+		}	
+		else {
+			return structIsEmpty(obj);
+		}	
 	}
 
 	/**
@@ -1275,7 +1280,7 @@ component {
 	/** 
 	* 	@header _.isObject(object) : boolean
 	*	@hint Returns true if value is an Object. Delegates to native isObject()
-	* 	@example _.isObject({});<br />=> true <br />_.isObject(1);<br />=> false
+	* 	@example _.isObject(new Component());<br />=> true <br />_.isObject({});<br />=> false
 	*/
 	public boolean function isObject(obj = this.obj) {
 		return isObject(obj);
@@ -1307,7 +1312,7 @@ component {
 	* 	@example _.isNumber(8.4 + 5);<br />=> true
 	*/
 	public boolean function isNumber(obj = this.obj) {
-		return isNumerc(obj);
+		return isNumeric(obj);
 	}
 	
 	/**
