@@ -66,6 +66,9 @@ component {
 		if (isArray(obj)) {
 			var index = 1;
 			for (element in obj) {
+				if (!isDefined("element")) {
+					continue;
+				}
 				var local = {};
 				local.tmp = context.iterator(element, index, obj);
 				if (structKeyExists(local, "tmp")) {

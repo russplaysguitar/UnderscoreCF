@@ -529,13 +529,8 @@ start tests:<br />
 		writeDump(obj);
 	});
 */
-
-sparseArray = [];
-sparseArray[1] = 20;
-sparseArray[2] = -5;
-writeDump(sparseArray);
-result = _.reduce(sparseArray, function(a, b){ writeOutput("a: " & a & " b:" & b & "<br />"); return (a - b); });
-writeDump(result);
+parity = _.groupBy([1, 2, 3, 4, 5, 6], function(num){ return num % 2; });
+writeDump(parity);
 </cfscript>
 <br />
 end tests

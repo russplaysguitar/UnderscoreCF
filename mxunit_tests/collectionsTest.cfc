@@ -120,6 +120,54 @@ component {
 	    assertEquals(_.pluck(people, 'name'), ['moe','curly'], 'pulls names out of objects');
 	}
 	
+	public void function testMax() {
+	    assertEquals(3, _.max([1, 2, 3]), 'can perform a regular Math.max');
+
+	    var neg = _.max([1, 2, 3], function(num){ return -num; });
+	    assertEquals(neg, 1, 'can perform a computation-based max');
+	}
+	
+	public void function testMin() {
+		assertEquals(1, _.min([1, 2, 3]), 'can perform a regular Math.min');
+
+		var neg = _.min([1, 2, 3], function(num){ return -num; });
+		assertEquals(neg, 3, 'can perform a computation-based min');
+	}
+	
+	public void function testSortBy() {
+		var people = [{name : 'curly', age : 50}, {name : 'moe', age : 30}];
+		people = _.sortBy(people, function(person){ return person.age; });
+		assertEquals(_.pluck(people, 'name'), ['moe', 'curly'], 'stooges sorted by age');
+
+		var list = [];
+		list[2] = 4;
+		list[3] = 1;
+		list[5] = 3;
+		list[6] = 2;
+		assertEquals(_.sortBy(list, _.identity), [1,2,3,4], 'sortBy with undefined values');
+
+		var list = ["one", "two", "three", "four", "five"];
+		var sorted = _.sortBy(list, function(val) { return len(val); });
+		assertEquals(sorted, ['one', 'two', 'four', 'five', 'three'], 'sorted by length');
+	}
+	
+	public void function testGroupBy() {
+	    var parity = _.groupBy([1, 2, 3, 4, 5, 6], function(num){ return num % 2; });
+	    assertTrue(_.has(parity, 0), 'created a group for each value 0');
+	    assertTrue(_.has(parity, 1), 'created a group for each value 1');
+	    assertEquals(parity[0], [2, 4, 6], 'put each even number in the right group');
+
+	    var list = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
+	    var grouped = _.groupBy(list, function(val) { return len(val); });
+	    assertEquals(grouped['3'], ['one', 'two', 'six', 'ten']);
+	    assertEquals(grouped['4'], ['four', 'five', 'nine']);
+	    assertEquals(grouped['5'], ['three', 'seven', 'eight']);		
+	}
+	
+	
+	
+	
+	
 	
 	
 	
