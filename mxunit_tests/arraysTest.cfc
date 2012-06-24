@@ -58,9 +58,8 @@ component {
 	public void function testArraysWithout() {
 		var list = [1, 2, 1, 0, 3, 1, 4];
 		assertEquals(_.without(list, [0, 1]), [2, 3, 4], 'can remove all instances of an object');
-		list = [{one : 1}, {two : 2}];
-		assertTrue(arrayLen(_.without(list, {one : 1})) == 2, 'uses real object identity for comparisons.');
-		assertTrue(arrayLen(_.without(list, list[1])) == 1, 'ditto.');
+		list = [{one: 1}, {two: 2}];
+		assertTrue(arrayLen(_.without(list, [{one: 1}])) == 1, 'works with structs');
 	}
 	
 	
@@ -92,6 +91,43 @@ component {
 		assertEquals(result, [2, 5, 8, "hi"], "Works with sorted sparse arrays where `undefined` elements are elided");
 		assertEquals(arrayLen(result), 4, "The resulting array should not be sparse");
 	}
+	
+	public void function testArraysIntersection() {
+	    var stooges = ['moe', 'curly', 'larry'];
+	    var leaders = ['moe', 'groucho'];
+	    assertEquals(_.intersection(stooges, leaders), ['moe'], 'can take the set intersection of two arrays');
+	    // assertEquals(_(stooges).intersection(leaders).join(''), 'moe', 'can perform an OO-style intersection');
+	    // var result = (function(){ return _.intersection(arguments, leaders); })('moe', 'curly', 'larry');
+	    // equal(result.join(''), 'moe', 'works on an arguments object');
+	}
+	
+	public void function testArraysUnion() {
+	    var result = _.union([1, 2, 3], [2, 30, 1], [1, 40]);
+	    assertEquals(result, [1, 2, 3, 30, 40], 'takes the union of a list of arrays');
+
+	    var result = _.union([1, 2, 3], [2, 30, 1], [1, 40, [1]]);
+	    assertEquals(result, [1, 2, 3, 30, 40, 1], 'takes the union of a list of nested arrays');
+	}
+	
+	public void function testArraysDifference() {
+	    var result = _.difference([1, 2, 3], [2, 30, 40]);
+	    assertEquals(result, [1, 3], 'takes the difference of two arrays');
+
+	    var result = _.difference([1, 2, 3, 4], [[2, 30, 40], [1, 11, 111]]);
+	    assertEquals(result, [3, 4], 'takes the difference of three arrays');
+	}
+	
+	public void function testArraysZip() {
+	    var names = ['moe', 'larry', 'curly'];
+	    var ages = [30, 40, 50];
+	    var leaders = [true];
+	    var stooges = _.zip(names, ages, leaders);
+	    assertEquals(stooges, [['moe',30,true],['larry',40],['curly',50]], 'zipped together arrays of different lengths');
+	}
+	
+	
+	
+	
 	
 	
 

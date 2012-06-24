@@ -64,7 +64,11 @@ component {
 		if (isArray(obj)) {
 			var index = 1;
 			for (element in obj) {
-				result[index] = context.iterator(element, index, obj);
+				var local = {};
+				local.tmp = context.iterator(element, index, obj);
+				if (structKeyExists(local, "tmp")) {
+					result[index] = context.iterator(element, index, obj);
+				}
 				index++;
 			}
 		}
@@ -72,7 +76,11 @@ component {
 			var index = 1;
 			for (key in obj) {
 				var val = obj[key];
-				result[index] = context.iterator(val, key, obj);
+				var local = {};
+				local.tmp = context.iterator(val, key, obj);
+				if (structKeyExists(local, "tmp")) {
+					result[index] = local.tmp;
+				}
 				index++;
 			}
 		}
@@ -375,7 +383,9 @@ component {
 	public boolean function include(obj = this.obj, target) {
 		return _.any(obj, function(value) {
 			if (!isSimpleValue(value) || !isSimpleValue(target)) {
-				return false;
+				var obj1 = serializeJSON(value);
+				var obj2 = serializeJSON(target);
+				return obj1 == obj2;
 			}
 			else {
 				return value == target;
@@ -425,8 +435,17 @@ component {
     		if (_.isFunction(key)) {
     			return key(value);
     		}
-    		else {
+    		else if (isArray(value) && arrayLen(value) >= key) {
+	    		return value[key];    			
+    		}
+    		else if ((isStruct(value) || isObject(value)) && structKeyExists(value, key)) {
 	    		return value[key];
+    		}
+    		else if (isQuery(value)) {
+    			return _.pluck(_.toArray(value), key);
+    		}
+    		else {
+    			return;
     		}
     	});				
 	}
@@ -625,7 +644,7 @@ component {
 
 	/**
 	*	@header _.toArray(list) : array
-	*	@hint Converts the list (object or struct), into an array. Useful for transmuting the arguments object.
+	*	@hint Converts the list (object, query or struct), into an array. Useful for transmuting the arguments object.
 	* 	@example _.toArray({a:10,b:20});<br />=> [10, 20]
 	*/
 	public array function toArray(obj = this.obj) {
@@ -890,7 +909,7 @@ component {
 	*	@hint Similar to without, but returns the values from array that are not present in the other arrays.
 	* 	@example _.difference([1, 2, 3, 4, 5], [5, 2, 10]);<br />=> [1, 3, 4]
 	*/
-	public array function difference(array = this.obj, others = []) {
+	remote array function difference(array = this.obj, others = []) {
 		var rest = _.flatten(others, true);
 		return _.filter(array, function(value){
 			return !_.include(rest, value);
@@ -1375,7 +1394,7 @@ component {
 	/**
 	* 	@header _.isDate(object) : boolean
 	*	@hint Returns true if object is a date. Delegates to native isDate()
-	* 	@example _,isDate(now());<br />=> true
+	* 	@example _.isDate(now());<br />=> true
 	*/
 	public boolean function isDate(obj = this.obj) {
 		return isDate(obj);
@@ -1397,10 +1416,6 @@ component {
 	public boolean function isUndefined(variableName, context) {
 		return structKeyExists(context, variableName);
 	}
-			
-	
-	
-
 
 	/*
 		Returns a wrapped object. Calling methods on this object will continue to return wrapped objects until value is used.

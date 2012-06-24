@@ -400,11 +400,9 @@ component {
 	}
 	
 	
-	
 	public void function setUp() {
 		variables._ = new github.UnderscoreCF.Underscore();
 	}
-
 
 	public void function tearDown() {
 		structDelete(variables, "_");

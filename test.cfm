@@ -28,7 +28,7 @@ start tests:<br />
 	_myStruct = new Underscore(myStruct);
 	_myArr = new Underscore(myArr);
 	_myObj = new Underscore(myObj);
-
+/*
 	_.forEach(myStruct, function(val, key) {
 		writeDump(key & ": " & val);
 	});
@@ -417,29 +417,29 @@ start tests:<br />
 	writeDump(clone);
 	writeoutput("<br />");
 
-/*
-	writeOutput("tap: ");
-	tap = _.chain([1,2,3,200]).filter(function(num) {
-		return num % 2 == 0;
-	}).tap(function () {
-		writeDump(arguments);
-	}).map(function(num) { 
-		return num * num; 
-	}).value();
-	writeDump(tap);
-	writeoutput("<br />");
-*/
 
-/*
-	writeOutput("chain: ");
-	stooges = [{name : 'curly', age : 25}, {name : 'moe', age : 21}, {name : 'larry', age : 23}];
-	chain = _.chain(stooges);
-	writeDump(chain);
-	youngest = chain.map(iterator = function(stooge){
-		return stooge.name & ' is ' & stooge.age; 
-	});//.first().value();
-	writeDump(youngest);	
-*/
+	// writeOutput("tap: ");
+	// tap = _.chain([1,2,3,200]).filter(function(num) {
+	// 	return num % 2 == 0;
+	// }).tap(function () {
+	// 	writeDump(arguments);
+	// }).map(function(num) { 
+	// 	return num * num; 
+	// }).value();
+	// writeDump(tap);
+	// writeoutput("<br />");
+
+
+
+	// writeOutput("chain: ");
+	// stooges = [{name : 'curly', age : 25}, {name : 'moe', age : 21}, {name : 'larry', age : 23}];
+	// chain = _.chain(stooges);
+	// writeDump(chain);
+	// youngest = chain.map(iterator = function(stooge){
+	// 	return stooge.name & ' is ' & stooge.age; 
+	// });//.first().value();
+	// writeDump(youngest);	
+
 
 	// writeOutput("isEqual: ");
 	// moe   = {name : 'moe', luckyNumbers : [13, 27, 34]};
@@ -528,6 +528,15 @@ start tests:<br />
 		writeDump(idx);
 		writeDump(obj);
 	});
+*/
+
+	writeOutput("<br />zip:<br/>");
+
+	names = ['moe', 'larry', 'curly'];
+    ages = [30, 40, 50];
+    leaders = [true];
+    stooges = _.zip(names, ages, leaders);
+    writeDump(stooges);
 </cfscript>
 <br />
 end tests
