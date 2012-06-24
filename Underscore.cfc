@@ -29,7 +29,9 @@ component {
 		if (isArray(obj)) {
 			var index = 1;
 			for (element in obj) {
-				context.iterator(element, index, obj);
+				if (isDefined("element")) {
+					context.iterator(element, index, obj);
+				}
 				index++;
 			}
 		}
@@ -106,27 +108,20 @@ component {
 	*/
  	public any function reduce(obj = this.obj, iterator = _.identity, memo, context = new Component()) {
  		context.iterator = iterator;
- 		var i = 1;
 
-		if (isArray(obj)) {
-			for (num in obj) {
-				if (isDefined("num")) {
-					memo = context.iterator(memo, num, i);
-				}
-				i++;
+ 		var outer = {};
+ 		if (structKeyExists(arguments, "memo")) {
+	 		outer.initial = memo;
+ 		}
+		_.each(obj, function(value, index, list) {
+			if (!structKeyExists(outer, "initial")) {
+				memo = value;
+				outer.initial = true;
+			} 
+			else {
+				memo = context.iterator(memo, value, index, list);
 			}
-		}
-		else if (isObject(obj) || isStruct(obj)) {	
-			for (key in obj) {
-				var num = obj[key];
-				memo = context.iterator(memo, num, i);
-				i++;
-			}
-		}
-		else {
-			// query or something else? convert to array and recurse
-			return _.reduce(toArray(obj), iterator, memo, context);			
-		}
+		});
 
 		return memo;		
  	}

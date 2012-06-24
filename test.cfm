@@ -530,13 +530,12 @@ start tests:<br />
 	});
 */
 
-	writeOutput("<br />zip:<br/>");
-
-	names = ['moe', 'larry', 'curly'];
-    ages = [30, 40, 50];
-    leaders = [true];
-    stooges = _.zip(names, ages, leaders);
-    writeDump(stooges);
+sparseArray = [];
+sparseArray[1] = 20;
+sparseArray[2] = -5;
+writeDump(sparseArray);
+result = _.reduce(sparseArray, function(a, b){ writeOutput("a: " & a & " b:" & b & "<br />"); return (a - b); });
+writeDump(result);
 </cfscript>
 <br />
 end tests
