@@ -904,7 +904,7 @@ component {
 	*	@hint Similar to without, but returns the values from array that are not present in the other arrays.
 	* 	@example _.difference([1, 2, 3, 4, 5], [5, 2, 10]);<br />=> [1, 3, 4]
 	*/
-	remote array function difference(array = this.obj, others = []) {
+	public array function difference(array = this.obj, others = []) {
 		var rest = _.flatten(others, true);
 		return _.filter(array, function(value){
 			return !_.include(rest, value);
