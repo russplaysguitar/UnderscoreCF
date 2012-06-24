@@ -66,6 +66,67 @@ component {
 		assertEquals(_.reduce(sparseArray, function(a, b){ return (a - b); }), 25, 'initially-sparse arrays with no memo');
 	}
 	
+	public void function testDetect() {
+	   var result = _.detect([1, 2, 3], function(num){ return num * 2 == 4; });
+	   assertEquals(result, 2, 'found the first "2" and broke the loop');
+   	}
+	
+	public void function testSelect() {
+	    var evens = _.select([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });
+	    assertEquals(evens, [2, 4, 6], 'selected each even number');
+
+	    evens = _.filter([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });
+	    assertEquals(evens, [2, 4, 6], 'aliased as "filter"');
+	}
+	
+	public void function testReject() {
+	    var odds = _.reject([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });		
+	    assertEquals(odds, [1, 3, 5], 'rejected each even number');
+	}
+	
+	public void function testAll() {
+	    assertTrue(_.all([], _.identity), 'the empty set');
+	    assertTrue(_.all([true, true, true], _.identity), 'all true values');
+	    assertTrue(!_.all([true, false, true], _.identity), 'one false value');
+	    assertTrue(_.all([0, 10, 28], function(num){ return num % 2 == 0; }), 'even numbers');
+	    assertTrue(!_.all([0, 11, 28], function(num){ return num % 2 == 0; }), 'an odd number');
+	    assertTrue(_.all([1], _.identity) == true, 'cast to boolean - true');
+	    assertTrue(_.all([0], _.identity) == false, 'cast to boolean - false');
+	    assertTrue(_.every([true, true, true], _.identity), 'aliased as "every"');
+	}
+	
+	public void function testAny() {
+	    assertTrue(!_.any([]), 'the empty set');
+	    assertTrue(!_.any([false, false, false]), 'all false values');
+	    assertTrue(_.any([false, false, true]), 'one true value');
+	    assertTrue(_.any([0, 'yes', false]), 'a string');
+	    assertTrue(!_.any([0, 'no', false]), 'falsy values');
+	    assertTrue(!_.any([1, 11, 29], function(num){ return num % 2 == 0; }), 'all odd numbers');
+	    assertTrue(_.any([1, 10, 29], function(num){ return num % 2 == 0; }), 'an even number');
+	    assertTrue(_.any([1], _.identity) == true, 'cast to boolean - true');
+	    assertTrue(_.any([0], _.identity) == false, 'cast to boolean - false');
+	    assertTrue(_.some([false, false, true]), 'aliased as "some"');
+	}
+	
+	public void function testInclude() {
+		assertTrue(_.include([1,2,3], 2), 'two is in the array');
+		assertTrue(!_.include([1,3,9], 2), 'two is not in the array');
+		assertTrue(_.include({moe:1, larry:3, curly:9}, 3) == true, '_.include on objects checks their values');
+		// assertTrue(_([1,2,3]).include(2), 'OO-style include');
+	}
+	
+	public void function testPluck() {
+	    var people = [{name : 'moe', age : 30}, {name : 'curly', age : 50}];
+	    assertEquals(_.pluck(people, 'name'), ['moe','curly'], 'pulls names out of objects');
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

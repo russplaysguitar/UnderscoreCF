@@ -300,6 +300,9 @@ component {
 				}
 				index++;
 			}
+			if (arrayLen(obj) == 0) {
+				result = true;
+			}
 		}
 		else if (isObject(obj) || isStruct(obj)) {	
 			var index  = 1;
