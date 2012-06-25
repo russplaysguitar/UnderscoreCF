@@ -1,8 +1,8 @@
 <cfsilent>
 <cfscript>
-	_ = new github.UnderscoreCF.Underscore();
+	_ = new underscore.Underscore();
 
-	metadata = getComponentMetaData("github.UnderscoreCF.Underscore");
+	metadata = getComponentMetaData("underscore.Underscore");
 
 	collectionFunctions = "each,map,reduce,find,filter,reject,all,any,include,pluck,max,min,sortBy,groupBy,sortedIndex,shuffle,toArray,size";
 

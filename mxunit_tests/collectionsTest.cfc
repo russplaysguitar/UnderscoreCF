@@ -181,7 +181,7 @@ component {
 	
 	
 	public void function setUp() {
-		variables._ = new github.UnderscoreCF.Underscore();
+		variables._ = new underscore.Underscore();
 	}
 
 	public void function tearDown() {
