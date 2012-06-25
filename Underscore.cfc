@@ -652,6 +652,9 @@ component {
 		if (isArray(obj)) {
 			return obj;
 		}
+		else if ((isStruct(obj) || isObject(obj)) && structKeyExists(obj, "toArray") && isClosure(obj.toArray)) {
+			return obj.toArray();
+		}
 		else if (isQuery(obj)) {
 			var result = [];
 			for (index = 1; index <= obj.RecordCount; index++) {

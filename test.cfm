@@ -13,6 +13,16 @@
 	<cfabort>
 </cffunction>
 
+<cfxml variable="xmlDoc">
+ 
+<parent>
+	<child childAtt="attVal" />
+	<child childAtt="attVal2" />
+</parent>
+
+
+</cfxml>
+
 start tests:<br />
 <br />
 <cfscript>
@@ -529,8 +539,17 @@ start tests:<br />
 		writeDump(obj);
 	});
 */
-parity = _.groupBy("1, 2, 3, 4, 5, 6", function(num){ return num % 2; });
-writeDump(parity);
+
+writeDump(xmlDoc);
+writeOutput("<br />----------------------------<br />");
+
+_.each(xmlDoc.parent.xmlChildren, function(v,k) {
+	writeOutput("k: ");
+	writeDump(k);
+	writeOutput("v:");	
+	writeDump(v);
+	writeOutput("<br /><br />");
+});
 </cfscript>
 <br />
 end tests

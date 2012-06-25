@@ -178,6 +178,35 @@ component {
 		assertEquals(_.sort(shuffled), numbers, 'contains the same members before and after shuffle');
 	}
 	
+	public void function testToArray() {
+		var testStruct = {one:1, two:2};
+	    assertTrue(!_.isArray(testStruct), 'struct is not an array');
+	    assertTrue(_.isArray(_.toArray(testStruct)), 'struct object converted into array');
+	    var a = [1,2,3];
+	    var newArray = _.toArray(a);
+	    a[4] = 4;// modify original array
+	    assertNotEquals(newArray, a, 'array is cloned');
+	    assertEquals(newArray, [1, 2, 3], 'cloned array contains same elements');
+
+	    var numbers = _.toArray({one : 1, two : 2, three : 3});
+	    assertEquals(numbers, [1, 2, 3], 'object flattened into array');
+	    
+	    var objectWithToArrayFunction = {toArray: function() {
+	        return [1, 2, 3];
+	    }};
+	    assertEquals(_.toArray(objectWithToArrayFunction), [1, 2, 3], 'toArray method used if present');
+	    
+	    var objectWithToArrayValue = {toArray: 1};
+	    assertEquals(_.toArray(objectWithToArrayValue), [1], 'toArray property ignored if not a function');
+	}
+	
+	public void function testSize() {
+	    assertEquals(_.size({one : 1, two : 2, three : 3}), 3, 'can compute the size of an object');
+	    assertEquals(_.size([1, 2, 3]), 3, 'can compute the size of an array');
+	}
+	
+	
+	
 	
 	
 	public void function setUp() {
