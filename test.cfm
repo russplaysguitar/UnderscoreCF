@@ -529,7 +529,7 @@ start tests:<br />
 		writeDump(obj);
 	});
 */
-parity = _.groupBy([1, 2, 3, 4, 5, 6], function(num){ return num % 2; });
+parity = _.groupBy("1, 2, 3, 4, 5, 6", function(num){ return num % 2; });
 writeDump(parity);
 </cfscript>
 <br />

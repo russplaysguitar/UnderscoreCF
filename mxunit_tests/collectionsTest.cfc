@@ -164,22 +164,22 @@ component {
 	    assertEquals(grouped['5'], ['three', 'seven', 'eight']);		
 	}
 	
+	public void function testSortedIndex() {
+	    var numbers = [10, 20, 30, 40, 50];
+	    var num = 35;
+	    var index = _.sortedIndex(numbers, num);
+	    assertEquals(index, 4, '35 should be inserted at index 4');		
+	}
+	
+	public void function testShuffle() {
+		var numbers = _.range(100);
+		var shuffled = _.shuffle(numbers);
+		assertNotEquals(numbers, shuffled, 'shuffle actually shuffled');
+		assertEquals(_.sort(shuffled), numbers, 'contains the same members before and after shuffle');
+	}
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-
 	public void function setUp() {
 		variables._ = new github.UnderscoreCF.Underscore();
 	}
