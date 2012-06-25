@@ -65,16 +65,19 @@ component {
 
 		if (isArray(obj)) {
 			var index = 1;
+			var resultIndex = 1;
 			for (element in obj) {
 				if (!isDefined("element")) {
+					index++;
 					continue;
 				}
 				var local = {};
 				local.tmp = context.iterator(element, index, obj);
 				if (structKeyExists(local, "tmp")) {
-					result[index] = context.iterator(element, index, obj);
+					result[resultIndex] = context.iterator(element, index, obj);
 				}
 				index++;
+				resultIndex++;
 			}
 		}
 		else if (isObject(obj) || isStruct(obj)) {	
@@ -694,7 +697,7 @@ component {
 			return obj.recordCount;
 		}
 		else {
-			throw "size() is only compatible with objects, structs, and arrays.";
+			throw("size() is only compatible with objects, structs, queries, and arrays.", "Underscore");
 		}
 	}
 
@@ -1191,7 +1194,20 @@ component {
 	* 	@example _.keys({one : 1, two : 2, three : 3});<br />=> ["one", "two", "three"]
 	*/
 	public array function keys(obj = this.obj) {
-		return listToArray(structKeyList(obj));
+		if (isArray(obj)) {
+			return _.map(obj, function(v,i){
+				return i;
+			});
+		}
+		else if (isStruct(obj) || isObject(obj)) {
+			return listToArray(structKeyList(obj));
+		}
+		else if (isQuery(obj)) {
+			return _.keys(toArray(obj));
+		}
+		else {
+			throw("_.keys() expects an array, object, struct, or query", "Underscore");
+		}
 	}
 
 	/**
@@ -1277,6 +1293,7 @@ component {
 	* 	@example _.clone({name : 'moe'});<br />=> {name : 'moe'}
 	*/
 	public any function clone(obj = this.obj) {
+		return duplicate(obj);
 		// TODO: ensure this adds references to nested objects or arrays...
 		if (!_.isObject(obj)) {
 			return obj;
@@ -1326,6 +1343,7 @@ component {
 	// TODO: implement this
 	public any function isEqual(a = this.obj, b) {
 		// return eq(a, b, []);
+		return serializeJSON(a) == serializeJSON(b);
 	}
 
 	/**
@@ -1362,12 +1380,11 @@ component {
 	
 	/**
 	* 	@header _.isFunction(object) : boolean
-	*	@hint Returns true if object is a Function.	Delegates to native isClosure()
+	*	@hint Returns true if object is a Function.	Delegates to native isClosure() || isCustomFunction()
 	* 	@example _.isFunction(function(){return 1;});<br />=> true
 	*/	
 	public boolean function isFunction(obj = this.obj) {
-		// TODO: find a better way to do this in Coldfusion?
-		return isClosure(obj);
+		return isClosure(obj) || isCustomFunction(obj);
 	}
 	
 	/**

@@ -550,6 +550,13 @@ _.each(xmlDoc.parent.xmlChildren, function(v,k) {
 	writeDump(v);
 	writeOutput("<br /><br />");
 });
+
+moe = {name : 'moe', lucky : [13, 27, 34]};
+clone = _.clone(moe);
+clone.name = 'curly';
+writeDump(clone);
+writeDump(moe);
+
 </cfscript>
 <br />
 end tests
