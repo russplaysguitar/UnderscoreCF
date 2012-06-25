@@ -1345,9 +1345,9 @@ component {
 	*	@hint Performs an optimized deep comparison between the two objects, to determine if they should be considered equal.
 	*	@example moe = {name : 'moe', luckyNumbers : [13, 27, 34]};<br />clone = {name : 'moe', luckyNumbers : [13, 27, 34]};<br />moe == clone;<br />=> false<br />_.isEqual(moe, clone);<br />=> true
 	*/
-	// TODO: implement this
 	public any function isEqual(a = this.obj, b) {
 		// return eq(a, b, []);
+		// TODO: implement a better comparison function
 		return serializeJSON(a) == serializeJSON(b);
 	}
 
