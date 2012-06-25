@@ -78,15 +78,15 @@ component {
 	}
 	
 	public void function testClone() {
-	    var moe = {name : 'moe', lucky : [13, 27, 34]};
+	    var moe = {name : 'moe', lucky: {array:[13, 27, 34]}};
 	    var clone = _.clone(moe);
 	    assertEquals(clone.name, 'moe', 'the clone as the attributes of the original');
 
 	    clone.name = 'curly';
 	    assertTrue(clone.name == 'curly' && moe.name == 'moe', 'clones can change shallow attributes without affecting the original');
 
-	    arrayAppend(clone.lucky, 101);
-	    assertEquals(_.last(moe.lucky), 101, 'changes to deep attributes are shared with the original');
+	    arrayAppend(clone.lucky.array, 101);
+	    assertEquals(_.last(moe.lucky.array), 101, 'changes to deep attributes are shared with the original');
 
 	    assertEquals(_.clone(1), 1, 'non objects should not be changed by clone');	  
 	}

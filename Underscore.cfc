@@ -1289,20 +1289,25 @@ component {
 		
 	/**
 	* 	@header _.clone(object) : any
-	*	@hint Create a shallow-copied clone of the object. Any nested objects or arrays will be copied by reference, not duplicated (note: this is yet to be tested).
+	*	@hint Create a shallow-copied clone of the object. Any nested structs or objects will be copied by reference, not duplicated.
 	* 	@example _.clone({name : 'moe'});<br />=> {name : 'moe'}
 	*/
 	public any function clone(obj = this.obj) {
-		return duplicate(obj);
-		// TODO: ensure this adds references to nested objects or arrays...
-		if (!_.isObject(obj)) {
+		if (isSimpleValue(obj)) {
 			return obj;
 		}
 		else if (_.isArray(obj)) {
 			return _.slice(obj, 1);
 		}
-		else {
+		else if (isStruct(obj)) {
 			return _.extend({}, obj);
+		}
+		else if (isObject(obj)) {
+			return _.extend(new Component(), obj);			
+		}
+		else {
+			// not sure what obj is, convert to array and try again
+			return _.clone(toArray(obj));
 		}
 	}
 		
