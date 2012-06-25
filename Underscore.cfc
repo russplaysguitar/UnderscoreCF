@@ -645,7 +645,7 @@ component {
 
 	/**
 	*	@header _.toArray(list) : array
-	*	@hint Converts the list (object, query or struct), into an array. Useful for transmuting the arguments object.
+	*	@hint Converts the list (object, struct, query, or cf-list), into an array. Useful for transmuting the arguments object.
 	* 	@example _.toArray({a:10,b:20});<br />=> [10, 20]
 	*/
 	public array function toArray(obj = this.obj) {
@@ -666,9 +666,12 @@ component {
 		else if (isObject(obj) || isStruct(obj)) {
 			return _.values(obj);
 		}
-		else {
-			// TODO: make sure this is right
-			return [];
+		else if (_.isString(obj)) {
+			return listToArray(obj);
+		}
+		else
+		{
+			return [obj];
 		}
 	}
 	
