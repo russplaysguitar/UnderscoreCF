@@ -213,6 +213,38 @@ component {
 	    
 	}
 	
+	public void function testIsEmpty() {
+	    assertTrue(!_.isEmpty([1]), '[1] is not empty');
+	    assertTrue(_.isEmpty([]), '[] is empty');
+	    assertTrue(!_.isEmpty({one : 1}), '{one : 1} is not empty');
+	    assertTrue(_.isEmpty({}), '{} is empty');
+	    assertTrue(_.isEmpty(javaCast("null", 0)), 'null is empty');
+	    assertTrue(_.isEmpty(''), 'the empty string is empty');
+	    assertTrue(!_.isEmpty('moe'), 'but other strings are not');
+
+	    var obj = {one : 1};
+	    structDelete(obj, "one");
+	    assertTrue(_.isEmpty(obj), 'deleting all the keys from a struct empties it');		
+	}
+	
+	public void function testIsObject() {
+	    assertTrue(!_.isObject([1, 2, 3]), 'arrays are not objects');
+	    assertTrue(_.isObject(function () {}), 'functions are objects');
+	    assertTrue(!_.isObject(javaCast("null", 0)), 'null is not an object');
+	    assertTrue(!_.isObject('string'), 'string is not an object');
+	    assertTrue(!_.isObject(JavaCast("int", 12)), 'number is not an object');
+	    assertTrue(!_.isObject(true), 'boolean is not an object');
+	}
+	
+	public void function testIsArray() {
+		assertTrue(_.isArray([]), 'Empty arrays are arrays');
+		assertTrue(_.isArray([1, 2, 3]), 'Arrays are arrays');
+		assertFalse(_.isArray(new Component()), 'Objects are not arrays');
+		assertFalse(_.isArray('string'), 'String are not arrays');
+	}
+	
+	
+	
 	
 	
 	

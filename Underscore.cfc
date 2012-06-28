@@ -1461,9 +1461,15 @@ component {
 		if (isArray(obj)) {
 			return (ArrayLen(obj) == 0);
 		}	
-		else {
+		else if (isStruct(obj)) {
 			return structIsEmpty(obj);
-		}	
+		}
+		else if (_.isString(obj)) {
+			return (len(obj) == 0);
+		}
+		else {
+			throw "isEmpty() error: Not sure what obj is";
+		}
 	}
 
 	/**
