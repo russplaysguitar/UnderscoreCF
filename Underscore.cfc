@@ -1,7 +1,7 @@
 /** 
 * @name Underscore.cfc 
 * @hint A port of Underscore.js for Coldfusion
-* @introduction Underscore.cfc is a port of <a href="http://underscorejs.org">Underscore.js</a> for Coldfusion. It is a utility-belt library that provides a lot of the functional programming support that you would expect in Prototype.js (or Ruby). <br /><br />Underscore.cfc provides dozens of functions that support both the usual functional suspects: map, select, <s>invoke</s> - as well as more specialized helpers: function binding, <s>templating, deep equality testing,</s> and so on. It delegates to built-in functions where applicable.<br /><br />Underscore.cfc is currently only tested on Adobe Coldfusion 10. <b>It is still in progress (very beta), so please be careful using it.</b> I recommend <a href="https://github.com/markmandel/Sesame" target="_blank">Sesame</a> if you want something similar but more stable.<br /><br />Some unit tests are included, but much work needs to be done there.<br /><br />The project is <a href="http://github.com/russplaysguitar/underscorecf">hosted on GitHub</a>. Contributions are welcome.<br />
+* @introduction Underscore.cfc is a port of <a href="http://underscorejs.org">Underscore.js</a> for Coldfusion. It is a utility-belt library that provides a lot of the functional programming support that you would expect in Prototype.js (or Ruby). <br /><br />Underscore.cfc provides dozens of functions that support both the usual functional suspects: map, select, <s>invoke</s> - as well as more specialized helpers: function binding, <s>templating, deep equality testing,</s> and so on. It delegates to built-in functions where applicable.<br /><br />Underscore.cfc is currently only tested on Adobe Coldfusion 10. <b>It is still in progress-- not recommended for production.</b> I recommend <a href="https://github.com/markmandel/Sesame" target="_blank">Sesame</a> if you want something similar but more stable.<br /><br />Some unit tests are included, but much work needs to be done there.<br /><br />The project is <a href="http://github.com/russplaysguitar/underscorecf">hosted on GitHub</a>. Contributions are welcome.<br />
 * 
 */ 
 component { 
@@ -386,14 +386,7 @@ component {
 	*/
 	public boolean function include(obj = this.obj, target) {
 		return _.any(obj, function(value) {
-			if (!isSimpleValue(value) || !isSimpleValue(target)) {
-				var obj1 = serializeJSON(value);
-				var obj2 = serializeJSON(target);
-				return obj1 == obj2;
-			}
-			else {
-				return value == target;
-			}
+			return isEqual(value, target);
 		});
 	}
 
@@ -1346,9 +1339,117 @@ component {
 	*	@example moe = {name : 'moe', luckyNumbers : [13, 27, 34]};<br />clone = {name : 'moe', luckyNumbers : [13, 27, 34]};<br />moe == clone;<br />=> false<br />_.isEqual(moe, clone);<br />=> true
 	*/
 	public any function isEqual(a = this.obj, b) {
-		// return eq(a, b, []);
-		// TODO: implement a better comparison function
-		return serializeJSON(a) == serializeJSON(b);
+		var result = true;
+
+		// returns true if a is equal to b
+		var compareSimple = function(required a, required b) {
+			var aIsString = _.isString(a);
+			var bIsString = _.isString(b);
+			if (aIsString && bIsString) {
+				return compare(a, b) == 0;
+			}
+			else if (aIsString && !bIsString) {
+				return false;
+			}
+			else if (bIsString && !aIsString) {
+				return false;
+			}
+			else {
+				return (a == b);
+			}
+		};
+
+		if (isSimpleValue(a) && isSimpleValue(b)) {
+			result = compareSimple(a, b);
+			return result;	
+		}
+
+		// returns true if a's type is equal to b's type
+		var compareTypes = function (required a, required b) {
+			writeDump(b);
+			if (isArray(a) && isArray(b)) {
+				return true;
+			}
+			else if (isObject(a) && isObject(b)) {
+				return true;
+			}
+			else if (isStruct(a) && isStruct(b)) {
+				return true;
+			}
+			else if (isQuery(a) && isQuery(b)) {
+				return true;
+			}
+			else if (isDate(a) && isDate(b)) {
+				return true;
+			}
+			// else if (isXML(a) && isXML(b)) {
+			// 	return true;
+			// }
+			else if (isBinary(a) && isBinary(b)) {
+				return true;
+			}
+			else if (isBoolean(a) && isBoolean(b)) {
+				return true;
+			}
+			else if (_.isFunction(a) && isFunction(b)) {
+				writeDump("asdf");
+				return true;
+			}
+			else if (_.isNumber(a) && _.isNumber(b)) {
+				return true;
+			}
+			else if (_.isString(a) && _.isString(b)) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		};
+
+		if (!compareTypes(a, b)) {
+			return false;
+		}
+
+		if (isArray(a) && arrayLen(a) != arrayLen(b)) {
+			return false;
+		}
+
+		if (_.isFunction(a) || _.isFunction(b)) {
+			// TODO: figure out how to compare anon functions
+			return true;
+		}
+
+		var iterator = function (v, k) {
+			if (isSimpleValue(o) || (isStruct(o) && !structKeyExists(o, k)) || (isArray(o) && arrayLen(o) < k)) {
+				result = false;
+				return;
+			}
+			var other = o[k];
+			if (!isSimpleValue(v)) {
+				if (!_.isEqual(v, other)) {
+					result = false;
+					return;
+				}
+			}
+			else if (isSimpleValue(other)) {
+				if (!compareSimple(v, other)) {
+					result = false;
+					return;
+				}
+			}
+			else {
+				result = false;
+				return;
+			}
+		};
+
+		var o = b;
+		_.each(a, iterator);
+
+		var o = a;
+		_.each(b, iterator);		
+
+		return result;
 	}
 
 	/**
@@ -1394,21 +1495,22 @@ component {
 	
 	/**
 	* 	@header _.isString(object) : boolean
-	*	@hint Returns true if object is a String. 
-	* 	@example _.isString("moe");<br />=> true
+	*	@hint Returns true if object is a String. Uses Java String type comparison.
+	* 	@example _.isString("moe");<br />=> true<br />_.isString(1);<br />=> true//Coldfusion converts numbers to strings
 	*/
 	public boolean function isString(obj = this.obj) {
-		// Note: There is no isString() is CF, so we use process of elimination.
-		return isSimpleValue(obj) && !isBinary(obj) && !isNumeric(obj) && !isBoolean(obj) && !isDate(obj);
+		return isInstanceOf(obj, "java.lang.String");
 	}
 
 	/**
 	* 	@header _.isNumber(object) : boolean
-	*	@hint Returns true if object is a number. Delegates to native isNumeric()
-	* 	@example _.isNumber(8.4 + 5);<br />=> true
+	*	@hint Returns true if object is of a Java numeric type.
+	* 	@example _.isNumber(1);<br />=> false//Coldfusion converts numbers to strings<br />_.isNumber(JavaCast("int", 1));<br />=> true
 	*/
 	public boolean function isNumber(obj = this.obj) {
-		return isNumeric(obj);
+		return isInstanceOf(obj, "java.lang.Integer") || isInstanceOf(obj, "java.lang.Short") ||
+			isInstanceOf(obj, "java.lang.Long") || isInstanceOf(obj, "java.lang.Double") || 
+			isInstanceOf(obj, "java.lang.Float");
 	}
 	
 	/**

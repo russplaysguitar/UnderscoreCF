@@ -373,6 +373,8 @@ component {
 		var result = _.isString("moe");
 		assertTrue(result);
 		result = _.isString(1);
+		assertTrue(result);
+		result = _.isString(JavaCast("int", 1));
 		assertFalse(result);
 	}
 	

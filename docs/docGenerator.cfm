@@ -64,7 +64,7 @@
 <body>
 	<div id="sidebar" class="interface">
 		<a class="toc_title" href="#">
-		    Underscore.cfc <span class="version">(.01)</span>
+		    Underscore.cfc <!-- <span class="version">(.01)</span> -->
 	    </a>
 	    <a class="toc_title" href="#">
 	    	Introduction
@@ -90,7 +90,7 @@
 			<cfoutput>#metadata.introduction#</cfoutput>
 		</p>
 		<h2>Download</h2>
-		<div><a href="https://github.com/russplaysguitar/UnderscoreCF/downloads">Beta Version (.01)</a> - <i>Links to GitHub Download page</i></div>
+		<div><a href="https://github.com/russplaysguitar/UnderscoreCF/downloads">Latest Version (Trunk)</a> - <i>Links to GitHub Download page</i></div>
 		<h2 id="Collections">Collection Functions (Arrays, Structs, Queries, or Objects)</h2>
 		<cfset display(metadata, collectionFunctions) >
 		<h2 id="Arrays">Array Functions</h2>
