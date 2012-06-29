@@ -4,7 +4,7 @@
 
 	metadata = getComponentMetaData("underscore.Underscore");
 
-	collectionFunctions = "each,map,reduce,find,filter,reject,all,any,include,pluck,max,min,sortBy,groupBy,sortedIndex,shuffle,toArray,size";
+	collectionFunctions = "each,map,reduce,find,filter,reject,all,any,include,invoke,pluck,max,min,sortBy,groupBy,sortedIndex,shuffle,toArray,size";
 
 	arrayFunctions = "first,initial,last,rest,compact,flatten,without,union,intersection,difference,uniq,zip,indexOf,lastIndexOf,range";
 

@@ -205,6 +205,46 @@ component {
 	    assertEquals(_.size([1, 2, 3]), 3, 'can compute the size of an array');
 	}
 	
+	public void function testInvoke() {
+	    var String = function() {
+	      local.call = function () {
+	      	return 42;
+	      };
+	      return local;
+	    };
+	    var s = String("foo");
+	    assertEquals(s.call(), 42, "call function exists");
+
+		var getObj = function() {
+			var obj = { 
+				val: [],
+				sort: function () {
+					arraySort(obj.val, "numeric"); 
+					return obj.val;
+				}
+			};
+			return obj;
+		};
+		var obj1 = getObj();
+		var obj2 = getObj();
+		obj1.val = [5, 1, 7];
+		obj2.val = [3, 2, 1];
+		list = [obj1, obj2];
+		list2 = list;
+	    var result = _.invoke(list, 'sort');
+	    assertEquals(result[1], [1, 5, 7], 'first array sorted');
+	    assertEquals(result[2], [1, 2, 3], 'second array sorted');
+
+	    var sortBackwards = function(obj) {
+			arraySort(obj.val, "numeric", "desc");
+			return obj.val;
+		};
+	    var result = _.invoke(list2, sortBackwards);
+	    assertEquals(result[1], [7, 5, 1], 'first array sorted');
+	    assertEquals(result[2], [3, 2, 1], 'second array sorted');
+	}
+	
+	
 	
 	
 	

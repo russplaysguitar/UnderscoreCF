@@ -400,7 +400,11 @@ component {
 		result = _.isDate(1);
 		assertFalse(result);
 	}
-	
+
+	public void function testInvoke() {
+		var result = _.invoke([{fun: function(){ return 1; }}], 'fun');
+		assertEquals([1], result);	
+	}
 	
 	public void function setUp() {
 		variables._ = new underscore.Underscore();

@@ -395,13 +395,11 @@ component {
 	*	@hint Calls the method named by methodName on each value in the list. The arguments struct passed to invoke will be forwarded on to the method invocation. 
 	* 	@example _.invoke([{fun: function(){ return 1; }}], 'fun');<br />=> [1]
 	*/
-	// TODO: make sure this works right
-	// TODO: decide whether or not to replace with native invoke()
 	public array function invoke(obj = this.obj, method, args = {}) {
 	    return _.map(obj, function(value) {
 	    	if (_.isFunction(method)) {
 	    		// try to call method() directly
-	    		var result = method(args);
+	    		var result = method(value, args);
 	    		if (isDefined('result')) {
 	    			return result;
 	    		}
@@ -412,7 +410,7 @@ component {
 	    	else if((isObject(value) || isStruct(value)) && structKeyExists(value, method)) {
 	    		// call method as member of obj item
 	    		var fun = value[method];
-	    		return fun(args);
+	    		return fun(value, args);
 	    	}
 	    	else {
 	    		// no idea what method() is all about, return value instead
