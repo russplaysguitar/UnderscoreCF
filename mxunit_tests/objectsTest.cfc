@@ -243,15 +243,46 @@ component {
 		assertFalse(_.isArray('string'), 'String are not arrays');
 	}
 	
+	public void function testIsString() {
+		assertTrue(_.isString('string', 'strings are strings'));
+		assertTrue(_.isString(''), 'empty strings are strings');
+		assertFalse(_.isString(javaCast("int", 1)), 'numbers are not strings');
+		assertFalse(_.isString(createDate(2001, 12, 31), 'dates are not strings'));
+		assertFalse(_.isString(javaCast("null", 0)), 'null is not a strings');
+		assertFalse(_.isString(javaCast("boolean", true)), 'true is not a string');
+	}
 	
+	public void function testIsNumber() {
+		assertTrue(_.isNumber(javaCast("int", 1)), 'ints are numbers');
+		assertTrue(_.isNumber(javaCast("int", "0")), 'zero int is a number');
+		assertTrue(_.isNumber(javaCast("float", 1.1)), 'floats are numbers');
+		assertTrue(_.isNumber(javaCast("double", 2.2)), 'doubles are numbers');
+		assertFalse(_.isNumber(javaCast("null", 0)), 'null is not a number');
+		assertFalse(_.isNumber('string'), 'strings are not numbers');
+		assertFalse(_.isNumber(createDate(2001, 12, 31), 'dates are not numbers'));
+	}
 	
+	public void function testIsBoolean() {
+		assertTrue(_.isBoolean(true), 'true is boolean');
+		assertTrue(_.isBoolean(false), 'false is boolean');
+		assertTrue(_.isBoolean(javaCast("boolean", true)), 'javacasted true is boolean');
+		assertTrue(_.isBoolean(javaCast("boolean", false)), 'javacasted false is boolean');
+		assertFalse(_.isBoolean('string'), 'strings are not booleans');
+		// some other things count as booleans, but that may or may not be supported in all CF engines
+		//	 so we won't test things like "YES", "NO", "true", "false", 1, 0, etc
+	}
 	
+	public void function testIsFunction() {
+	    assertTrue(!_.isFunction([1, 2, 3]), 'arrays are not functions');
+	    assertTrue(!_.isFunction('moe'), 'strings are not functions');
+	    assertTrue(_.isFunction(_.isFunction), 'but functions are');
+	}
 	
-	
-	
-	
-	
-
+	public void function testIsDate() {
+		assertFalse(_.isDate(100), 'numbers are not dates');
+		assertFalse(_.isDate(new Component()), 'objects are not dates');
+		assertTrue(_.isDate(createDate(1999, 12, 31)), 'dates are dates');
+	}
 
 	public void function setUp() {
 		variables._ = new underscore.Underscore();

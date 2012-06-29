@@ -1366,7 +1366,7 @@ component {
 
 		// returns true if a's type is equal to b's type
 		var compareTypes = function (required a, required b) {
-			writeDump(b);
+			// note: order matters here since some types count as other types
 			if (isArray(a) && isArray(b)) {
 				return true;
 			}
@@ -1382,17 +1382,10 @@ component {
 			else if (isDate(a) && isDate(b)) {
 				return true;
 			}
-			// else if (isXML(a) && isXML(b)) {
-			// 	return true;
-			// }
 			else if (isBinary(a) && isBinary(b)) {
 				return true;
 			}
-			else if (isBoolean(a) && isBoolean(b)) {
-				return true;
-			}
 			else if (_.isFunction(a) && isFunction(b)) {
-				writeDump("asdf");
 				return true;
 			}
 			else if (_.isNumber(a) && _.isNumber(b)) {
@@ -1401,12 +1394,16 @@ component {
 			else if (_.isString(a) && _.isString(b)) {
 				return true;
 			}
+			else if (isBoolean(a) && isBoolean(b)) {
+				return true;
+			}
 			else {
 				return false;
 			}
 		};
 
 		if (!compareTypes(a, b)) {
+			// don't bother comparing if the types don't even match
 			return false;
 		}
 
@@ -1525,6 +1522,7 @@ component {
 	* 	@example _.isBoolean(false);<br />=> true
 	*/
 	public boolean function isBoolean(obj = this.obj) {
+		// note: I considered making this test for java-casted booleans, but since Adobe CF functions don't return them, it would be counter-productive.
 		return isBoolean(obj);
 	}
 	
@@ -1535,23 +1533,6 @@ component {
 	*/
 	public boolean function isDate(obj = this.obj) {
 		return isDate(obj);
-	}
-	
-	/*
-		Returns true if object is null.
-		Compares object to Java null.
-	*/
-	// TODO: implement this
-	public boolean function isNull(obj = this.obj) {
-		// return obj == JavaCast("null", 0);
-	}
-	
-	/*
-		Returns true if key is undefined in context.
-	*/	
-	// TODO: determine if this is necessary or rewrite it
-	public boolean function isUndefined(variableName, context) {
-		return structKeyExists(context, variableName);
 	}
 
 	/*
