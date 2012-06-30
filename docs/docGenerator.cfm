@@ -10,7 +10,7 @@
 
 	funcFunctions = "bind,bindAll,memoize,delay,once,after,wrap";
 
-	objectFunctions = "keys,values,functions,extend,pick,defaults,clone,has,isEmpty,isArray,isObject,isFunction,isString,isNumber,isBoolean,isDate,isNaN";
+	objectFunctions = "keys,values,functions,extend,pick,defaults,clone,has,isEqual,isEmpty,isArray,isObject,isFunction,isString,isNumber,isBoolean,isDate,isNaN";
 
 	utilFunctions = "times,mixin,result";
 
@@ -88,7 +88,7 @@
 		<h1>Underscore.cfc</h1>
 		<p id="Introduction">
 			<cfoutput>#metadata.introduction#</cfoutput>
-		</p>
+		</p>		
 		<h2>Download</h2>
 		<div><a href="https://github.com/russplaysguitar/UnderscoreCF/downloads">Latest Version (Trunk)</a> - <i>Links to GitHub Download page</i></div>
 		<h2 id="Collections">Collection Functions (Arrays, Structs, Queries, or Objects)</h2>

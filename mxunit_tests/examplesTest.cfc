@@ -344,6 +344,12 @@ component {
 		assertEquals(false, result);
 	}
 	
+	public void function testIsEqual() {
+		var moe = {name : 'moe', luckyNumbers : [13, 27, 34]};
+		clone = {name : 'moe', luckyNumbers : [13, 27, 34]};
+		assertTrue(_.isEqual(moe, clone));
+	}
+
 	public void function testIsEmpty() {
 		var result = _.isEmpty([1, 2, 3]);
 		assertEquals(false, result);

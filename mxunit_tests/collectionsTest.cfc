@@ -175,7 +175,7 @@ component {
 		var numbers = _.range(100);
 		var shuffled = _.shuffle(numbers);
 		assertNotEquals(numbers, shuffled, 'shuffle actually shuffled');
-		assertEquals(_.sort(shuffled), numbers, 'contains the same members before and after shuffle');
+		assertEquals(_.sortBy(shuffled), numbers, 'contains the same members before and after shuffle');
 	}
 	
 	public void function testToArray() {

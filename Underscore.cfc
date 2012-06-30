@@ -1,7 +1,7 @@
 /** 
 * @name Underscore.cfc 
 * @hint A port of Underscore.js for Coldfusion
-* @introduction Underscore.cfc is a port of <a href="http://underscorejs.org">Underscore.js</a> for Coldfusion. It is a utility-belt library that provides a lot of the functional programming support that you would expect in Prototype.js (or Ruby). <br /><br />Underscore.cfc provides dozens of functions that support both the usual functional suspects: map, select, invoke - as well as more specialized helpers: function binding, sorting, deep equality testing, and so on. It delegates to built-in functions where applicable.<br /><br />Underscore.cfc is currently only available on Adobe Coldfusion 10. <b>It is still in progress-- not recommended for production.</b> <a href="https://github.com/markmandel/Sesame" target="_blank">Sesame</a> is recommended if you want something similar but more stable.<br /><br />Unit tests are included, but some work still needs to be done there.<br /><br />The project is <a href="http://github.com/russplaysguitar/underscorecf">hosted on GitHub</a>. Contributions are welcome.<br />
+* @introduction Underscore.cfc is a port of <a href="http://underscorejs.org">Underscore.js</a> for Coldfusion. It is a utility-belt library that provides a lot of the functional programming support that you would expect in Prototype.js (or Ruby). <br /><br />Underscore.cfc provides dozens of functions that support both the usual functional suspects: map, select, invoke - as well as more specialized helpers: function binding, sorting, deep equality testing, and so on. It delegates to built-in functions where applicable.<br /><br />Underscore.cfc is currently only available on Adobe Coldfusion 10. <b>It is still in progress-- not recommended for production.</b> <a href="https://github.com/markmandel/Sesame" target="_blank">Sesame</a> is recommended if you want something similar but more stable.<br /><br />The project is <a href="http://github.com/russplaysguitar/underscorecf">hosted on GitHub</a>. Contributions are welcome.<br />
 * 
 */ 
 component { 
@@ -9,8 +9,10 @@ component {
 	public any function init(obj = {}) { 
 		this.obj = obj;
 
+		// _ is referenced throughout this cfc
 		variables._ = this;
 
+		// used as the default iterator
 		_.identity = function(x) { return x; };
 
 		return this;
@@ -162,6 +164,9 @@ component {
  		return _.reduceRight(argumentCollection = arguments);
  	}
  	
+
+ 	/* ARRAY FUNCTIONS */
+
  	/**
 	* 	@header _.find(list, iterator, [context]) : any
 	*	@hint Looks through each value in the list, returning the first one that passes a truth test (iterator). The function returns as soon as it finds an acceptable element, and doesn't traverse the entire list.
@@ -501,11 +506,14 @@ component {
 
 	/**
 	* 	@header _.sortBy(list, iterator, [context]) : array
-	*	@hint Returns a sorted copy of list, ranked in ascending order by the results of running each value through iterator. Iterator may also be the string name of the property to sort by (eg. length).
+	*	@hint Returns a sorted copy of list, ranked in ascending order by the results of running each value through iterator. Iterator may also be the string name of the object key to sort by.
 	* 	@example _.sortBy([6, 2, 4, 3, 5, 1], function(num){ return num; });<br />=> [1, 2, 3, 4, 5, 6]
 	*/
 	public array function sortBy(obj = this.obj, val, context = new Component()) {
-		if (_.isFunction(val)) {
+		if (!structKeyExists(arguments, 'val')) {
+			var iterator = _.identity;
+		}
+		else if (_.isFunction(val)) {
 			var iterator = val;
 		}
 		else {
@@ -521,7 +529,7 @@ component {
 				criteria : context.iterator(value, index, list, context)
 			};
 		});
-		var sorted = this.sort(toSort, function(left, right) {
+		var sorted = sort(toSort, function(left, right) {
 			if (!structKeyExists(left, 'criteria')) {
 				return 1;
 			}
@@ -537,7 +545,7 @@ component {
 
 	// for sortBy()
 	// note: this isn't part of UnderscoreJS, but CF doesn't have a sort() that can use a custom comparison function
-	public array function sort(obj = this.obj, iterator = this.comparison) {
+	private array function sort(obj = this.obj, iterator = comparison) {
 		var array = _.toArray(obj);
 		if(arraylen(array) < 2) {
 			return array;
@@ -545,12 +553,12 @@ component {
 		var middle = ceiling(arraylen(array) / 2);
 		var left = sort(_.slice(array, 1, middle), iterator);
 		var right = sort(_.slice(array, middle+1), iterator);
-		var merge = this.merge(left, right, iterator);
+		var merge = merge(left, right, iterator);
 		return merge;
 	}
 
 	// for sort()
-	public array function merge(left, right, comparison = this.comparison)
+	private array function merge(left, right, comparison = this.comparison)
 	{
 		var result = [];
 		while((arraylen(left) > 0) && (arraylen(right) > 0))
@@ -1040,6 +1048,8 @@ component {
 
 		return range;
 	}
+		
+	/* FUNCTION FUNCTIONS */
 			
 	/**
 	* 	@header _.bind(function, object, [*arguments]) : any
@@ -1177,6 +1187,7 @@ component {
 		};
 	}
 
+
 	/*
 		@hint Returns a function that is the composition of a list of functions, each
 		consuming the return value of the function that follows.
@@ -1203,10 +1214,7 @@ component {
 	}
 
 
-
-
 	/* OBJECT FUNCTIONS */
-	// TODO: stub out all object functions
 
 	/**
 	* 	@header _.keys(object) : array
@@ -1360,10 +1368,10 @@ component {
 		}
 	}
 
-	/*
+	/**
 	*	@header _.isEqual(object, other) 
 	*	@hint Performs an optimized deep comparison between the two objects, to determine if they should be considered equal.
-	*	@example moe = {name : 'moe', luckyNumbers : [13, 27, 34]};<br />clone = {name : 'moe', luckyNumbers : [13, 27, 34]};<br />moe == clone;<br />=> false<br />_.isEqual(moe, clone);<br />=> true
+	*	@example moe = {name : 'moe', luckyNumbers : [13, 27, 34]};<br />clone = {name : 'moe', luckyNumbers : [13, 27, 34]};<br />_.isEqual(moe, clone);<br />=> true
 	*/
 	public any function isEqual(a = this.obj, b) {
 		var result = true;
