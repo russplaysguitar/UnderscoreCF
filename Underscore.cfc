@@ -505,7 +505,7 @@ component {
 	}
 
 	/**
-	* 	@header _.sortBy(list, iterator, [context]) : array
+	* 	@header _.sortBy(list, [iterator], [context]) : array
 	*	@hint Returns a sorted copy of list, ranked in ascending order by the results of running each value through iterator. Iterator may also be the string name of the object key to sort by.
 	* 	@example _.sortBy([6, 2, 4, 3, 5, 1], function(num){ return num; });<br />=> [1, 2, 3, 4, 5, 6]
 	*/
@@ -587,7 +587,7 @@ component {
 		return result;
 	}
 
-	// for merge()
+	// default comparator for merge()
 	public numeric function comparison(left, right) {		
 		if(left == right)
 			return 0;
@@ -762,14 +762,15 @@ component {
 		return result;
 	}
 
+	// TODO: write a shift() method and add it with unshift() to Underscore.cfc
 	// wrote this for some reason, then didn't end up needing it?
-	public any function unshift(obj = this.obj) {
-		var elements = _.slice(arguments, 2);
-		for (var i = arrayLen(elements); i > 0; i--) {
-			arrayPrepend(obj, elements[i]);
-		}
-		return obj;
-	}
+	// public any function unshift(obj = this.obj) {
+	// 	var elements = _.slice(arguments, 2);
+	// 	for (var i = arrayLen(elements); i > 0; i--) {
+	// 		arrayPrepend(obj, elements[i]);
+	// 	}
+	// 	return obj;
+	// }
 	
 	/**
 	* 	@header _.initial(array, [n]) : array
@@ -1635,7 +1636,9 @@ component {
 		}
 	}
 
-	// useful
+	/*
+	* 	@hint Internal helper function. Converts boolean equivalents to boolean true or false. Helpful for keeping function return values consistent.
+	*/ 
 	private boolean function toBoolean(obj) {
 		return !!obj;
 	}
