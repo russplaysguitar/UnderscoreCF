@@ -1370,7 +1370,7 @@ component {
 
 	/**
 	*	@header _.isEqual(object, other) 
-	*	@hint Performs an optimized deep comparison between the two objects, to determine if they should be considered equal.
+	*	@hint Performs a deep comparison between the two objects, to determine if they should be considered equal.
 	*	@example moe = {name : 'moe', luckyNumbers : [13, 27, 34]};<br />clone = {name : 'moe', luckyNumbers : [13, 27, 34]};<br />_.isEqual(moe, clone);<br />=> true
 	*/
 	public any function isEqual(a = this.obj, b) {
@@ -1486,7 +1486,7 @@ component {
 
 	/**
 	* 	@header _.isEmpty(object) : boolean
-	*	@hint Returns true if object contains no values. Delegates ArrayLen for arrays, structIsEmpty() otherwise.
+	*	@hint Returns true if object contains no values. Delegates to ArrayLen for arrays, structIsEmpty() otherwise.
 	* 	@example _.isEmpty([1, 2, 3]);<br />=> false<br />_.isEmpty({});<br />=> true
 	*/
 	public boolean function isEmpty(obj = this.obj) {
