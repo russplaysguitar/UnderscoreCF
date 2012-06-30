@@ -1,7 +1,7 @@
 /** 
 * @name Underscore.cfc 
 * @hint A port of Underscore.js for Coldfusion
-* @introduction Underscore.cfc is a port of <a href="http://underscorejs.org">Underscore.js</a> for Coldfusion. It is a utility-belt library that provides a lot of the functional programming support that you would expect in Prototype.js (or Ruby). <br /><br />Underscore.cfc provides dozens of functions that support both the usual functional suspects: map, select, <s>invoke</s> - as well as more specialized helpers: function binding, <s>templating,</s> deep equality testing, and so on. It delegates to built-in functions where applicable.<br /><br />Underscore.cfc is currently only available on Adobe Coldfusion 10. <b>It is still in progress-- not recommended for production.</b> <a href="https://github.com/markmandel/Sesame" target="_blank">Sesame</a> is recommended if you want something similar but more stable.<br /><br />Unit tests are included, but some work still needs to be done there.<br /><br />The project is <a href="http://github.com/russplaysguitar/underscorecf">hosted on GitHub</a>. Contributions are welcome.<br />
+* @introduction Underscore.cfc is a port of <a href="http://underscorejs.org">Underscore.js</a> for Coldfusion. It is a utility-belt library that provides a lot of the functional programming support that you would expect in Prototype.js (or Ruby). <br /><br />Underscore.cfc provides dozens of functions that support both the usual functional suspects: map, select, invoke - as well as more specialized helpers: function binding, <s>templating,</s> deep equality testing, and so on. It delegates to built-in functions where applicable.<br /><br />Underscore.cfc is currently only available on Adobe Coldfusion 10. <b>It is still in progress-- not recommended for production.</b> <a href="https://github.com/markmandel/Sesame" target="_blank">Sesame</a> is recommended if you want something similar but more stable.<br /><br />Unit tests are included, but some work still needs to be done there.<br /><br />The project is <a href="http://github.com/russplaysguitar/underscorecf">hosted on GitHub</a>. Contributions are welcome.<br />
 * 
 */ 
 component { 
@@ -24,6 +24,7 @@ component {
 	* 	@example _.each([1, 2, 3], function(num){ writeDump(num); }); <br />=> dumps each number in turn... <br />_.each({one : 1, two : 2, three : 3}, function(num, key){ writeDump(num); });<br />=> dumps each number in turn...
 	*/
 	public void function each(obj = this.obj, iterator = _.identity, context = new Component()) {
+		context = toContext(context);
  		context.iterator = iterator;
 
 		if (isArray(obj)) {
@@ -61,6 +62,7 @@ component {
 	*/
  	public array function map(obj = this.obj, iterator = _.identity, context = new Component()) {
  		var result = [];
+ 		context = toContext(context);		
  		context.iterator = iterator;
 
 		if (isArray(obj)) {
@@ -113,6 +115,7 @@ component {
 	* 	@example sum = _.reduce([1, 2, 3], function(memo, num){ return memo + num; }, 0);<br />=> 6
 	*/
  	public any function reduce(obj = this.obj, iterator = _.identity, memo, context = new Component()) {
+ 		context = toContext(context);		
  		context.iterator = iterator;
 
  		var outer = {};
@@ -166,6 +169,7 @@ component {
  	*/
  	public any function find(obj = this.obj, iterator = _.identity, context = new Component()) { 
  		var result = 0;
+ 		context = toContext(context);		
  		context.iterator = iterator;
 
 		if (isArray(obj)) {
@@ -211,6 +215,7 @@ component {
  	*/
  	public array function filter(obj = this.obj, iterator = _.identity, context = new Component()) {
 		var result = [];
+		context = toContext(context);
  		context.iterator = iterator;
 
 		if (isArray(obj)) {
@@ -256,6 +261,7 @@ component {
 	*/
 	public array function reject(obj = this.obj, iterator = _.identity, context = new Component()) {
 		var result = [];
+		context = toContext(context);
  		context.iterator = iterator;
 
 		if (isArray(obj)) {
@@ -295,6 +301,7 @@ component {
 	*/
 	public boolean function all(obj = this.obj, iterator = _.identity, context = new Component()) {
 		var result = false;
+		context = toContext(context);
  		context.iterator = iterator;
 
 		if (isArray(obj)) {
@@ -342,6 +349,7 @@ component {
 	*/
 	public boolean function any(obj = this.obj, iterator = _.identity, context = new Component()) {
 		var result = false;
+		context = toContext(context);
  		context.iterator = iterator;
 
 		if (isArray(obj)) {
@@ -452,6 +460,7 @@ component {
 	*/
 	public any function max(obj = this.obj, iterator = _.identity, context = new Component()) {
 		var result = {};
+		context = toContext(context);
  		context.iterator = iterator;
 
 	    _.each(obj, function(value, index, obj) {
@@ -474,6 +483,7 @@ component {
 	*/
 	public any function min(obj = this.obj, iterator = _.identity, context = new Component()) {
 		var result = {};
+		context = toContext(context);
  		context.iterator = iterator;
 
 	    _.each(obj, function(value, index, obj) {
@@ -503,6 +513,7 @@ component {
 				return obj[val];
 			};
 		}
+		context = toContext(context);
  		context.iterator = iterator;
 		var toSort = _.map(obj, function(value, index, list, context) {
 			return {
@@ -1027,14 +1038,28 @@ component {
 	}
 			
 	/**
-	* 	@header _.bind(function, object, arguments) : any
+	* 	@header _.bind(function, object, [*arguments]) : any
 	*	@hint Bind a function to a structure, meaning that whenever the function is called, the value of "this" will be the structure. Optionally, bind arguments to the function to pre-fill them, also known as partial application.
-	* 	@example "func = function(greeting){ return greeting & ': ' & this.name; };<br />func = _.bind(func, {name : 'moe'}, {greeting: 'hi'});<br />func();<br />=> 'hi: moe'"
+	* 	@example "func = function(args){ return args.greeting & ': ' & this.name; };<br />func = _.bind(func, {name : 'moe'}, {greeting: 'hi'});<br />func();<br />=> 'hi: moe'"
 	*/
-	public any function bind(func, context = {}, args = {}) {
-		// TODO: convert arguments after func and context into an arguments struct, rather than forcing the user to pass args as a struct
+	public any function bind(func, context = new Component()) {
+		var boundArgs = _.slice(arguments, 3);
+		context = toContext(context);
+
+		if (!_.isFunction(func)) {
+			throw("bind() expected a function", "Underscore");
+		}
+		
 		return function () {
-			return func(argumentCollection = args, this = context);
+			// writeDump(arguments);
+			var passedArgs = _.toArray(arguments);
+			var argsArray = _.arrayConcat(boundArgs, passedArgs);
+			var argStruct = {};
+			_.each(argsArray, function (val, index) {
+				argStruct[index] = val;
+			});
+			context.func = func;
+			return context.func(argumentCollection = argStruct);
 		};
 	}
 
@@ -1463,7 +1488,7 @@ component {
 			return (len(obj) == 0);
 		}
 		else {
-			throw "isEmpty() error: Not sure what obj is";
+			throw("isEmpty() error: Not sure what obj is", "Underscore");
 		}
 	}
 
@@ -1558,7 +1583,8 @@ component {
 	*	@hint Invokes the given iterator function n times.
 	* 	@example _.times(3, function(){ genie.grantWish(); });
 	*/
-	public void function times(n, iterator, context) {
+	public void function times(n, iterator, context = new Component()) {
+		context = toContext(context);
 		context.iterator = iterator;
 
 		for (var i = 0; i < n; i++) {
@@ -1600,5 +1626,25 @@ component {
 	// useful
 	private boolean function toBoolean(obj) {
 		return !!obj;
+	}
+
+	/*
+	*	@hint Internal helper function. Converts a struct to a component instance with the same values for "this" that exist in the struct. If passed a component instance, will simply return that instead.
+	*/ 
+	private component function toContext(any context = new Component()) {
+		if(isObject(context)) {
+			return context;
+		}
+		if(isStruct(context)) {
+			var result = new Component();
+			_.each(context, function(val, key){
+				result[key] = val;
+			});
+			return result;
+		}
+		else {
+			// not really sure what to do with non-struct-like types
+			return new Component();
+		}
 	}
 }

@@ -201,7 +201,7 @@ component {
 	}
 	
 	public void function testBind() {
-		var func = function(greeting){ return greeting & ': ' & this.name; };
+		var func = function(args){ return args.greeting & ': ' & this.name; };
 		func = _.bind(func, {name : 'moe'}, {greeting: 'hi'});
 		var result = func();
 		assertEquals('hi: moe', result);
