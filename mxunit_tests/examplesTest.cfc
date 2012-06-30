@@ -199,6 +199,11 @@ component {
 		result = _.range(0);
 		assertEquals([], result);
 	}
+
+	public void function testArrayConcat() {
+		var result = _.arrayConcat([1, 2, 3], [4, 5, 6]);
+		assertEquals([1, 2, 3, 4, 5, 6], result);
+	}
 	
 	public void function testBind() {
 		var func = function(args){ return args.greeting & ': ' & this.name; };

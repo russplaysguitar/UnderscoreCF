@@ -163,6 +163,15 @@ component {
 		assertEquals(_.range(0, -10, -1), [0, -1, -2, -3, -4, -5, -6, -7, -8, -9], 'final example in the Python docs');		
 	}
 	
+	public void function testArrayConcat() {
+		assertEquals(_.arrayConcat([], []), [], 'Concatenating two empty arrays results in an empty array');
+		assertEquals(_.arrayConcat([1], [1]), [1, 1], 'Concatenating two arrays with same value results in array with both values');
+		assertEquals(_.arrayConcat([], [1]), [1], 'Concatenating an empty array with a non-empty array results in non-empty array');
+		assertEquals(_.arrayConcat([1], []), [1], 'Concatenating an empty array with a non-empty array results in non-empty array');
+		assertEquals(_.arrayConcat([{one:1}], [{two:2}]), [{one:1}, {two:2}], 'Can concatenate arrays of structs');
+		assertEquals(_.arrayConcat([true], [false]), [true, false], 'Can concatenate arrays of booleans');
+	}
+
 	public void function setUp() {
 		variables._ = new underscore.Underscore();
 	}

@@ -6,7 +6,7 @@
 
 	collectionFunctions = "each,map,reduce,find,filter,reject,all,any,include,invoke,pluck,max,min,sortBy,groupBy,sortedIndex,shuffle,toArray,size";
 
-	arrayFunctions = "first,initial,last,rest,compact,flatten,without,union,intersection,difference,uniq,zip,indexOf,lastIndexOf,range";
+	arrayFunctions = "first,initial,last,rest,compact,flatten,without,union,intersection,difference,uniq,zip,indexOf,lastIndexOf,range,arrayConcat";
 
 	funcFunctions = "bind,bindAll,memoize,delay,once,after,wrap";
 

@@ -1,7 +1,7 @@
 /** 
 * @name Underscore.cfc 
 * @hint A port of Underscore.js for Coldfusion
-* @introduction Underscore.cfc is a port of <a href="http://underscorejs.org">Underscore.js</a> for Coldfusion. It is a utility-belt library that provides a lot of the functional programming support that you would expect in Prototype.js (or Ruby). <br /><br />Underscore.cfc provides dozens of functions that support both the usual functional suspects: map, select, invoke - as well as more specialized helpers: function binding, <s>templating,</s> deep equality testing, and so on. It delegates to built-in functions where applicable.<br /><br />Underscore.cfc is currently only available on Adobe Coldfusion 10. <b>It is still in progress-- not recommended for production.</b> <a href="https://github.com/markmandel/Sesame" target="_blank">Sesame</a> is recommended if you want something similar but more stable.<br /><br />Unit tests are included, but some work still needs to be done there.<br /><br />The project is <a href="http://github.com/russplaysguitar/underscorecf">hosted on GitHub</a>. Contributions are welcome.<br />
+* @introduction Underscore.cfc is a port of <a href="http://underscorejs.org">Underscore.js</a> for Coldfusion. It is a utility-belt library that provides a lot of the functional programming support that you would expect in Prototype.js (or Ruby). <br /><br />Underscore.cfc provides dozens of functions that support both the usual functional suspects: map, select, invoke - as well as more specialized helpers: function binding, sorting, deep equality testing, and so on. It delegates to built-in functions where applicable.<br /><br />Underscore.cfc is currently only available on Adobe Coldfusion 10. <b>It is still in progress-- not recommended for production.</b> <a href="https://github.com/markmandel/Sesame" target="_blank">Sesame</a> is recommended if you want something similar but more stable.<br /><br />Unit tests are included, but some work still needs to be done there.<br /><br />The project is <a href="http://github.com/russplaysguitar/underscorecf">hosted on GitHub</a>. Contributions are welcome.<br />
 * 
 */ 
 component { 
@@ -848,8 +848,12 @@ component {
 		}, []);
 	}
 	
-	// note: this isn't part of UnderscoreJS, but it is missing in Coldfusion
-	public array function arrayConcat(array1, array2) {
+	/**
+	* 	@header _.arrayConcat(array1, array2) : array
+	* 	@hint Concatenates two arrays together an returns the result.
+	* 	@example _.arrayConcat([1, 2, 3],[4, 5, 6]);<br />=> [1, 2, 3, 4, 5, 6];
+	*/ 
+	public array function arrayConcat(array array1 = [], array array2 = []) {
 		var result = [];
 
 		// add all of array1 to result array
@@ -1049,7 +1053,7 @@ component {
 		if (!_.isFunction(func)) {
 			throw("bind() expected a function", "Underscore");
 		}
-		
+
 		return function () {
 			// writeDump(arguments);
 			var passedArgs = _.toArray(arguments);
