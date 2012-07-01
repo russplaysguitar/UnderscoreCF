@@ -27,6 +27,12 @@ component {
 		assertEquals(6, sum);
 	}	
 
+	public void function testReduceRight() {
+		var list = [[0, 1], [2, 3], [4, 5]];
+		var flat = _.reduceRight(list, function(a, b) { return _.arrayConcat(a, b); }, []);
+		assertEquals([4, 5, 2, 3, 0, 1], flat);
+	}
+
 	public void function testFind() {
 		var even = _.find([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });
 		assertEquals(2, even);		
@@ -205,6 +211,11 @@ component {
 		assertEquals([1, 2, 3, 4, 5, 6], result);
 	}
 	
+	public void function testArrayReverse() {
+		var result = _.arrayReverse([1, 2, 3]);
+		assertEquals([3, 2, 1], result);	
+	}
+ 
 	public void function testBind() {
 		var func = function(args){ return args.greeting & ': ' & this.name; };
 		func = _.bind(func, {name : 'moe'}, {greeting: 'hi'});

@@ -151,19 +151,25 @@ component {
  		return _.reduce(argumentCollection = arguments);
  	}
 
- 	/*
-		The right-associative version of reduce. 
-		@header _.reduceRight(collection, iterator, memo, [context])
+ 	/**
+	*	@header _.reduceRight(collection, [iterator], memo, [context])
+	*	@hint The right-associative version of reduce. 
+	* 	@example list = [[0, 1], [2, 3], [4, 5]];<br />flat = _.reduceRight(list, function(a, b) { return _.arrayConcat(a, b); }, []);<br />=> [4, 5, 2, 3, 0, 1]
  	*/
   	public any function reduceRight(obj = this.obj, iterator = _.identity, memo, context = new Component()) {
-  		// TODO
+		var initial = structKeyExists(arguments, 'memo');
+		var reversed = _.arrayReverse(_.toArray(obj));
+  		context = toContext(context);
+		if (!_.isEmpty(context) && !initial) {
+			iterator = _.bind(iterator, context);
+		}
+		return initial ? _.reduce(reversed, iterator, memo, context) : _.reduce(reversed, iterator);
    	}
 
    	// alias of reduceRight
  	public any function foldr(obj, iterator, memo, context) {
  		return _.reduceRight(argumentCollection = arguments);
  	}
- 	
 
  	/* ARRAY FUNCTIONS */
 
@@ -870,6 +876,24 @@ component {
 
 		return result;
 	}
+
+ 	/**
+ 	* 	@header _.arrayReverse(array) : array
+ 	* 	@hint Returns a copy of the array in reverse order.
+ 	* 	@example _.arrayReverse([1, 2, 3]);<br />=> [3, 2, 1];
+ 	*/ 
+ 	public array function arrayReverse(array obj = this.obj) {
+ 		var result = [];
+ 		var size = _.size(obj);
+ 		var i = size;
+
+ 		_.each(obj, function(val) {
+ 			result[i] = val;
+ 			i--;
+ 		});
+
+ 		return result;
+ 	}
 	
 	/**
 	* 	@header _.without(array, [values]) : array 

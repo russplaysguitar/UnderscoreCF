@@ -65,6 +65,23 @@ component {
 		sparseArray[3] = -5;
 		assertEquals(_.reduce(sparseArray, function(a, b){ return (a - b); }), 25, 'initially-sparse arrays with no memo');
 	}
+
+
+	public void function testReduceRight() {
+		var list = _.reduceRight(["foo", "bar", "baz"], function(memo, str){ return memo & str; }, '');
+		assertEquals(list, 'bazbarfoo', 'can perform right folds');
+
+		var list = _.foldr(["foo", "bar", "baz"], function(memo, str){ return memo & str; }, '');
+		assertEquals(list, 'bazbarfoo', 'aliased as "foldr"');
+
+		var list = _.foldr(["foo", "bar", "baz"], function(memo, str){ return memo & str; });
+		assertEquals(list, 'bazbarfoo', 'default initial value');
+
+		var list = _.foldr(["foo", "bar", "baz"], function(memo, str){ return memo & str & this.q; }, 'start_', {q:'qux'});
+		assertEquals(list, 'start_bazquxbarquxfooqux', 'context');		
+	}
+	
+	
 	
 	public void function testDetect() {
 	   var result = _.detect([1, 2, 3], function(num){ return num * 2 == 4; });
