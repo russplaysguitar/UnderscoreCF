@@ -64,7 +64,7 @@
 <body>
 	<div id="sidebar" class="interface">
 		<a class="toc_title" href="#">
-		    Underscore.cfc <!-- <span class="version">(.01)</span> -->
+		    Underscore.cfc <span class="version">(1.0)</span>
 	    </a>
 	    <a class="toc_title" href="#">
 	    	Introduction
@@ -83,6 +83,9 @@
 				</cfscript>			    	
 		    </ul>
     	</cfloop>
+	    <a class="toc_title" href="#changelog">
+	    	Change Log
+	    </a>    	
 	</div>
 	<div class="container">
 		<h1>Underscore.cfc</h1>
@@ -101,6 +104,17 @@
 		<cfset display(metadata, objectFunctions) >
 		<h2 id="Utilities">Utility Functions</h2>
 		<cfset display(metadata, utilFunctions) >
+		<p id="changelog">
+			<h2>Change Log</h2>
+			<p>
+		        <b class="header">1.0</b> -- <small><i>June 30, 2012</i></small><br>
+	        </p>
+	        <ul>
+	        	<li>
+	        		First release! In under 30 days, woot!
+		        </li>
+	        </ul>
+		</p>		
 	</div>
 	<a href="http://github.com/russplaysguitar/underscorecf"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
 </body>
