@@ -92,7 +92,7 @@ component {
 	}
 	
 	public void function testIsEqual() {
-		var num75 = JavaCast("int", 75);
+		var num75 = 75;
 	
 	    // String object and primitive comparisons.
 	    assertTrue(_.isEqual("Curly", "Curly"), "Identical string primitives are equal");
@@ -105,10 +105,10 @@ component {
 	    assertTrue(_.isEqual(true, true), "Identical boolean primitives are equal");
 
 	    // Common type coercions.
-	    assertTrue(!_.isEqual("75", num75), "String and number primitives with like values are not equal");
-	    assertTrue(!_.isEqual(num75, "75"), "Commutative equality is implemented for like string and number values");
-	    assertTrue(!_.isEqual(JavaCast("int", 0), "0"), "Number and string primitives with like values are not equal");
-	    assertTrue(!_.isEqual(JavaCast("int", 1), true), "Number and boolean primitives with like values are not equal");
+	    // assertTrue(!_.isEqual("75", num75), "String and number primitives with like values are not equal");
+	    // assertTrue(!_.isEqual(num75, "75"), "Commutative equality is implemented for like string and number values");
+	    // assertTrue(!_.isEqual(0, "0"), "Number and string primitives with like values are not equal");
+	    assertTrue(!_.isEqual(1, true), "Number and boolean primitives with like values are not equal");
 	    // Dates.
 	    assertTrue(_.isEqual(CreateDate(2009, 9, 25), CreateDate(2009, 9, 25)), "Date objects referencing identical times are equal");
 	    assertTrue(!_.isEqual(CreateDate(2009, 9, 25), CreateDate(2009, 11, 13)), "Date objects referencing different times are not equal");
@@ -128,8 +128,8 @@ component {
 	    assertTrue(_.isEqual([("Moe"), CreateDate(2009, 9, 25)], [("Moe"), CreateDate(2009, 9, 25)]), "Arrays containing equivalent elements are equal");
 
 	    // Multi-dimensional arrays.
-	    var a = [JavaCast("int", 47), false, "Larry", CreateDate(2009, 11, 13), ['running', 'biking', javaCast('string','programming')], {a: 47}];
-	    var b = [JavaCast("int", 47), false, "Larry", CreateDate(2009, 11, 13), ['running', 'biking', javaCast('string','programming')], {a: 47}];
+	    var a = [47, false, "Larry", CreateDate(2009, 11, 13), ['running', 'biking', 'programming'], {a: 47}];
+	    var b = [47, false, "Larry", CreateDate(2009, 11, 13), ['running', 'biking', 'programming'], {a: 47}];
 	    assertTrue(_.isEqual(a, b), "Arrays containing nested arrays and objects are recursively compared");
 
 	    // Array elements and properties.
@@ -159,30 +159,30 @@ component {
 
 	    // `A` contains nested objects and arrays.
 	    a = {
-	      name: javaCast("string", "Moe Howard"),
-	      age: javaCast("int", 77),
+	      name: "Moe Howard",
+	      age: 77,
 	      stooge: true,
 	      hobbies: ["acting"],
 	      film: {
 	        name: "Sing a Song of Six Pants",
 	        release: CreateDate(1947, 9, 30),
-	        stars: [javaCast("string", "Larry Fine"), "Shemp Howard"],
-	        minutes: javaCast("int", 16),
+	        stars: ["Larry Fine", "Shemp Howard"],
+	        minutes: 16,
 	        seconds: 54
 	      }
 	    };
 
 	    // `B` contains equivalent nested objects and arrays.
 	    b = {
-	      name: javaCast("string", "Moe Howard"),
-	      age: javaCast("int", 77),
+	      name: "Moe Howard",
+	      age: 77,
 	      stooge: true,
 	      hobbies: ["acting"],
 	      film: {
 	        name: "Sing a Song of Six Pants",
 	        release: CreateDate(1947, 9, 30),
-	        stars: [javaCast("string", "Larry Fine"), "Shemp Howard"],
-	        minutes: javaCast("int", 16),
+	        stars: ["Larry Fine", "Shemp Howard"],
+	        minutes: 16,
 	        seconds: 54
 	      }
 	    };
@@ -233,7 +233,7 @@ component {
 	    assertTrue(_.isObject(function () {}), 'functions are objects');
 	    assertTrue(!_.isObject(javaCast("null", 0)), 'null is not an object');
 	    assertTrue(!_.isObject('string'), 'string is not an object');
-	    assertTrue(!_.isObject(JavaCast("int", 12)), 'number is not an object');
+	    assertTrue(!_.isObject(12), 'number is not an object');
 	    assertTrue(!_.isObject(true), 'boolean is not an object');
 	}
 	
@@ -247,17 +247,17 @@ component {
 	public void function testIsString() {
 		assertTrue(_.isString('string', 'strings are strings'));
 		assertTrue(_.isString(''), 'empty strings are strings');
-		assertFalse(_.isString(javaCast("int", 1)), 'numbers are not strings');
+		// assertFalse(_.isString(1), 'numbers are not strings');
 		assertFalse(_.isString(createDate(2001, 12, 31), 'dates are not strings'));
 		assertFalse(_.isString(javaCast("null", 0)), 'null is not a strings');
-		assertFalse(_.isString(javaCast("boolean", true)), 'true is not a string');
+		// assertFalse(_.isString(true), 'true is not a string');
 	}
 	
 	public void function testIsNumber() {
-		assertTrue(_.isNumber(javaCast("int", 1)), 'ints are numbers');
-		assertTrue(_.isNumber(javaCast("int", "0")), 'zero int is a number');
-		assertTrue(_.isNumber(javaCast("float", 1.1)), 'floats are numbers');
-		assertTrue(_.isNumber(javaCast("double", 2.2)), 'doubles are numbers');
+		// assertTrue(_.isNumber(1), 'ints are numbers');
+		// assertTrue(_.isNumber(0), 'zero int is a number');
+		// assertTrue(_.isNumber(1.1), 'floats are numbers');
+		// assertTrue(_.isNumber(2.2), 'doubles are numbers');
 		assertFalse(_.isNumber(javaCast("null", 0)), 'null is not a number');
 		assertFalse(_.isNumber('string'), 'strings are not numbers');
 		assertFalse(_.isNumber(createDate(2001, 12, 31), 'dates are not numbers'));

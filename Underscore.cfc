@@ -1414,14 +1414,9 @@ component {
 		var compareSimple = function(required a, required b) {
 			var aIsString = _.isString(a);
 			var bIsString = _.isString(b);
+
 			if (aIsString && bIsString) {
-				return compare(a, b) == 0;
-			}
-			else if (aIsString && !bIsString) {
-				return false;
-			}
-			else if (bIsString && !aIsString) {
-				return false;
+				return (compare(a, b) == 0);
 			}
 			else {
 				return (a == b);
@@ -1498,7 +1493,10 @@ component {
 				}
 			}
 			else if (isSimpleValue(other)) {
+// writeDump(other);
+// writeDump(v);
 				if (!compareSimple(v, other)) {
+			writeDump('a' & compareSimple(v, other));
 					result = false;
 					return;
 				}
@@ -1511,10 +1509,10 @@ component {
 
 		var o = b;
 		_.each(a, iterator);
-
+writeDump('--------');
 		var o = a;
 		_.each(b, iterator);		
-
+// writeDump(result);
 		return result;
 	}
 
