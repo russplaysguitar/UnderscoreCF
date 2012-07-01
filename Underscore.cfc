@@ -594,8 +594,10 @@ component {
 	}
 
 	// default comparator for merge()
-	public numeric function comparison(left, right) {		
-		if(left == right)
+	public numeric function comparison(left, right) {
+		if(!isSimpleValue(left) || !isSimpleValue(right)) 
+			return 0;// can't compare non-simple values
+		else if(left == right)
 			return 0;
 		else if(left < right)
 			return -1;
@@ -1204,9 +1206,9 @@ component {
 	*/
 	public any function wrap(func, wrapper) {
 		// TODO make sure this handles arguments correctly
-		var args = arguments;
 		return function() {
-			return wrapper(argumentCollection=arguments, func=args.func);
+			arguments.func = func;
+			return wrapper(argumentCollection = arguments);
 		};
 	}
 

@@ -94,6 +94,23 @@ component {
 		assertEquals(result1, result2);
 	}
 	
+	public void function testWrap() {
+	    var greet = function(name){ return "hi: " & name; };
+	    var backwards = _.wrap(greet, function(name, func){ return func(name) & ' ' & reverse(name); });
+	    assertEquals(backwards('moe'), 'hi: moe eom', 'wrapped the saluation function');
+
+	    var inner = function(){ return "Hello "; };
+	    var obj   = {name : "Moe"};
+	    obj.hi    = _.wrap(inner, function(func){ return func() & obj.name; });
+	    assertEquals(obj.hi(), "Hello Moe");
+
+	    var noop    = function(){};
+	    var wrapped = _.wrap(noop, function(input){ return _.slice(arguments, 1); });
+	    var ret     = wrapped(['whats', 'your'], 'vector', 'victor');
+	    var expected = [['whats', 'your'], 'vector', 'victor', noop];
+	    assertTrue(_.isEqual(_.sortBy(ret), _.sortBy(expected)));
+	}
+	
 	
 	
 	
