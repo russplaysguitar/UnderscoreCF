@@ -859,23 +859,14 @@ component {
 	
 	/**
 	* 	@header _.arrayConcat(array1, array2) : array
-	* 	@hint Concatenates two arrays together an returns the result.
+	* 	@hint Concatenates two arrays together an returns the result. Delegates to ArrayAppend().
 	* 	@example _.arrayConcat([1, 2, 3],[4, 5, 6]);<br />=> [1, 2, 3, 4, 5, 6];
 	*/ 
 	public array function arrayConcat(array array1 = [], array array2 = []) {
 		var result = [];
 
-		// add all of array1 to result array
-		_.each(array1, function(element, index, list) {
-			var newIndex = arrayLen(result) + 1;
-			result[newIndex] = element;
-		});
-
-		// add all of array2 to result array
-		_.each(array2, function(element, index, list) {
-			var newIndex = arrayLen(result) + 1;
-			result[newIndex] = element;
-		});
+		ArrayAppend(result, array1, true);
+		ArrayAppend(result, array2, true);
 
 		return result;
 	}
