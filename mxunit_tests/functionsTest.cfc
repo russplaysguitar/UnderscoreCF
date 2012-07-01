@@ -111,6 +111,21 @@ component {
 	    assertTrue(_.isEqual(_.sortBy(ret), _.sortBy(expected)));
 	}
 	
+	public void function testAfter() {
+	    var testAfter = function(afterAmount, timesCalled) {
+	      var afterCalled = 0;
+	      var after = _.after(afterAmount, function() {
+	        afterCalled++;
+	      });
+	      while (timesCalled--) after();
+	      return afterCalled;
+	    };
+
+	    assertEquals(testAfter(5, 5), 1, "after(N) should fire after being called N times");
+	    assertEquals(testAfter(5, 4), 0, "after(N) should not fire unless called N times");
+	    assertEquals(testAfter(0, 0), 1, "after(0) should fire immediately");
+	}
+	
 	
 	
 	
