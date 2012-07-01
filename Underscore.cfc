@@ -32,7 +32,7 @@ component {
 		if (isArray(obj)) {
 			var index = 1;
 			for (element in obj) {
-				if (isDefined("element")) {
+				if (arrayIsDefined(obj, index)) {
 					context.iterator(element, index, obj);
 				}
 				index++;
@@ -71,7 +71,7 @@ component {
 			var index = 1;
 			var resultIndex = 1;
 			for (element in obj) {
-				if (!isDefined("element")) {
+				if (!arrayIsDefined(obj, index)) {
 					index++;
 					continue;
 				}
@@ -419,7 +419,7 @@ component {
 	    	if (_.isFunction(method)) {
 	    		// try to call method() directly
 	    		var result = method(value, args);
-	    		if (isDefined('result')) {
+	    		if (!isNull(result)) {
 	    			return result;
 	    		}
 	    		else {
