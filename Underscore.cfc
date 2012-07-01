@@ -21,8 +21,8 @@ component {
 	/* COLLECTION FUNCTIONS (ARRAYS, STRUCTURES, OR OBJECTS) */
 
 	/**
-	* 	@header _.each(list, iterator, [context]) : void
-	*	@hint Iterates over a list of elements, yielding each in turn to an iterator function. The iterator is bound to the context object (component), if one is passed. Each invocation of iterator is called with three arguments: (element, index, list). If list is an object/struct, iterator's arguments will be (value, key, list). 
+	* 	@header _.each(collection, iterator, [context]) : void
+	*	@hint Iterates over a collection of elements, yielding each in turn to an iterator function. The iterator is bound to the context object (component), if one is passed. Each invocation of iterator is called with three arguments: (element, index, collection). If collection is an object/struct, iterator's arguments will be (value, key, collection). 
 	* 	@example _.each([1, 2, 3], function(num){ writeDump(num); }); <br />=> dumps each number in turn... <br />_.each({one : 1, two : 2, three : 3}, function(num, key){ writeDump(num); });<br />=> dumps each number in turn...
 	*/
 	public void function each(obj = this.obj, iterator = _.identity, context = new Component()) {
@@ -58,8 +58,8 @@ component {
  	}
 
 	/**
-	* 	@header _.map(list, iterator, [context]) : array
-	*	@hint Produces a new array of values by mapping each value in list through a transformation function (iterator). If list is an object/struct, iterator's arguments will be (value, key, list).
+	* 	@header _.map(collection, iterator, [context]) : array
+	*	@hint Produces a new array of values by mapping each value in collection through a transformation function (iterator). If collection is an object/struct, iterator's arguments will be (value, key, collection).
 	* 	@example _.map([1, 2, 3], function(num){ return num * 3; }); <br />=> [3, 6, 9] <br />_.map({one : 1, two : 2, three : 3}, function(num, key){ return num * 3; });<br />=> [3, 6, 9]
 	*/
  	public array function map(obj = this.obj, iterator = _.identity, context = new Component()) {
@@ -112,8 +112,8 @@ component {
  	}
 
 	/**
-	* 	@header _.reduce(list, iterator, memo, [context]) : any
-	*	@hint Also known as inject and foldl, reduce boils down a list of values into a single value. Memo is the initial state of the reduction, and each successive step of it should be returned by iterator.
+	* 	@header _.reduce(collection, iterator, memo, [context]) : any
+	*	@hint Also known as inject and foldl, reduce boils down a collection of values into a single value. Memo is the initial state of the reduction, and each successive step of it should be returned by iterator.
 	* 	@example sum = _.reduce([1, 2, 3], function(memo, num){ return memo + num; }, 0);<br />=> 6
 	*/
  	public any function reduce(obj = this.obj, iterator = _.identity, memo, context = new Component()) {
@@ -124,13 +124,13 @@ component {
  		if (structKeyExists(arguments, "memo")) {
 	 		outer.initial = memo;
  		}
-		_.each(obj, function(value, index, list) {
+		_.each(obj, function(value, index, collection) {
 			if (!structKeyExists(outer, "initial")) {
 				memo = value;
 				outer.initial = true;
 			} 
 			else {
-				memo = context.iterator(memo, value, index, list);
+				memo = context.iterator(memo, value, index, collection);
 			}
 		});
 
@@ -153,7 +153,7 @@ component {
 
  	/*
 		The right-associative version of reduce. 
-		@header _.reduceRight(list, iterator, memo, [context])
+		@header _.reduceRight(collection, iterator, memo, [context])
  	*/
   	public any function reduceRight(obj = this.obj, iterator = _.identity, memo, context = new Component()) {
   		// TODO
@@ -168,8 +168,8 @@ component {
  	/* ARRAY FUNCTIONS */
 
  	/**
-	* 	@header _.find(list, iterator, [context]) : any
-	*	@hint Looks through each value in the list, returning the first one that passes a truth test (iterator). The function returns as soon as it finds an acceptable element, and doesn't traverse the entire list.
+	* 	@header _.find(collection, iterator, [context]) : any
+	*	@hint Looks through each value in the collection, returning the first one that passes a truth test (iterator). The function returns as soon as it finds an acceptable element, and doesn't traverse the entire collection.
 	* 	@example even = _.find([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });<br />=> 2
  	*/
  	public any function find(obj = this.obj, iterator = _.identity, context = new Component()) { 
@@ -214,8 +214,8 @@ component {
  	}
 
  	/**
-	* 	@header _.filter(list, iterator, [context]) : array
-	*	@hint Looks through each value in the list, returning an array of all the values that pass a truth test (iterator). 
+	* 	@header _.filter(collection, iterator, [context]) : array
+	*	@hint Looks through each value in the collection, returning an array of all the values that pass a truth test (iterator). 
 	* 	@example evens = _.filter([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });<br />=> [2, 4, 6]
  	*/
  	public array function filter(obj = this.obj, iterator = _.identity, context = new Component()) {
@@ -260,8 +260,8 @@ component {
 	}
 	
 	/**
-	* 	@header _.reject(list, iterator, [context]) : array
-	*	@hint Returns the values in list without the elements that the truth test (iterator) passes. The opposite of filter.
+	* 	@header _.reject(collection, iterator, [context]) : array
+	*	@hint Returns the values in collection without the elements that the truth test (iterator) passes. The opposite of filter.
 	* 	@example odds = _.reject([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });<br />=> [1, 3, 5]
 	*/
 	public array function reject(obj = this.obj, iterator = _.identity, context = new Component()) {
@@ -300,8 +300,8 @@ component {
 
 
 	/**
-	* 	@header _.all(list, iterator, [context]) : boolean
-	*	@hint Returns true if all of the values in the list pass the iterator truth test. 
+	* 	@header _.all(collection, iterator, [context]) : boolean
+	*	@hint Returns true if all of the values in the collection pass the iterator truth test. 
 	* 	@example _.all([true, 1, 'no'], _.identity);<br />=> false
 	*/
 	public boolean function all(obj = this.obj, iterator = _.identity, context = new Component()) {
@@ -348,8 +348,8 @@ component {
 	}
 	
 	/**
-	* 	@header _.any(list, [iterator], [context]) : boolean
-	*	@hint Returns true if any of the values in the list pass the iterator truth test. Short-circuits and stops traversing the list if a true element is found. 
+	* 	@header _.any(collection, [iterator], [context]) : boolean
+	*	@hint Returns true if any of the values in the collection pass the iterator truth test. Short-circuits and stops traversing the collection if a true element is found. 
 	* 	@example _.any([0, 'yes', false]);<br />=> true
 	*/
 	public boolean function any(obj = this.obj, iterator = _.identity, context = new Component()) {
@@ -393,8 +393,8 @@ component {
 	}	
 
 	/**
-	* 	@header _.include(list, value) : boolean
-	*	@hint Returns true if the value is present in the list.
+	* 	@header _.include(collection, value) : boolean
+	*	@hint Returns true if the value is present in the collection.
 	* 	@example _.include([1, 2, 3], 3);<br />=> true
 	*/
 	public boolean function include(obj = this.obj, target) {
@@ -404,8 +404,8 @@ component {
 	}
 
 	/**
-	* 	@header _.invoke(list, methodName, [arguments]) : array
-	*	@hint Calls the method named by methodName on each value in the list. The arguments struct passed to invoke will be forwarded on to the method invocation. 
+	* 	@header _.invoke(collection, methodName, [arguments]) : array
+	*	@hint Calls the method named by methodName on each value in the collection. The arguments struct passed to invoke will be forwarded on to the method invocation. 
 	* 	@example _.invoke([{fun: function(){ return 1; }}], 'fun');<br />=> [1]
 	*/
 	public array function invoke(obj = this.obj, method, args = {}) {
@@ -434,8 +434,8 @@ component {
 	}
 
 	/**
-	* 	@header _.pluck(list, propertyName) : array
-	*	@hint A convenient version of what is perhaps the most common use-case for map: extracting a list of property values.
+	* 	@header _.pluck(collection, propertyName) : array
+	*	@hint A convenient version of what is perhaps the most common use-case for map: extracting a collection of property values.
 	* 	@example stooges = [{name : 'moe', age : 40}, {name : 'larry', age : 50}, {name : 'curly', age : 60}];<br />_.pluck(stooges, 'name');<br />=> ["moe", "larry", "curly"]
 	*/
 	public array function pluck(obj = this.obj, key) {
@@ -459,8 +459,8 @@ component {
 	}
 
 	/**
-	* 	@header _.max(list, [iterator], [context]) : any
-	*	@hint Returns the maximum value in list. If iterator is passed, it will be used on each value to generate the criterion by which the value is ranked.
+	* 	@header _.max(collection, [iterator], [context]) : any
+	*	@hint Returns the maximum value in collection. If iterator is passed, it will be used on each value to generate the criterion by which the value is ranked.
 	* 	@example stooges = [{name : 'moe', age : 40}, {name : 'larry', age : 50}, {name : 'curly', age : 60}];<br />_.max(stooges, function(stooge){ return stooge.age; });<br />=> {name : 'curly', age : 60};
 	*/
 	public any function max(obj = this.obj, iterator = _.identity, context = new Component()) {
@@ -482,8 +482,8 @@ component {
 	}
 
 	/**
-	* 	@header _.min(list, [iterator], [context]) : any
-	*	@hint Returns the minimum value in list. If iterator is passed, it will be used on each value to generate the criterion by which the value is ranked.
+	* 	@header _.min(collection, [iterator], [context]) : any
+	*	@hint Returns the minimum value in collection. If iterator is passed, it will be used on each value to generate the criterion by which the value is ranked.
 	* 	@example numbers = [10, 5, 100, 2, 1000];<br />_.min(numbers);<br />=> 2
 	*/
 	public any function min(obj = this.obj, iterator = _.identity, context = new Component()) {
@@ -505,8 +505,8 @@ component {
 	}
 
 	/**
-	* 	@header _.sortBy(list, [iterator], [context]) : array
-	*	@hint Returns a sorted copy of list, ranked in ascending order by the results of running each value through iterator. Iterator may also be the string name of the object key to sort by.
+	* 	@header _.sortBy(collection, [iterator], [context]) : array
+	*	@hint Returns a sorted copy of collection, ranked in ascending order by the results of running each value through iterator. Iterator may also be the string name of the object key to sort by. Uses a Merge Sort algorithm.
 	* 	@example _.sortBy([6, 2, 4, 3, 5, 1], function(num){ return num; });<br />=> [1, 2, 3, 4, 5, 6]
 	*/
 	public array function sortBy(obj = this.obj, val, context = new Component()) {
@@ -523,13 +523,13 @@ component {
 		}
 		context = toContext(context);
  		context.iterator = iterator;
-		var toSort = _.map(obj, function(value, index, list, context) {
+		var toSort = _.map(obj, function(value, index, collection, context) {
 			return {
 				value : value,
-				criteria : context.iterator(value, index, list, context)
+				criteria : context.iterator(value, index, collection, context)
 			};
 		});
-		var sorted = sort(toSort, function(left, right) {
+		var sorted = mergeSort(toSort, function(left, right) {
 			if (!structKeyExists(left, 'criteria')) {
 				return 1;
 			}
@@ -545,14 +545,14 @@ component {
 
 	// for sortBy()
 	// note: this isn't part of UnderscoreJS, but CF doesn't have a sort() that can use a custom comparison function
-	private array function sort(obj = this.obj, iterator = comparison) {
+	private array function mergeSort(obj = this.obj, iterator = comparison) {
 		var array = _.toArray(obj);
 		if(arraylen(array) < 2) {
 			return array;
 		}
 		var middle = ceiling(arraylen(array) / 2);
-		var left = sort(_.slice(array, 1, middle), iterator);
-		var right = sort(_.slice(array, middle+1), iterator);
+		var left = mergeSort(_.slice(array, 1, middle), iterator);
+		var right = mergeSort(_.slice(array, middle+1), iterator);
 		var merge = merge(left, right, iterator);
 		return merge;
 	}
@@ -598,7 +598,7 @@ component {
 	}
 	
 	/**
-	* 	@header _.groupBy(list, iterator) : struct
+	* 	@header _.groupBy(collection, iterator) : struct
 	*	@hint Splits a collection into sets, grouped by the result of running each value through iterator. If iterator is a string instead of a function, groups by the property named by iterator on each of the values.
 	*	@example _.groupBy([1.3, 2.1, 2.4], function(num){ return fix(num); });<br />=> {1: [1.3], 2: [2.1, 2.4]}<br /><br />_.groupBy(['one', 'two', 'three'], function(num) { return len(num); });<br />=> {3: ["one", "two"], 5: ["three"]}
 	*/
@@ -621,8 +621,8 @@ component {
 	}
 
 	/**
-	* 	@header _.sortedIndex(list, value, [iterator]) : numeric
-	*	@hint Uses a binary search to determine the index at which the value should be inserted into the list in order to maintain the list's sorted order. If an iterator is passed, it will be used to compute the sort ranking of each value.
+	* 	@header _.sortedIndex(collection, value, [iterator]) : numeric
+	*	@hint Uses a binary search to determine the index at which the value should be inserted into the collection in order to maintain the collection's sorted order. If an iterator is passed, it will be used to compute the sort ranking of each value.
 	* 	@example _.sortedIndex([10, 20, 30, 40, 50], 35);<br />=> 4
 	*/
 	public numeric function sortedIndex(array = this.obj, obj, iterator = _.identity) {
@@ -648,7 +648,7 @@ component {
 	public array function shuffle(obj = this.obj) {
 	    var shuffled = obj;
 	    var rand = 0;
-	    _.each(obj, function(value, index, list) {
+	    _.each(obj, function(value, index, collection) {
 			rand = fix(1 + (rand() * (index)));
 			shuffled[index] = shuffled[rand];
 			shuffled[rand] = value;
@@ -657,8 +657,8 @@ component {
 	}
 
 	/**
-	*	@header _.toArray(list) : array
-	*	@hint Converts the list (object, struct, query, or cf-list), into an array. Useful for transmuting the arguments object.
+	*	@header _.toArray(collection) : array
+	*	@hint Converts the collection (object, struct, query, or cf-list), into an array. Useful for transmuting the arguments object.
 	* 	@example _.toArray({a:10,b:20});<br />=> [10, 20]
 	*/
 	public array function toArray(obj = this.obj) {
@@ -692,8 +692,8 @@ component {
 	}
 	
 	/**
-	* 	@header _.size(list) : numeric
-	*	@hint Return the number of values in the list.
+	* 	@header _.size(collection) : numeric
+	*	@hint Return the number of values in the collection.
 	* 	@example _.size({one : 1, two : 2, three : 3});<br />=> 3
 	*/
 	public numeric function size(obj = this.obj) {
@@ -882,7 +882,7 @@ component {
 	
 	/**
 	* 	@header _.union(*arrays) : array
-	*	@hint Computes the union of the passed-in arrays: the list of unique items, in order, that are present in one or more of the arrays.
+	*	@hint Computes the union of the passed-in arrays: the collection of unique items, in order, that are present in one or more of the arrays.
 	* 	@example _.union([1, 2, 3], [101, 2, 1, 10], [2, 1]);<br />=> [1, 2, 3, 101, 10]
 	*/
 	public array function union() {
@@ -896,7 +896,7 @@ component {
 
 	/**
 	* 	@header _.intersection(*arrays) : array
-	*	@hint Computes the list of values that are the intersection of all the arrays. Each value in the result is present in each of the arrays.
+	*	@hint Computes the collection of values that are the intersection of all the arrays. Each value in the result is present in each of the arrays.
 	* 	@example _.intersection([1, 2, 3], [101, 2, 1, 10], [2, 1]);<br />=> [1, 2]
 	*/
 	public array function intersection(array = this.obj) {
@@ -1020,7 +1020,7 @@ component {
 	
 	/**
 	* 	@header _.range([start], stop, [step]) : array
-	*	@hint A function to create flexibly-numbered lists of integers, handy for each and map loops. start, if omitted, defaults to 0; step defaults to 1. Returns a list of integers from start to stop, incremented (or decremented) by step, exclusive.
+	*	@hint A function to create flexibly-numbered arrays of integers, handy for each and map loops. start, if omitted, defaults to 0; step defaults to 1. Returns an array of integers from start to stop, incremented (or decremented) by step, exclusive.
 	* 	@example _.range(10);<br />=> [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]<br />_.range(1, 11);<br />=> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]<br />_.range(0, 30, 5);<br />=> [0, 5, 10, 15, 20, 25]<br />_.range(0, -10, -1);<br />=> [0, -1, -2, -3, -4, -5, -6, -7, -8, -9]<br />_.range(0);<br />=> []
 	*/
 	public array function range(start = 0, stop, step = 1) {
@@ -1232,7 +1232,7 @@ component {
 
 	/**
 	* 	@header _.values(object) : array
-	*	@hint Returns true if any of the values in the list pass the iterator truth test. Short-circuits and stops traversing the list if a true element is found. 
+	*	@hint Returns true if any of the values in the object pass the iterator truth test. Short-circuits and stops traversing the object if a true element is found. 
 	* 	@example _.values({one : 1, two : 2, three : 3});<br />=> [1, 2, 3]
 	*/
 	public array function values(obj = this.obj) {
