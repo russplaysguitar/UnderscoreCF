@@ -10,7 +10,7 @@
 
 	funcFunctions = "bind,bindAll,memoize,delay,once,after,wrap,compose";
 
-	objectFunctions = "keys,values,functions,extend,pick,defaults,clone,has,isEqual,isEmpty,isArray,isObject,isFunction,isString,isNumber,isBoolean,isDate,isNaN";
+	objectFunctions = "keys,values,functions,extend,pick,defaults,clone,has,isEqual,isEmpty,isArray,isObject,isFunction,isString,isNumber,isBoolean,isDate";
 
 	utilFunctions = "times,mixin,result";
 
