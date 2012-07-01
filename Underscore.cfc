@@ -22,7 +22,7 @@ component {
 
 	/**
 	* 	@header _.each(collection, iterator, [context]) : void
-	*	@hint Iterates over a collection of elements, yielding each in turn to an iterator function. The iterator is bound to the context object (component), if one is passed. Each invocation of iterator is called with three arguments: (element, index, collection). If collection is an object/struct, iterator's arguments will be (value, key, collection). 
+	*	@hint Iterates over a collection of elements, yielding each in turn to an iterator function. The iterator is bound to the context object (component or struct), if one is passed. Each invocation of iterator is called with three arguments: (element, index, collection). If collection is an object/struct, iterator's arguments will be (value, key, collection). 
 	* 	@example _.each([1, 2, 3], function(num){ writeDump(num); }); <br />=> dumps each number in turn... <br />_.each({one : 1, two : 2, three : 3}, function(num, key){ writeDump(num); });<br />=> dumps each number in turn...
 	*/
 	public void function each(obj = this.obj, iterator = _.identity, context = new Component()) {
