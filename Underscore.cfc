@@ -1212,14 +1212,23 @@ component {
 		};
 	}
 
-
-	/*
-		@hint Returns a function that is the composition of a list of functions, each
-		consuming the return value of the function that follows.
+	/**
+	* 	@header _.compose(*functions) : any
+	*	@hint Returns a function that is the composition of a list of functions, each function consumes the return value of the function that follows. In math terms, composing the functions f(), g(), and h() produces f(g(h())).
+	*	@example greet    = function(name){ return "hi: " & name; };<br />exclaim  = function(statement){ return statement & "!"; };<br />welcome = _.compose(exclaim, greet);<br />welcome('moe');<br />=> 'hi: moe!';
 	*/
 	public any function compose() {
-		// TODO	
-		return;
+		var funcs = arguments;
+		return function() {
+			var args = arguments;
+			for (var i = _.size(funcs); i >= 1; i--) {
+				writeDump(args);
+				var toCall = funcs[i];
+				var result = toCall(argumentCollection = args);
+				args = {1:result};
+			}
+			return args[1];
+		};
 	}
 
 	/**

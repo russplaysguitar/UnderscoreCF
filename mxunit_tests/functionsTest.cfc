@@ -111,6 +111,16 @@ component {
 	    assertTrue(_.isEqual(_.sortBy(ret), _.sortBy(expected)));
 	}
 	
+	public void function testCompose() {
+	    var greet = function(name){ return "hi: " & name; };
+	    var exclaim = function(sentence){ return sentence & '!'; };
+	    var composed = _.compose(exclaim, greet);
+	    assertEquals(composed('moe'), 'hi: moe!', 'can compose a function that takes another');
+
+	    composed = _.compose(greet, exclaim);
+	    assertEquals(composed('moe'), 'hi: moe!', 'in this case, the functions are also commutative');		
+	}
+
 	public void function testAfter() {
 	    var testAfter = function(afterAmount, timesCalled) {
 	      var afterCalled = 0;
@@ -126,11 +136,6 @@ component {
 	    assertEquals(testAfter(0, 0), 1, "after(0) should fire immediately");
 	}
 	
-	
-	
-	
-	
-
 	public void function setUp() {
 		variables._ = new underscore.Underscore();
 	}

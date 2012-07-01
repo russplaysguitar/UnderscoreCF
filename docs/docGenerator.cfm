@@ -8,7 +8,7 @@
 
 	arrayFunctions = "first,initial,last,rest,compact,flatten,without,union,intersection,difference,uniq,zip,indexOf,lastIndexOf,range,arrayConcat,arrayReverse";
 
-	funcFunctions = "bind,bindAll,memoize,delay,once,after,wrap";
+	funcFunctions = "bind,bindAll,memoize,delay,once,after,wrap,compose";
 
 	objectFunctions = "keys,values,functions,extend,pick,defaults,clone,has,isEqual,isEmpty,isArray,isObject,isFunction,isString,isNumber,isBoolean,isDate,isNaN";
 

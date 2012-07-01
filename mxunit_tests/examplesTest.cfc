@@ -274,6 +274,15 @@ component {
 		assertEquals('before, hello: moe, after', result);
 	}
 	
+	public void function testCompose() {
+		var greet    = function(name){ return "hi: " & name; };
+		var exclaim  = function(statement){ return statement & "!"; };
+		var welcome = _.compose(exclaim, greet);
+		var result = welcome('moe');
+		var expected = 'hi: moe!';
+		assertEquals(expected, result);
+	}
+
 	public void function testTimes() {
 		var results = [];
 		var i = 1;
