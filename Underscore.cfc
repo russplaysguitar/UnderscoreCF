@@ -1182,11 +1182,18 @@ component {
 		var memo = {};
 		return function() {
 			if (ran) {
-				return memo;
+				if (!isNull(memo)) {
+					return memo;
+				}
+				else {
+					return;
+				}
 			}
 			ran = true;
 			memo = func(arguments);
-			return memo;
+			if (!isNull(memo)) {
+				return memo;
+			}
 		};
 	}
 
