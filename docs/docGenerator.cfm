@@ -93,7 +93,7 @@
 			<cfoutput>#metadata.introduction#</cfoutput>
 		</p>		
 		<h2>Download</h2>
-		<div><a href="https://github.com/downloads/russplaysguitar/UnderscoreCF/Underscore.cfc.1.5.zip">Version 1.5</a> - <i>36kb, Includes unit tests and doc generator</i></div>
+		<div><a href="https://github.com/downloads/russplaysguitar/UnderscoreCF/Underscore.cfc.2.0.zip">Version 2.0</a> - <i>37kb, Includes unit tests and doc generator</i></div>
 		<h2 id="Collections">Collection Functions (Arrays, Structs, Queries, or Objects)</h2>
 		<cfset display(metadata, collectionFunctions) >
 		<h2 id="Arrays">Array Functions</h2>
