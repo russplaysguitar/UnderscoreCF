@@ -1,7 +1,5 @@
-/**
-*	@extends mxunit.framework.TestCase
-*/
-component {
+
+component extends="mxunit.framework.TestCase" {
 
 	public void function testEach() {
 	    _.each([1, 2, 3], function(num, i) {
@@ -9,14 +7,19 @@ component {
 	    });
 
 	    var answers = [];
-	    var context = new Component();
-	    context.multiplier = 5;
-	    _.each([1, 2, 3], function(num){ arrayAppend(answers, (num * this.multiplier)); }, context);
-	    assertEquals(answers, [5, 10, 15], 'context object property accessed');
+	    var context = { multiplier = 5 };
+	    _.each([1, 2, 3], function(num, k, o, this){ arrayAppend(answers, (num * this.multiplier)); }, context);
+	    assertTrue(_.has(answers, 5), 'context object property accessed');
+	    assertTrue(_.has(answers, 10), 'context object property accessed');
+	    assertTrue(_.has(answers, 15), 'context object property accessed');
+	    assertEquals(arrayLen(answers), 3, 'context object property accessed');
 
 	    answers = [];
 	    _.forEach([1, 2, 3], function(num){ arrayAppend(answers, num); });
-	    assertEquals(answers, [1, 2, 3], 'aliased as "forEach"');
+	    assertTrue(_.has(answers, 1));
+	    assertTrue(_.has(answers, 2));
+	    assertTrue(_.has(answers, 3));
+	    assertEquals(arrayLen(answers), 3);
 
 	    answer = false;
 	    _.each([1, 2, 3], function(num, index, arr){ if (_.include(arr, num)) answer = true; });
@@ -31,9 +34,9 @@ component {
 	    doubled = _.collect([1, 2, 3], function(num) { return num * 2; });
 	    assertEquals(doubled, [2, 4, 6], 'aliased as "collect"');
 
-	    var context = new Component();
+	    var context = {};
 	    context.multiplier = 3;
-	    var tripled = _.map([1, 2, 3], function(num) { return num * this.multiplier; }, context);
+	    var tripled = _.map([1, 2, 3], function(num, i, o, this) { return num * this.multiplier; }, context);
 	    assertEquals(tripled, [3, 6, 9], 'tripled numbers with context');
 
 	    // var doubled = _([1, 2, 3]).map(function(num){ return num * 2; });
@@ -44,9 +47,9 @@ component {
 		var sum = _.reduce([1, 2, 3], function(sum, num){ return sum + num; }, 0);
 		assertEquals(sum, 6, 'can sum up an array');
 
-	    var context = new Component();
+	    var context = {};
 	    context.multiplier = 3;
-		sum = _.reduce([1, 2, 3], function(sum, num){ return sum + num * this.multiplier; }, 0, context);
+		sum = _.reduce([1, 2, 3], function(sum, num, m, this){ return sum + num * this.multiplier; }, 0, context);
 		assertEquals(sum, 18, 'can reduce with a context object');
 
 		sum = _.inject([1, 2, 3], function(sum, num){ return sum + num; }, 0);
@@ -77,7 +80,7 @@ component {
 		var list = _.foldr(["foo", "bar", "baz"], function(memo, str){ return memo & str; });
 		assertEquals(list, 'bazbarfoo', 'default initial value');
 
-		var list = _.foldr(["foo", "bar", "baz"], function(memo, str){ return memo & str & this.q; }, 'start_', {q:'qux'});
+		var list = _.foldr(["foo", "bar", "baz"], function(memo, str, m, this){ return memo & str & this.q; }, 'start_', {q:'qux'});
 		assertEquals(list, 'start_bazquxbarquxfooqux', 'context');		
 	}
 	
@@ -206,7 +209,10 @@ component {
 	    assertEquals(newArray, [1, 2, 3], 'cloned array contains same elements');
 
 	    var numbers = _.toArray({one : 1, two : 2, three : 3});
-	    assertEquals(numbers, [1, 2, 3], 'object flattened into array');
+	    assertTrue(_.has(numbers, 1));
+	    assertTrue(_.has(numbers, 2));
+	    assertTrue(_.has(numbers, 3));	    
+	    // assertEquals(numbers, [1, 2, 3], 'object flattened into array');
 	    
 	    var objectWithToArrayFunction = {toArray: function() {
 	        return [1, 2, 3];

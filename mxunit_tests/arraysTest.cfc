@@ -1,7 +1,5 @@
-/**
-*	@extends mxunit.framework.TestCase
-*/
-component {
+
+component extends="mxunit.framework.TestCase" {
 	public void function testFirst() {
 	    var firstWrapper = function (x) {return _.first(x);};
 	    assertEquals(_.first([1,2,3]), 1, 'can pull out the first element of an array');

@@ -1,7 +1,5 @@
-/**
-* @extends mxunit.framework.TestCase
-*/ 
-component {
+
+component extends="mxunit.framework.TestCase" {
 	
 	public void function testIdentity() {
 	    var moe = {name : 'moe'};
@@ -29,7 +27,7 @@ component {
 	}
 	
 	public void function testResult() {
-		var obj = new Component();
+		var obj = {};
 		obj.w = '';
 		obj.x = 'x';
 		obj.y = function(){ return obj.x; };

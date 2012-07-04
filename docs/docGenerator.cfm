@@ -64,7 +64,7 @@
 <body>
 	<div id="sidebar" class="interface">
 		<a class="toc_title" href="#">
-		    Underscore.cfc <span class="version">(1.0)</span>
+		    Underscore.cfc <span class="version">(2.0)</span>
 	    </a>
 	    <a class="toc_title" href="#">
 	    	Introduction
@@ -93,7 +93,7 @@
 			<cfoutput>#metadata.introduction#</cfoutput>
 		</p>		
 		<h2>Download</h2>
-		<div><a href="https://github.com/downloads/russplaysguitar/UnderscoreCF/Underscore.cfc.1.0.zip">Version 1.0</a> - <i>36kb, Includes unit tests and doc generator</i></div>
+		<div><a href="https://github.com/downloads/russplaysguitar/UnderscoreCF/Underscore.cfc.1.5.zip">Version 1.5</a> - <i>36kb, Includes unit tests and doc generator</i></div>
 		<h2 id="Collections">Collection Functions (Arrays, Structs, Queries, or Objects)</h2>
 		<cfset display(metadata, collectionFunctions) >
 		<h2 id="Arrays">Array Functions</h2>
@@ -106,6 +106,15 @@
 		<cfset display(metadata, utilFunctions) >
 		<p id="changelog">
 			<h2>Change Log</h2>
+			<p>
+		        <b class="header">2.0</b> -- <small><i>July 4th, 2012</i></small><br>
+	        </p>	
+	        <ul>
+	        	<li>Added Railo 4 Support!</li>
+	        	<li>Breaking changes: "this" now needs to be listed in the parameters of any iterator that references a passed in context.</li>
+	        	<li>Cleaned up some writeDumps()</li>
+	        	<li>Replaced isDefined() calls</li>
+	        </ul>
 			<p>
 		        <b class="header">1.0</b> -- <small><i>June 30, 2012</i></small><br>
 	        </p>

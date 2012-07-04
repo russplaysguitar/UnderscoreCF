@@ -7,7 +7,7 @@
 component { 
 
 	public any function init(obj = {}) { 
-		this.obj = obj;
+		this.obj = arguments.obj;
 
 		// _ is referenced throughout this cfc
 		variables._ = this;
@@ -22,74 +22,70 @@ component {
 
 	/**
 	* 	@header _.each(collection, iterator, [context]) : void
-	*	@hint Iterates over a collection of elements, yielding each in turn to an iterator function. The iterator is bound to the context object (component or struct), if one is passed. Each invocation of iterator is called with three arguments: (element, index, collection). If collection is an object/struct, iterator's arguments will be (value, key, collection). 
+	*	@hint Iterates over a collection of elements, yielding each in turn to an iterator function. The iterator is bound to the context object (component or struct), if one is passed. Each invocation of iterator is called with three arguments: (element, index, collection, this). If collection is an object/struct, iterator's arguments will be (value, key, collection, this). 
 	* 	@example _.each([1, 2, 3], function(num){ writeDump(num); }); <br />=> dumps each number in turn... <br />_.each({one : 1, two : 2, three : 3}, function(num, key){ writeDump(num); });<br />=> dumps each number in turn...
 	*/
-	public void function each(obj = this.obj, iterator = _.identity, context = new Component()) {
-		context = toContext(context);
- 		context.iterator = iterator;
-
-		if (isArray(obj)) {
+	public void function each(obj = this.obj, iterator = _.identity, this = {}) {
+		
+		if (isArray(arguments.obj)) {
 			var index = 1;
-			for (element in obj) {
-				if (arrayIsDefined(obj, index)) {
-					context.iterator(element, index, obj);
+			for (element in arguments.obj) {
+				if (arrayIsDefined(arguments.obj, index)) {
+					iterator(element, index, arguments.obj, arguments.this);
 				}
 				index++;
 			}
 		}
-		else if (isObject(obj) || isStruct(obj)) {	
-			for (key in obj) {
-				var val = obj[key];
-				context.iterator(val, key, obj);
+		else if (isObject(arguments.obj) || isStruct(arguments.obj)) {	
+			for (key in arguments.obj) {
+				var val = arguments.obj[key];
+				iterator(val, key, arguments.obj, arguments.this);
 			}
 		}
 		else {
 			// query or something else? convert to array and recurse
-			_.each(toArray(obj), iterator, context);			
+			_.each(toArray(arguments.obj), iterator, arguments.this);			
 		}
  	}
 
  	/**
  	* 	@alias each
  	*/
-	public void function forEach(obj, iterator, context) {
+	public void function forEach(obj, iterator, this) {
 	    _.each(argumentCollection = arguments);
  	}
 
 	/**
 	* 	@header _.map(collection, iterator, [context]) : array
-	*	@hint Produces a new array of values by mapping each value in collection through a transformation function (iterator). If collection is an object/struct, iterator's arguments will be (value, key, collection).
+	*	@hint Produces a new array of values by mapping each value in collection through a transformation function (iterator). If collection is an object/struct, iterator's arguments will be (value, key, collection, this).
 	* 	@example _.map([1, 2, 3], function(num){ return num * 3; }); <br />=> [3, 6, 9] <br />_.map({one : 1, two : 2, three : 3}, function(num, key){ return num * 3; });<br />=> [3, 6, 9]
 	*/
- 	public array function map(obj = this.obj, iterator = _.identity, context = new Component()) {
+ 	public array function map(obj = this.obj, iterator = _.identity, this = {}) {
  		var result = [];
- 		context = toContext(context);		
- 		context.iterator = iterator;
 
-		if (isArray(obj)) {
+		if (isArray(arguments.obj)) {
 			var index = 1;
 			var resultIndex = 1;
-			for (element in obj) {
-				if (!arrayIsDefined(obj, index)) {
+			for (element in arguments.obj) {
+				if (!arrayIsDefined(arguments.obj, index)) {
 					index++;
 					continue;
 				}
 				var local = {};
-				local.tmp = context.iterator(element, index, obj);
+				local.tmp = iterator(element, index, arguments.obj, arguments.this);
 				if (structKeyExists(local, "tmp")) {
-					result[resultIndex] = context.iterator(element, index, obj);
+					result[resultIndex] = local.tmp;
 				}
 				index++;
 				resultIndex++;
 			}
 		}
-		else if (isObject(obj) || isStruct(obj)) {	
+		else if (isObject(arguments.obj) || isStruct(arguments.obj)) {	
 			var index = 1;
-			for (key in obj) {
-				var val = obj[key];
+			for (key in arguments.obj) {
+				var val = arguments.obj[key];
 				var local = {};
-				local.tmp = context.iterator(val, key, obj);
+				local.tmp = iterator(val, key, arguments.obj, arguments.this);
 				if (structKeyExists(local, "tmp")) {
 					result[index] = local.tmp;
 				}
@@ -98,7 +94,7 @@ component {
 		}
 		else {
 			// query or something else? convert to array and recurse
-			result = _.map(toArray(obj), iterator, context);			
+			result = _.map(toArray(arguments.obj), iterator, arguments.this);			
 		}
 
 		return result;
@@ -107,7 +103,7 @@ component {
  	/**
  	* 	@alias map
  	*/
-  	public array function collect(obj, iterator, context) {
+  	public array function collect(obj, iterator, this) {
  		return _.map(argumentCollection = arguments);
  	}
 
@@ -116,23 +112,21 @@ component {
 	*	@hint Also known as inject and foldl, reduce boils down a collection of values into a single value. Memo is the initial state of the reduction, and each successive step of it should be returned by iterator.
 	* 	@example sum = _.reduce([1, 2, 3], function(memo, num){ return memo + num; }, 0);<br />=> 6
 	*/
- 	public any function reduce(obj = this.obj, iterator = _.identity, memo, context = new Component()) {
- 		context = toContext(context);		
- 		context.iterator = iterator;
+ 	public any function reduce(obj = this.obj, iterator = _.identity, memo, this = {}) {
 
  		var outer = {};
  		if (structKeyExists(arguments, "memo")) {
 	 		outer.initial = memo;
  		}
-		_.each(obj, function(value, index, collection) {
+		_.each(arguments.obj, function(value, index, collection, this) {
 			if (!structKeyExists(outer, "initial")) {
 				memo = value;
 				outer.initial = true;
 			} 
 			else {
-				memo = context.iterator(memo, value, index, collection);
+				memo = iterator(memo, value, index, this);
 			}
-		});
+		}, arguments.this);
 
 		return memo;		
  	}
@@ -140,14 +134,14 @@ component {
  	/**
  	*	@alias reduce
  	*/
-  	public any function foldl(obj, iterator, memo, context) {
+  	public any function foldl(obj, iterator, memo, this) {
  		return _.reduce(argumentCollection = arguments);
  	}
  	
  	/**
  	*	@alias reduce
  	*/
-   	public any function inject(obj, iterator, memo, context) {
+   	public any function inject(obj, iterator, memo, this) {
  		return _.reduce(argumentCollection = arguments);
  	}
 
@@ -156,18 +150,18 @@ component {
 	*	@hint The right-associative version of reduce. 
 	* 	@example list = [[0, 1], [2, 3], [4, 5]];<br />flat = _.reduceRight(list, function(a, b) { return _.arrayConcat(a, b); }, []);<br />=> [4, 5, 2, 3, 0, 1]
  	*/
-  	public any function reduceRight(obj = this.obj, iterator = _.identity, memo, context = new Component()) {
+  	public any function reduceRight(obj = this.obj, iterator = _.identity, memo, this = {}) {
 		var initial = structKeyExists(arguments, 'memo');
-		var reversed = _.arrayReverse(_.toArray(obj));
-  		context = toContext(context);
-		if (!_.isEmpty(context) && !initial) {
-			iterator = _.bind(iterator, context);
+		var reversed = _.arrayReverse(_.toArray(arguments.obj));
+  
+		if (!_.isEmpty(this) && !initial) {
+			iterator = _.bind(iterator, arguments.this);
 		}
-		return initial ? _.reduce(reversed, iterator, memo, context) : _.reduce(reversed, iterator);
+		return initial ? _.reduce(reversed, iterator, memo, arguments.this) : _.reduce(reversed, iterator);
    	}
 
    	// alias of reduceRight
- 	public any function foldr(obj, iterator, memo, context) {
+ 	public any function foldr(obj, iterator, memo, this) {
  		return _.reduceRight(argumentCollection = arguments);
  	}
 
@@ -178,26 +172,24 @@ component {
 	*	@hint Looks through each value in the collection, returning the first one that passes a truth test (iterator). The function returns as soon as it finds an acceptable element, and doesn't traverse the entire collection.
 	* 	@example even = _.find([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });<br />=> 2
  	*/
- 	public any function find(obj = this.obj, iterator = _.identity, context = new Component()) { 
+ 	public any function find(obj = this.obj, iterator = _.identity, this = {}) { 
  		var result = 0;
- 		context = toContext(context);		
- 		context.iterator = iterator;
 
-		if (isArray(obj)) {
+		if (isArray(arguments.obj)) {
 			var index = 1;
-			for (val in obj) {
-				if (context.iterator(val, index, obj)) {
+			for (val in arguments.obj) {
+				if (iterator(val, index, arguments.obj, arguments.this)) {
 					result = val;
 					break;
 				}
 				index++;
 			}
 		}
-		else if (isObject(obj) || isStruct(obj)) {	
+		else if (isObject(arguments.obj) || isStruct(arguments.obj)) {	
 			var index  = 1;
-			for (key in obj) {
-				var val = obj[key];
-				if (context.iterator(val, index, obj)) {
+			for (key in arguments.obj) {
+				var val = arguments.obj[key];
+				if (iterator(val, index, arguments.obj, arguments.this)) {
 					result = val;
 					break;
 				}
@@ -206,7 +198,7 @@ component {
 		}
 		else {
 			// query or something else? convert to array and recurse
-			return _.find(toArray(obj), iterator, context);			
+			return _.find(toArray(arguments.obj), iterator, arguments.this);			
 		}
 
 		return result;
@@ -215,7 +207,7 @@ component {
  	/**
  	* 	@alias find
  	*/
-  	public any function detect(obj, iterator, context) { 
+  	public any function detect(obj, iterator, this) { 
  		return _.find(argumentCollection = arguments);
  	}
 
@@ -224,26 +216,24 @@ component {
 	*	@hint Looks through each value in the collection, returning an array of all the values that pass a truth test (iterator). 
 	* 	@example evens = _.filter([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });<br />=> [2, 4, 6]
  	*/
- 	public array function filter(obj = this.obj, iterator = _.identity, context = new Component()) {
+ 	public array function filter(obj = this.obj, iterator = _.identity, this = {}) {
 		var result = [];
-		context = toContext(context);
- 		context.iterator = iterator;
 
-		if (isArray(obj)) {
+		if (isArray(arguments.obj)) {
 			var index = 1;
-			for (val in obj) {
-				var success = context.iterator(val, index, obj);
+			for (val in arguments.obj) {
+				var success = iterator(val, index, arguments.obj, arguments.this);
 				if (success) {
 					result[index] = val;
 					index++;
 				}
 			}
 		}
-		else if (isObject(obj) || isStruct(obj)) {	
+		else if (isObject(arguments.obj) || isStruct(arguments.obj)) {	
 			var index = 1;
-			for (key in obj) {
-				var val = obj[key];
-				var success = context.iterator(val, index, obj);
+			for (key in arguments.obj) {
+				var val = arguments.obj[key];
+				var success = iterator(val, index, arguments.obj, arguments.this);
 				if (success) {
 					result[index] = val;
 					index++;
@@ -252,7 +242,7 @@ component {
 		}
 		else {
 			// query or something else? convert to array and recurse
-			return _.filter(toArray(obj), iterator, context);			
+			return _.filter(toArray(arguments.obj), iterator, arguments.this);			
 		}
 
 		return result;
@@ -261,7 +251,7 @@ component {
  	/**
  	*	@alias filter
  	*/
-	public array function select(obj, iterator, context) {
+	public array function select(obj, iterator, this) {
 		return _.filter(argumentCollection = arguments);
 	}
 	
@@ -270,26 +260,24 @@ component {
 	*	@hint Returns the values in collection without the elements that the truth test (iterator) passes. The opposite of filter.
 	* 	@example odds = _.reject([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });<br />=> [1, 3, 5]
 	*/
-	public array function reject(obj = this.obj, iterator = _.identity, context = new Component()) {
+	public array function reject(obj = this.obj, iterator = _.identity, this = {}) {
 		var result = [];
-		context = toContext(context);
- 		context.iterator = iterator;
 
-		if (isArray(obj)) {
+		if (isArray(arguments.obj)) {
 			var index = 1;
-			for (val in obj) {
-				var success = context.iterator(val, index, obj);
+			for (val in arguments.obj) {
+				var success = iterator(val, index, arguments.obj, arguments.this);
 				if (!success) {
 					result[index] = val;
 					index++;
 				}
 			}
 		}
-		else if (isObject(obj) || isStruct(obj)) {	
+		else if (isObject(arguments.obj) || isStruct(arguments.obj)) {	
 			var index = 1;
-			for (key in obj) {
-				var val = obj[key];
-				var success = context.iterator(val, index, obj);
+			for (key in arguments.obj) {
+				var val = arguments.obj[key];
+				var success = iterator(val, index, arguments.obj, arguments.this);
 				if (!success) {
 					result[index] = val;
 					index++;
@@ -298,7 +286,7 @@ component {
 		}
 		else {
 			// query or something else? convert to array and recurse
-			return _.reject(toArray(obj), iterator, context);			
+			return _.reject(toArray(arguments.obj), iterator, arguments.this);			
 		}
 
 		return result;		
@@ -310,29 +298,27 @@ component {
 	*	@hint Returns true if all of the values in the collection pass the iterator truth test. 
 	* 	@example _.all([true, 1, 'no'], _.identity);<br />=> false
 	*/
-	public boolean function all(obj = this.obj, iterator = _.identity, context = new Component()) {
+	public boolean function all(obj = this.obj, iterator = _.identity, this = {}) {
 		var result = false;
-		context = toContext(context);
- 		context.iterator = iterator;
 
-		if (isArray(obj)) {
+		if (isArray(arguments.obj)) {
 			var index = 1;
-			for (val in obj) {
-				result = context.iterator(val, index, obj);
+			for (val in arguments.obj) {
+				result = iterator(val, index, arguments.obj, arguments.this);
 				if (!result) {
 					break;
 				}
 				index++;
 			}
-			if (arrayLen(obj) == 0) {
+			if (arrayLen(arguments.obj) == 0) {
 				result = true;
 			}
 		}
-		else if (isObject(obj) || isStruct(obj)) {	
+		else if (isObject(arguments.obj) || isStruct(arguments.obj)) {	
 			var index  = 1;
-			for (key in obj) {
-				var val = obj[key];
-				result = context.iterator(val, index, obj);
+			for (key in arguments.obj) {
+				var val = arguments.obj[key];
+				result = iterator(val, index, arguments.obj, arguments.this);
 				if (!result) {
 					break;
 				}
@@ -340,7 +326,7 @@ component {
 			}
 		}
 		else {
-			return _.all(toArray(obj), iterator, context);			
+			return _.all(toArray(arguments.obj), iterator, arguments.this);			
 		}
 
 		return toBoolean(result);		
@@ -349,7 +335,7 @@ component {
 	/** 
 	*	@alias all
 	*/
-	public boolean function every(obj, iterator, context) {
+	public boolean function every(obj, iterator, this) {
 		return _.all(argumentCollection = arguments);
 	}
 	
@@ -358,26 +344,24 @@ component {
 	*	@hint Returns true if any of the values in the collection pass the iterator truth test. Short-circuits and stops traversing the collection if a true element is found. 
 	* 	@example _.any([0, 'yes', false]);<br />=> true
 	*/
-	public boolean function any(obj = this.obj, iterator = _.identity, context = new Component()) {
+	public boolean function any(obj = this.obj, iterator = _.identity, this = {}) {
 		var result = false;
-		context = toContext(context);
- 		context.iterator = iterator;
 
-		if (isArray(obj)) {
+		if (isArray(arguments.obj)) {
 			var index = 1;
-			for (value in obj) {
-				result = context.iterator(value, index, obj);
+			for (value in arguments.obj) {
+				result = iterator(value, index, arguments.obj, arguments.this);
 				if (result) {
 					break;
 				}
 				index++;
 			}
 		}
-		else if (isObject(obj) || isStruct(obj)) {	
+		else if (isObject(arguments.obj) || isStruct(arguments.obj)) {	
 			var index  = 1;
-			for (key in obj) {
-				var value = obj[key];
-				result = context.iterator(value, index, obj);
+			for (key in arguments.obj) {
+				var value = arguments.obj[key];
+				result = iterator(value, index, arguments.obj, arguments.this);
 				if (result) {
 					break;
 				}
@@ -385,7 +369,7 @@ component {
 			}
 		}
 		else {
-			return _.any(toArray(obj), iterator, context);			
+			return _.any(toArray(arguments.obj), iterator, arguments.this);			
 		}
 
 		return toBoolean(result);
@@ -394,7 +378,7 @@ component {
 	/**
 	* 	@alias any
 	*/ 
-	public boolean function some(obj, iterator, context) {
+	public boolean function some(obj, iterator, this) {
 		return _.any(argumentCollection = arguments);
 	}	
 
@@ -404,7 +388,7 @@ component {
 	* 	@example _.include([1, 2, 3], 3);<br />=> true
 	*/
 	public boolean function include(obj = this.obj, target) {
-		return _.any(obj, function(value) {
+		return _.any(arguments.obj, function(value) {
 			return isEqual(value, target);
 		});
 	}
@@ -415,7 +399,7 @@ component {
 	* 	@example _.invoke([{fun: function(){ return 1; }}], 'fun');<br />=> [1]
 	*/
 	public array function invoke(obj = this.obj, method, args = {}) {
-	    return _.map(obj, function(value) {
+	    return _.map(arguments.obj, function(value) {
 	    	if (_.isFunction(method)) {
 	    		// try to call method() directly
 	    		var result = method(value, args);
@@ -445,7 +429,7 @@ component {
 	* 	@example stooges = [{name : 'moe', age : 40}, {name : 'larry', age : 50}, {name : 'curly', age : 60}];<br />_.pluck(stooges, 'name');<br />=> ["moe", "larry", "curly"]
 	*/
 	public array function pluck(obj = this.obj, key) {
-    	return _.map(obj, function(value){
+    	return _.map(arguments.obj, function(value){
     		if (_.isFunction(key)) {
     			return key(value);
     		}
@@ -469,19 +453,17 @@ component {
 	*	@hint Returns the maximum value in collection. If iterator is passed, it will be used on each value to generate the criterion by which the value is ranked.
 	* 	@example stooges = [{name : 'moe', age : 40}, {name : 'larry', age : 50}, {name : 'curly', age : 60}];<br />_.max(stooges, function(stooge){ return stooge.age; });<br />=> {name : 'curly', age : 60};
 	*/
-	public any function max(obj = this.obj, iterator = _.identity, context = new Component()) {
+	public any function max(obj = this.obj, iterator = _.identity, this = {}) {
 		var result = {};
-		context = toContext(context);
- 		context.iterator = iterator;
 
-	    _.each(obj, function(value, index, obj) {
-    		var computed = context.iterator(value, index, obj);
+	    _.each(arguments.obj, function(value, index, obj, this) {
+    		var computed = iterator(value, index, obj, this);
 	    	if (isNumeric(computed)) {
 		    	if (!structKeyExists(result, 'computed') || computed >= result.computed) {
 		    		result = {value : value, computed : computed};
 		    	}
 	    	}
-	    });
+	    }, arguments.this);
 	    if (structKeyExists(result, 'value')) {
 		    return result.value;
 	    }
@@ -492,19 +474,17 @@ component {
 	*	@hint Returns the minimum value in collection. If iterator is passed, it will be used on each value to generate the criterion by which the value is ranked.
 	* 	@example numbers = [10, 5, 100, 2, 1000];<br />_.min(numbers);<br />=> 2
 	*/
-	public any function min(obj = this.obj, iterator = _.identity, context = new Component()) {
+	public any function min(obj = this.obj, iterator = _.identity, this = {}) {
 		var result = {};
-		context = toContext(context);
- 		context.iterator = iterator;
 
-	    _.each(obj, function(value, index, obj) {
-    		var computed = context.iterator(value, index, obj);
+	    _.each(arguments.obj, function(value, index, obj, this) {
+    		var computed = iterator(value, index, obj, this);
 	    	if (isNumeric(computed)) {
 		    	if (!structKeyExists(result, 'computed') || computed <= result.computed) {
 		    		result = {value : value, computed : computed};
 		    	}
 	    	}
-	    });
+	    }, arguments.this);
 	    if (structKeyExists(result, 'value')) {
 		    return result.value;
 	    }		
@@ -515,7 +495,7 @@ component {
 	*	@hint Returns a sorted copy of collection, ranked in ascending order by the results of running each value through iterator. Iterator may also be the string name of the object key to sort by. Uses a Merge Sort algorithm.
 	* 	@example _.sortBy([6, 2, 4, 3, 5, 1], function(num){ return num; });<br />=> [1, 2, 3, 4, 5, 6]
 	*/
-	public array function sortBy(obj = this.obj, val, context = new Component()) {
+	public array function sortBy(obj = this.obj, val, this = {}) {
 		if (!structKeyExists(arguments, 'val')) {
 			var iterator = _.identity;
 		}
@@ -527,14 +507,14 @@ component {
 				return obj[val];
 			};
 		}
-		context = toContext(context);
- 		context.iterator = iterator;
-		var toSort = _.map(obj, function(value, index, collection, context) {
+
+		var toSort = _.map(arguments.obj, function(value, index, collection, this) {
 			return {
 				value : value,
-				criteria : context.iterator(value, index, collection, context)
+				criteria : iterator(value, index, collection, arguments.this)
 			};
 		});
+
 		var sorted = mergeSort(toSort, function(left, right) {
 			if (!structKeyExists(left, 'criteria')) {
 				return 1;
@@ -546,13 +526,14 @@ component {
 			var b = right.criteria;	
 			return _.comparison(a, b);
 		});
+
 		return _.pluck(sorted, 'value');
 	}
 
 	// for sortBy()
 	// note: this isn't part of UnderscoreJS, but CF doesn't have a sort() that can use a custom comparison function
 	private array function mergeSort(obj = this.obj, iterator = comparison) {
-		var array = _.toArray(obj);
+		var array = _.toArray(arguments.obj);
 		if(arraylen(array) < 2) {
 			return array;
 		}
@@ -618,7 +599,7 @@ component {
 		else {
 			var iterator = function(obj) { return obj[val]; };
 		}
-		_.each(obj, function(value, index) {
+		_.each(arguments.obj, function(value, index) {
 			var key = iterator(value, index);
 			if (!structKeyExists(result, key)) {
 				result[key] = [];
@@ -638,7 +619,7 @@ component {
 		var high = arrayLen(array);
 		while (low < high) {
 			var mid = BitSHRN((low + high), 1);
-			if (iterator(array[mid]) < iterator(obj) ) {
+			if (iterator(array[mid]) < iterator(arguments.obj) ) {
 				low = mid + 1;
 			}
 			else {
@@ -654,9 +635,9 @@ component {
 	* 	@example _.shuffle([1, 2, 3, 4, 5, 6]);<br />=> [4, 1, 6, 3, 5, 2]
 	*/
 	public array function shuffle(obj = this.obj) {
-	    var shuffled = obj;
+	    var shuffled = duplicate(arguments.obj);
 	    var rand = 0;
-	    _.each(obj, function(value, index, collection) {
+	    _.each(shuffled, function(value, index, collection) {
 			rand = fix(1 + (rand() * (index)));
 			shuffled[index] = shuffled[rand];
 			shuffled[rand] = value;
@@ -670,32 +651,32 @@ component {
 	* 	@example _.toArray({a:10,b:20});<br />=> [10, 20]
 	*/
 	public array function toArray(obj = this.obj) {
-		if (isArray(obj)) {
-			return obj;
+		if (isArray(arguments.obj)) {
+			return duplicate(arguments.obj);
 		}
-		else if ((isStruct(obj) || isObject(obj)) && structKeyExists(obj, "toArray") && isClosure(obj.toArray)) {
-			return obj.toArray();
+		else if ((isStruct(arguments.obj) || isObject(arguments.obj)) && structKeyExists(arguments.obj, "toArray") && isClosure(arguments.obj.toArray)) {
+			return arguments.obj.toArray();
 		}
-		else if (isQuery(obj)) {
+		else if (isQuery(arguments.obj)) {
 			var result = [];
-			for (index = 1; index <= obj.RecordCount; index++) {
+			for (index = 1; index <= arguments.obj.RecordCount; index++) {
 				var row = {};
-				for (var colName in obj.columnList) {
-					row[colName] = obj[colName][index];
+				for (var colName in arguments.obj.columnList) {
+					row[colName] = arguments.obj[colName][index];
 				}
 				result[index] = row;
 			}
 			return result;	
 		}
-		else if (isObject(obj) || isStruct(obj)) {
-			return _.values(obj);
+		else if (isObject(arguments.obj) || isStruct(arguments.obj)) {
+			return _.values(arguments.obj);
 		}
-		else if (_.isString(obj)) {
-			return listToArray(obj);
+		else if (_.isString(arguments.obj)) {
+			return listToArray(arguments.obj);
 		}
 		else
 		{
-			return [obj];
+			return [arguments.obj];
 		}
 	}
 	
@@ -705,14 +686,14 @@ component {
 	* 	@example _.size({one : 1, two : 2, three : 3});<br />=> 3
 	*/
 	public numeric function size(obj = this.obj) {
-		if (isObject(obj) || isStruct(obj)) {
-			return structCount(obj);
+		if (isObject(arguments.obj) || isStruct(arguments.obj)) {
+			return structCount(arguments.obj);
 		}
-		else if (isArray(obj)) {
-			return arrayLen(obj);
+		else if (isArray(arguments.obj)) {
+			return arrayLen(arguments.obj);
 		}
-		else if (isQuery(obj)) {
-			return obj.recordCount;
+		else if (isQuery(arguments.obj)) {
+			return arguments.obj.recordCount;
 		}
 		else {
 			throw("size() is only compatible with objects, structs, queries, and arrays.", "Underscore");
@@ -886,10 +867,10 @@ component {
  	*/ 
  	public array function arrayReverse(array obj = this.obj) {
  		var result = [];
- 		var size = _.size(obj);
+ 		var size = _.size(arguments.obj);
  		var i = size;
 
- 		_.each(obj, function(val) {
+ 		_.each(arguments.obj, function(val) {
  			result[i] = val;
  			i--;
  		});
@@ -1072,35 +1053,41 @@ component {
 	/**
 	* 	@header _.bind(function, object, [*arguments]) : any
 	*	@hint Bind a function to a structure, meaning that whenever the function is called, the value of "this" will be the structure. Optionally, bind arguments to the function to pre-fill them, also known as partial application.
-	* 	@example "func = function(args){ return args.greeting & ': ' & this.name; };<br />func = _.bind(func, {name : 'moe'}, {greeting: 'hi'});<br />func();<br />=> 'hi: moe'"
+	* 	@example "func = function(args, this){ return args.greeting & ': ' & this.name; };<br />func = _.bind(func, {name : 'moe'}, {greeting: 'hi'});<br />func();<br />=> 'hi: moe'"
 	*/
-	public any function bind(func, context = new Component()) {
+	public any function bind(func) {
 		var boundArgs = _.slice(arguments, 3);
-		context = toContext(context);
+
+		if (arrayLen(arguments) > 1) {
+			var context = arguments[2];
+		}
+		else {
+			var context = {};
+		}
 
 		if (!_.isFunction(func)) {
 			throw("bind() expected a function", "Underscore");
 		}
 
 		return function () {
-			// writeDump(arguments);
 			var passedArgs = _.toArray(arguments);
 			var argsArray = _.arrayConcat(boundArgs, passedArgs);
 			var argStruct = {};
 			_.each(argsArray, function (val, index) {
 				argStruct[index] = val;
 			});
-			context.func = func;
-			return context.func(argumentCollection = argStruct);
+			argStruct.this = context;
+			return func(argumentCollection = argStruct);
 		};
 	}
 
 	/**
 	* 	@header _.bindAll(object, [*methodNames]) : any
 	*	@hint Bind all of an object's methods to that object. Useful for ensuring that all callbacks defined on an object belong to it.
-	* 	@example "buttonView = {label: 'button', onClick : function(){ return 'clicked: ' & this.label; }};<br />_.bindAll(buttonView);<br />buttonView.onClick();<br />=> 'clicked: button'"
+	* 	@example "buttonView = {label: 'button', onClick : function(this){ return 'clicked: ' & this.label; }};<br />_.bindAll(buttonView);<br />buttonView.onClick();<br />=> 'clicked: button'"
 	*/
 	public any function bindAll(obj) {
+		var local.obj = arguments.obj;
 		var funcs = _.slice(arguments, 2);
 		if (arrayLen(funcs) == 0) {
 			funcs = _.functions(obj);
@@ -1141,7 +1128,8 @@ component {
 	public any function delay(func, wait, args) {
 		// TODO: make this accept multiple arguments after func and wait, which will get put into an args struct instead of forcing the user to pass arguments as a struct
 	    sleep(wait);
-	    return arguments.func(argumentCollection = args);
+	    var local.func = arguments.func;
+	    return local.func(argumentCollection = args);
 	}
 	
 	/*
@@ -1222,7 +1210,6 @@ component {
 		return function() {
 			var args = arguments;
 			for (var i = _.size(funcs); i >= 1; i--) {
-				writeDump(args);
 				var toCall = funcs[i];
 				var result = toCall(argumentCollection = args);
 				args = {1:result};
@@ -1256,16 +1243,16 @@ component {
 	* 	@example _.keys({one : 1, two : 2, three : 3});<br />=> ["one", "two", "three"]
 	*/
 	public array function keys(obj = this.obj) {
-		if (isArray(obj)) {
-			return _.map(obj, function(v,i){
+		if (isArray(arguments.obj)) {
+			return _.map(arguments.obj, function(v,i){
 				return i;
 			});
 		}
-		else if (isStruct(obj) || isObject(obj)) {
-			return listToArray(structKeyList(obj));
+		else if (isStruct(arguments.obj) || isObject(arguments.obj)) {
+			return listToArray(structKeyList(arguments.obj));
 		}
-		else if (isQuery(obj)) {
-			return _.keys(toArray(obj));
+		else if (isQuery(arguments.obj)) {
+			return _.keys(toArray(arguments.obj));
 		}
 		else {
 			throw("_.keys() expects an array, object, struct, or query", "Underscore");
@@ -1278,7 +1265,7 @@ component {
 	* 	@example _.values({one : 1, two : 2, three : 3});<br />=> [1, 2, 3]
 	*/
 	public array function values(obj = this.obj) {
-		return _.map(obj);
+		return _.map(arguments.obj);
 	}
 	
 	/**
@@ -1288,8 +1275,8 @@ component {
 	*/
 	public array function functions(obj = this.obj) {
 		var names = [];
-		for (var key in obj) {
-			if (_.isFunction(obj[key])) {
+		for (var key in arguments.obj) {
+			if (_.isFunction(arguments.obj[key])) {
 				arrayAppend(names, key);
 			}
 		}
@@ -1310,6 +1297,7 @@ component {
 	* 	@example _.extend({name : 'moe'}, {age : 50});<br />=> {name : 'moe', age : 50}
 	*/
 	public any function extend(obj = this.obj) {
+		var local.obj = arguments.obj;
 		_.each(slice(arguments, 2), function(source) {
 			for (var prop in source) {
 				obj[prop] = source[prop];
@@ -1325,6 +1313,7 @@ component {
 	*/
 	public struct function pick(obj = this.obj) {
 		var result = {};
+		var local.obj = arguments.obj;
 		_.each(_.flatten(slice(arguments, 2)), function(key) {
 			if (structKeyExists(obj, key)) {
 				result[key] = obj[key];
@@ -1339,6 +1328,7 @@ component {
 	* 	@example iceCream = {flavor : "chocolate"};<br />_.defaults(iceCream, {flavor : "vanilla", sprinkles : "lots"});<br />=> {flavor : "chocolate", sprinkles : "lots"}
 	*/
 	public any function defaults(obj = this.obj) {
+		var local.obj = arguments.obj;
 		_.each(_.slice(arguments, 2), function(source) {
 			for (var prop in source) {
 				if (!structKeyExists(obj, prop)) {
@@ -1355,16 +1345,16 @@ component {
 	* 	@example _.clone({name : 'moe'});<br />=> {name : 'moe'}
 	*/
 	public any function clone(obj = this.obj) {
-		if (isSimpleValue(obj)) {
-			return obj;
+		if (isSimpleValue(arguments.obj)) {
+			return arguments.obj;
 		}
-		else if (_.isArray(obj)) {
-			return _.slice(obj, 1);
+		else if (_.isArray(arguments.obj)) {
+			return _.slice(arguments.obj, 1);
 		}
-		else if (isStruct(obj)) {
-			return _.extend({}, obj);
+		else if (isStruct(arguments.obj)) {
+			return _.extend({}, arguments.obj);
 		}
-		else if (isObject(obj)) {
+		else if (isObject(arguments.obj)) {
 			return _.extend(new Component(), obj);			
 		}
 		else {
@@ -1380,8 +1370,8 @@ component {
 	*/
 	// TODO: make this work
 	public any function tap(obj = this.obj, interceptor = _.identity) {
-		interceptor(obj);
-		return obj;
+		interceptor(arguments.obj);
+		return arguments.obj;
 	}
 	
 	/**
@@ -1391,14 +1381,14 @@ component {
 	*/
 	public boolean function has(obj = this.obj, key) {
 		// TODO: implement this better?
-		if (isArray(obj)) {
-			return _.include(obj, key);
+		if (isArray(arguments.obj)) {
+			return _.include(arguments.obj, key);
 		}
-		else if (isObject(obj) || isStruct(obj)) {
-			return structKeyExists(obj, key);
+		else if (isObject(arguments.obj) || isStruct(arguments.obj)) {
+			return structKeyExists(arguments.obj, key);
 		}
 		else {
-			return _.has(toArray(obj), key);
+			return _.has(toArray(arguments.obj), key);
 		}
 	}
 
@@ -1493,10 +1483,7 @@ component {
 				}
 			}
 			else if (isSimpleValue(other)) {
-// writeDump(other);
-// writeDump(v);
 				if (!compareSimple(v, other)) {
-			writeDump('a' & compareSimple(v, other));
 					result = false;
 					return;
 				}
@@ -1509,10 +1496,10 @@ component {
 
 		var o = b;
 		_.each(a, iterator);
-writeDump('--------');
+
 		var o = a;
 		_.each(b, iterator);		
-// writeDump(result);
+
 		return result;
 	}
 
@@ -1522,14 +1509,14 @@ writeDump('--------');
 	* 	@example _.isEmpty([1, 2, 3]);<br />=> false<br />_.isEmpty({});<br />=> true
 	*/
 	public boolean function isEmpty(obj = this.obj) {
-		if (isArray(obj)) {
-			return (ArrayLen(obj) == 0);
+		if (isArray(arguments.obj)) {
+			return (ArrayLen(arguments.obj) == 0);
 		}	
-		else if (isStruct(obj)) {
-			return structIsEmpty(obj);
+		else if (isStruct(arguments.obj)) {
+			return structIsEmpty(arguments.obj);
 		}
-		else if (_.isString(obj)) {
-			return (len(obj) == 0);
+		else if (_.isString(arguments.obj)) {
+			return (len(arguments.obj) == 0);
 		}
 		else {
 			throw("isEmpty() error: Not sure what obj is", "Underscore");
@@ -1542,7 +1529,7 @@ writeDump('--------');
 	* 	@example _.isArray({one: 1});<br />=> false<br />_.isArray([1,2,3]);<br />=> true
 	*/
 	public boolean function isArray(obj = this.obj) {
-		return isArray(obj);
+		return isArray(arguments.obj);
 	}
 	
 	/** 
@@ -1551,7 +1538,7 @@ writeDump('--------');
 	* 	@example _.isObject(new Component());<br />=> true <br />_.isObject({});<br />=> false
 	*/
 	public boolean function isObject(obj = this.obj) {
-		return isObject(obj);
+		return isObject(arguments.obj);
 	}
 	
 	/**
@@ -1560,7 +1547,7 @@ writeDump('--------');
 	* 	@example _.isFunction(function(){return 1;});<br />=> true
 	*/	
 	public boolean function isFunction(obj = this.obj) {
-		return isClosure(obj) || isCustomFunction(obj);
+		return isClosure(arguments.obj) || isCustomFunction(arguments.obj);
 	}
 	
 	/**
@@ -1569,7 +1556,7 @@ writeDump('--------');
 	* 	@example _.isString("moe");<br />=> true<br />_.isString(1);<br />=> true//Coldfusion converts numbers to strings
 	*/
 	public boolean function isString(obj = this.obj) {
-		return isInstanceOf(obj, "java.lang.String");
+		return isInstanceOf(arguments.obj, "java.lang.String");
 	}
 
 	/**
@@ -1578,9 +1565,9 @@ writeDump('--------');
 	* 	@example _.isNumber(1);<br />=> false//Coldfusion converts numbers to strings<br />_.isNumber(JavaCast("int", 1));<br />=> true
 	*/
 	public boolean function isNumber(obj = this.obj) {
-		return isInstanceOf(obj, "java.lang.Integer") || isInstanceOf(obj, "java.lang.Short") ||
-			isInstanceOf(obj, "java.lang.Long") || isInstanceOf(obj, "java.lang.Double") || 
-			isInstanceOf(obj, "java.lang.Float");
+		return isInstanceOf(arguments.obj, "java.lang.Integer") || isInstanceOf(arguments.obj, "java.lang.Short") ||
+			isInstanceOf(arguments.obj, "java.lang.Long") || isInstanceOf(arguments.obj, "java.lang.Double") || 
+			isInstanceOf(arguments.obj, "java.lang.Float");
 	}
 	
 	/**
@@ -1590,7 +1577,7 @@ writeDump('--------');
 	*/
 	public boolean function isBoolean(obj = this.obj) {
 		// note: I considered making this test for java-casted booleans, but since Adobe CF functions don't return them, it would be counter-productive.
-		return isBoolean(obj);
+		return isBoolean(arguments.obj);
 	}
 	
 	/**
@@ -1599,7 +1586,7 @@ writeDump('--------');
 	* 	@example _.isDate(now());<br />=> true
 	*/
 	public boolean function isDate(obj = this.obj) {
-		return isDate(obj);
+		return isDate(arguments.obj);
 	}
 
 	/*
@@ -1607,7 +1594,7 @@ writeDump('--------');
 	*/
 	// TODO: make this work
 	public any function chain(obj) {
-		var _obj = new Underscore(obj);
+		var _obj = new Underscore(arguments.obj);
 		return _.wrap(_obj, function (func) {
 			return new Underscore(func(arguments));
 		});
@@ -1627,12 +1614,10 @@ writeDump('--------');
 	*	@hint Invokes the given iterator function n times.
 	* 	@example _.times(3, function(){ genie.grantWish(); });
 	*/
-	public void function times(n, iterator, context = new Component()) {
-		context = toContext(context);
-		context.iterator = iterator;
+	public void function times(n, iterator, this = {}) {
 
 		for (var i = 0; i < n; i++) {
-			context.iterator(i);
+			iterator(i, arguments.this);
 		}
 	}
 	
@@ -1643,7 +1628,7 @@ writeDump('--------');
 	*/
 	public void function mixin(object) {
 		// TODO: make this also work for the OOP wrapper
-		_.each(object, function (val, key, obj) {
+		_.each(arguments.object, function (val, key, obj) {
 			_[key] = val;
 		});			
 	}
@@ -1657,10 +1642,10 @@ writeDump('--------');
 		// if (_.isNull(object)) {
 		// 	return JavaCast("null", 0);
 		// }
-		var value = object[property];
+		var value = arguments.object[arguments.property];
 
 		if (_.isFunction(value)) {
-			return value(object);
+			return value(arguments.object);
 		}
 		else {
 			return value;
@@ -1671,26 +1656,6 @@ writeDump('--------');
 	* 	@hint Internal helper function. Converts boolean equivalents to boolean true or false. Helpful for keeping function return values consistent.
 	*/ 
 	private boolean function toBoolean(obj) {
-		return !!obj;
-	}
-
-	/*
-	*	@hint Internal helper function. Converts a struct to a component instance with the same values for "this" that exist in the struct. If passed a component instance, will simply return that instead.
-	*/ 
-	private component function toContext(any context = new Component()) {
-		if(isObject(context)) {
-			return context;
-		}
-		if(isStruct(context)) {
-			var result = new Component();
-			_.each(context, function(val, key){
-				result[key] = val;
-			});
-			return result;
-		}
-		else {
-			// not really sure what to do with non-struct-like types
-			return new Component();
-		}
+		return !!arguments.obj;
 	}
 }

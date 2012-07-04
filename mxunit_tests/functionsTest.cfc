@@ -1,11 +1,9 @@
-/**
-* @extends mxunit.framework.TestCase
-*/
-component {
+
+component extends="mxunit.framework.TestCase" {
 
 	public void function testBind() {
 	    var context = new MyClass({name : 'moe'});
-	    var func = function(arg) { 
+	    var func = function(arg, this) { 
 			// writeDump(arg);
 			if (isDefined("this.name")) {
 				return "name: " & this.name;
@@ -44,8 +42,8 @@ component {
 	    var curly = {name : 'curly'};
 	    var moe = {
 	      name    : 'moe',
-	      getName : function() { return 'name: ' & this.name; },
-	      sayHi   : function() { return 'hi: ' & this.name; }
+	      getName : function(this) { return 'name: ' & this.name; },
+	      sayHi   : function(this) { return 'hi: ' & this.name; }
 	    };
 	    curly.getName = moe.getName;
 	    _.bindAll(moe, 'getName', 'sayHi');
@@ -56,8 +54,8 @@ component {
 	    curly = {name : 'curly'};
 	    moe = {
 	      name    : 'moe',
-	      getName : function() { return 'name: ' & this.name; },
-	      sayHi   : function() { return 'hi: ' & this.name; }
+	      getName : function(this) { return 'name: ' & this.name; },
+	      sayHi   : function(this) { return 'hi: ' & this.name; }
 	    };
 	    _.bindAll(moe);
 	    curly.sayHi = moe.sayHi;
