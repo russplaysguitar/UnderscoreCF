@@ -1348,14 +1348,15 @@ component {
 		if (isSimpleValue(arguments.obj)) {
 			return arguments.obj;
 		}
-		else if (_.isArray(arguments.obj)) {
+		else if (isArray(arguments.obj)) {
 			return _.slice(arguments.obj, 1);
+		}
+		else if (isObject(arguments.obj)) {
+			var metaData = getMetaData(arguments.obj);
+			return _.extend(new "#metaData.fullName#"(), obj);			
 		}
 		else if (isStruct(arguments.obj)) {
 			return _.extend({}, arguments.obj);
-		}
-		else if (isObject(arguments.obj)) {
-			return _.extend(new Component(), obj);			
 		}
 		else {
 			// not sure what obj is, convert to array and try again

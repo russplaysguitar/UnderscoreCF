@@ -88,6 +88,13 @@ component extends="mxunit.framework.TestCase" {
 	    assertEquals(_.last(moe.lucky.array), 101, 'changes to deep attributes are shared with the original');
 
 	    assertEquals(_.clone(1), 1, 'non objects should not be changed by clone');	  
+
+	    var original = new MyClass();
+	    original.subObj = new MyClass();
+	    original.subObj.x = 1;
+	    var clone = _.clone(original);
+	    original.subObj.x = 2;
+	    assertTrue(_.isEqual(clone, original));
 	}
 	
 	public void function testIsEqual() {
