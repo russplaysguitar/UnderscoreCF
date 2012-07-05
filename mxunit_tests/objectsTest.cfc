@@ -94,7 +94,21 @@ component extends="mxunit.framework.TestCase" {
 	    original.subObj.x = 1;
 	    var clone = _.clone(original);
 	    original.subObj.x = 2;
-	    assertTrue(_.isEqual(clone, original));
+	    assertTrue(_.isEqual(clone, original), 'nested objects are copied by reference');
+
+	    var original = new MyClass();
+	    original.subStruct = {
+	    	x: 1
+	    };
+	    var clone = _.clone(original);
+	    original.subStruct.x = 2;
+	    assertTrue(_.isEqual(clone, original), 'nested structs are copied by reference');	    
+
+	    var original = new MyClass();
+	    original.subArray = [1];
+	    var clone = _.clone(original);
+	    original.subArray[1] = 2;
+	    assertFalse(_.isEqual(clone, original), 'nested arrays are copied by reference');	    
 	}
 	
 	public void function testIsEqual() {
@@ -218,6 +232,8 @@ component extends="mxunit.framework.TestCase" {
 	    assertTrue(!_.isEqual(isEqualObj, {}), 'Objects that do not implement equivalent `isEqual` methods are not equal');
 	    assertTrue(!_.isEqual({}, isEqualObj), 'Commutative equality is implemented for objects with different `isEqual` methods');
 	    
+	    assertFalse(_.isEqual({}, new MyClass()), 'empty structs and objects are not the same');
+	    assertFalse(_.isEqual({}, new MyClass()), 'empty structs and objects are not the same');
 	}
 	
 	public void function testIsEmpty() {

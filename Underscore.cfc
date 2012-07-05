@@ -1353,14 +1353,13 @@ component {
 		}
 		else if (isObject(arguments.obj)) {
 			var metaData = getMetaData(arguments.obj);
-			return _.extend(new "#metaData.fullName#"(), obj);			
+			return _.extend(new "#metaData.fullName#"(), structCopy(arguments.obj));			
 		}
 		else if (isStruct(arguments.obj)) {
-			return _.extend({}, arguments.obj);
+			return structCopy(arguments.obj);
 		}
 		else {
-			// not sure what obj is, convert to array and try again
-			return _.clone(toArray(obj));
+			throw("Can only clone simple, array, object, or struct types", "underscore");
 		}
 	}
 		
@@ -1467,8 +1466,9 @@ component {
 		}
 
 		if (_.isFunction(a) || _.isFunction(b)) {
-			// TODO: figure out how to compare anon functions
-			return true;
+			var a_meta = getMetaData(a);
+			var b_meta = getMetaData(b);
+			return _.isEqual(a_meta.parameters, b_meta.parameters);
 		}
 
 		var iterator = function (v, k) {
