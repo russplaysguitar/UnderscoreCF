@@ -130,7 +130,7 @@ component extends="mxunit.framework.TestCase" {
 	    var numbers = [10, 20, 30, 40, 50];
 	    var num = 35;
 	    var index = _.indexOf(numbers, num, true);
-	    assertEquals(index, -1, '35 is not in the list');
+	    assertEquals(index, 0, '35 is not in the list');
 
 	    numbers = [10, 20, 30, 40, 50]; 
 	    num = 40;

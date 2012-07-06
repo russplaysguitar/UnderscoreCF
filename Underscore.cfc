@@ -715,7 +715,7 @@ component {
 	*	@hint Returns the first element of an array. Passing n will return the first n elements of the array.
 	* 	@example _.first([5, 4, 3, 2, 1]);<br />=> 5
 	*/
-	public any function first(array = this.obj, n, guard = false) {
+	public any function first(array array = this.obj, n, guard = false) {
 		if (structKeyExists(arguments, 'n') && !guard) {
 			return _.slice(array, 1, n);
 		}
@@ -774,7 +774,7 @@ component {
 	*	@hint Returns everything but the last entry of the array. Especially useful on the arguments object. Pass n to exclude the last n elements from the result. Note: CF arrays start at an index of 1
 	* 	@example _.initial([5, 4, 3, 2, 1]);<br />=> [5, 4, 3, 2]
 	*/
-	public array function initial(array = this.obj, n = 1, guard = false) {
+	public array function initial(array array = this.obj, n = 1, guard = false) {
 		if (guard) {
 			var exclude = 1;
 		}
@@ -790,7 +790,7 @@ component {
 	*	@hint Returns the last element of an array. Passing n will return the last n elements of the array.
 	* 	@example _.last([5, 4, 3, 2, 1]);<br />=> 1
 	*/
-	public any function last(array = this.obj, n, guard = false) {
+	public any function last(array array = this.obj, n, guard = false) {
 		if (structKeyExists(arguments,'n') && !guard) {
 			return _.slice(array, max(ArrayLen(array) - n + 1, 1));
 		} else if (arrayLen(array)) {
@@ -806,7 +806,7 @@ component {
 	*	@hint Returns the rest of the elements in an array. Pass an index to return the values of the array from that index onward.
 	* 	@example _.rest([5, 4, 3, 2, 1]);<br />=> [4, 3, 2, 1]
 	*/
-	public array function rest(array = this.obj, index = 2, guard = false) {
+	public array function rest(array array = this.obj, index = 2, guard = false) {
 		if (guard) {
 			index = 1;
 		}
@@ -825,7 +825,7 @@ component {
 	*	@hint Returns a copy of the array with all falsy values removed. In Coldfusion, false, 0, and "" are all falsy.
 	* 	@example _.compact([0, 1, false, 2, '', 3]);<br />=> [1, 2, 3]
 	*/
-	public array function compact(array = this.obj) {
+	public array function compact(array array = this.obj) {
 		return _.filter(array, function(value){ 
 			return val(value);
 		});
@@ -836,7 +836,7 @@ component {
 	*	@hint Flattens a nested array (the nesting can be to any depth). If you pass shallow, the array will only be flattened a single level.
 	* 	@example _.flatten([1, [2], [3, [[4]]]]);<br />=> [1, 2, 3, 4];<br /><br />_.flatten([1, [2], [3, [[4]]]], true);<br />=> [1, 2, 3, [[4]]];
 	*/
-	public array function flatten(array = this.obj, shallow = false) {
+	public array function flatten(array array = this.obj, shallow = false) {
 		return _.reduce(array, function(memo, value) {
 			if (isArray(value)) {
 				if (shallow) {
@@ -891,7 +891,7 @@ component {
 	*	@hint Returns a copy of the array with all instances of the values removed. 
 	* 	@example _.without([1, 2, 1, 0, 3, 1, 4], [0, 1]);<br />=> [2, 3, 4]
 	*/
-	public array function without(array = this.obj, others = []) {
+	public array function without(array array = this.obj, others = []) {
 		return _.difference(array, others);
 	}
 	
@@ -904,6 +904,9 @@ component {
 		var numArgs = _.size(arguments);
 		var arrays = [];
 		for(var i = 1; i <= numArgs; i++) {
+			if (!isArray(arguments[i])) {
+				throw("Cannot union() non-array collections","Underscore");
+			}
 			arrays[i] = arguments[i];
 		}
 		return _.uniq(_.flatten(arrays, true));
@@ -914,10 +917,13 @@ component {
 	*	@hint Computes the collection of values that are the intersection of all the arrays. Each value in the result is present in each of the arrays.
 	* 	@example _.intersection([1, 2, 3], [101, 2, 1, 10], [2, 1]);<br />=> [1, 2]
 	*/
-	public array function intersection(array = this.obj) {
+	public array function intersection(array array = this.obj) {
 		var numArgs = _.size(arguments);
 		var args = [];
 		for(var i = 1; i <= numArgs; i++) {
+			if (!isArray(arguments[i])) {
+				throw("Cannot intersection() non-array collections","Underscore");
+			}
 			args[i] = arguments[i];
 		}
 		var rest = _.rest(args);
@@ -940,7 +946,7 @@ component {
 	*	@hint Similar to without, but returns the values from array that are not present in the other arrays.
 	* 	@example _.difference([1, 2, 3, 4, 5], [5, 2, 10]);<br />=> [1, 3, 4]
 	*/
-	public array function difference(array = this.obj, others = []) {
+	public array function difference(array array = this.obj, others = []) {
 		var rest = _.flatten(others, true);
 		return _.filter(array, function(value){
 			return !_.include(rest, value);
@@ -952,7 +958,7 @@ component {
 	*	@hint Produces a duplicate-free version of the array. If you know in advance that the array is sorted, passing true for isSorted will run a much faster algorithm. If you want to compute unique items based on a transformation, pass an iterator function.
 	* 	@example _.uniq([1, 2, 1, 3, 1, 4]);<br />=> [1, 2, 3, 4]
 	*/
-	public array function uniq(array = this.obj, isSorted = false, iterator) {
+	public array function uniq(array array = this.obj, isSorted = false, iterator) {
 		if (structKeyExists(arguments, 'iterator')) {
 			var initial = _.map(array, iterator);
 		}
@@ -960,7 +966,7 @@ component {
 			var initial = array;
 		}
 		var results = [];
-		
+
 		if (arrayLen(array) < 3) {
 			isSorted = true;
 		}
@@ -986,6 +992,9 @@ component {
 	public array function zip() {
 	    var args = _.slice(arguments, 1);
 	    var length = _.max(_.pluck(args, function (array) {
+		    	if (!isArray(array)) {
+					throw("Cannot zip() non-array collections","Underscore");
+				}
 	    		return arrayLen(array);
 	    	})
 	    );
@@ -998,17 +1007,17 @@ component {
 	
 	/**
 	* 	@header _.indexOf(array, value, [isSorted]) : numeric
-	*	@hint Returns the index at which value can be found in the array, or -1 if value is not present in the array. Uses the native ArrayFind() function. If you're working with a large array, and you know that the array is already sorted, pass true for isSorted to use a faster binary search.
+	*	@hint Returns the index at which value can be found in the array, or 0 if value is not present in the array. Uses the native ArrayFind() function. If you're working with a large array, and you know that the array is already sorted, pass true for isSorted to use a faster binary search.
 	* 	@example _.indexOf([1, 2, 3], 2);<br />=> 2
 	*/
-	public numeric function indexOf(array = this.obj, item, isSorted = false) {
+	public numeric function indexOf(array array = this.obj, item, isSorted = false) {
 		if (isSorted) {
 			var i = _.sortedIndex(array, item);
 			if (array[i] == item) {
 				return i;
 			}
 			else {
-				return -1;
+				return 0;
 			}
 		}
 		else {
@@ -1021,7 +1030,7 @@ component {
 	*	@hint Returns the index of the last occurrence of value in the array, or -1 if value is not present. 
 	* 	@example _.lastIndexOf([1, 2, 3, 1, 2, 3], 2);<br />=> 5
 	*/
-	public numeric function lastIndexOf(array = this.obj, item) {
+	public numeric function lastIndexOf(array array = this.obj, item) {
 		if (!structKeyExists(arguments, 'array')) {
 			return -1;
 		}
@@ -1116,7 +1125,7 @@ component {
 		var memo = {};
 		if (!structKeyExists(arguments, 'hasher')) {
 			arguments.hasher = function(x) {
-				return _.first(x);
+				return _.first(_.toArray(x));
 			};
 		}
 		return function() {
@@ -1367,7 +1376,7 @@ component {
 			return structCopy(arguments.obj);
 		}
 		else {
-			throw("Can only clone simple, array, object, or struct types", "underscore");
+			throw("Can only clone simple, array, object, or struct types", "Underscore");
 		}
 	}
 		
@@ -1648,9 +1657,6 @@ component {
 	* 	@example 'object = {cheese: 'crumpets', stuff: function(){ return 'nonsense'; }};<br />_.result(object, 'cheese');<br />=> "crumpets"<br />_.result(object, 'stuff');<br />=> "nonsense"'
 	*/
 	public any function result(object, property) {
-		// if (_.isNull(object)) {
-		// 	return JavaCast("null", 0);
-		// }
 		var value = arguments.object[arguments.property];
 
 		if (_.isFunction(value)) {
