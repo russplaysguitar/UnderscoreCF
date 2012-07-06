@@ -97,11 +97,35 @@ component extends="mxunit.framework.TestCase" {
 
 	    evens = _.filter([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });
 	    assertEquals(evens, [2, 4, 6], 'aliased as "filter"');
+
+	    var expectedIndex = 1;
+	    var expectedContext = {context: 'test'};
+	    var result = _.filter([10, 20, 30], function(val, index, array, this){
+	    	assertTrue(index == expectedIndex, 'Index should increment for each loop');
+	    	assertEquals([10, 20, 30], array, 'array should be the obj passed in');
+	    	assertEquals(this, expectedContext, 'Context should be passed in as 4th param');
+	    	expectedIndex++;
+	    	return (val == 30);
+	    }, expectedContext);
+
+	    assertEquals(result, [30], 'Iterator tests should have run');	    
 	}
 	
 	public void function testReject() {
 	    var odds = _.reject([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });		
 	    assertEquals(odds, [1, 3, 5], 'rejected each even number');
+
+	    var expectedIndex = 1;
+	    var expectedContext = {context: 'test'};
+	    var result = _.reject([10, 20, 30], function(val, index, array, this){
+	    	assertTrue(index == expectedIndex, 'Index should increment for each loop');
+	    	assertEquals([10, 20, 30], array, 'array should be the obj passed in');
+	    	assertEquals(this, expectedContext, 'Context should be passed in as 4th param');
+	    	expectedIndex++;
+	    	return (val != 30);
+	    }, expectedContext);
+
+	    assertEquals(result, [30], 'Iterator tests should have run');
 	}
 	
 	public void function testAll() {
