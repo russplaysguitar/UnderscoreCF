@@ -221,23 +221,27 @@ component {
 
 		if (isArray(arguments.obj)) {
 			var index = 1;
+			var resultIndex = 1;
 			for (val in arguments.obj) {
 				var success = iterator(val, index, arguments.obj, arguments.this);
 				if (success) {
-					result[index] = val;
-					index++;
+					result[resultIndex] = val;
+					resultIndex++;
 				}
+				index++;
 			}
 		}
 		else if (isObject(arguments.obj) || isStruct(arguments.obj)) {	
 			var index = 1;
+			var resultIndex = 1;
 			for (key in arguments.obj) {
 				var val = arguments.obj[key];
 				var success = iterator(val, index, arguments.obj, arguments.this);
 				if (success) {
-					result[index] = val;
-					index++;
+					result[resultIndex] = val;
+					resultIndex++;
 				}
+				index++;
 			}
 		}
 		else {
@@ -265,23 +269,27 @@ component {
 
 		if (isArray(arguments.obj)) {
 			var index = 1;
+			var resultIndex = 1;
 			for (val in arguments.obj) {
 				var success = iterator(val, index, arguments.obj, arguments.this);
 				if (!success) {
-					result[index] = val;
-					index++;
+					result[resultIndex] = val;
+					resultIndex++;
 				}
+				index++;
 			}
 		}
 		else if (isObject(arguments.obj) || isStruct(arguments.obj)) {	
 			var index = 1;
+			var resultIndex = 1;
 			for (key in arguments.obj) {
 				var val = arguments.obj[key];
 				var success = iterator(val, index, arguments.obj, arguments.this);
 				if (!success) {
-					result[index] = val;
-					index++;
+					result[resultIndex] = val;
+					resultIndex++;
 				}
+				index++;
 			}
 		}
 		else {
