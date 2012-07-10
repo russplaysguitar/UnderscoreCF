@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="MXUnitTask" basedir="." default="runtests">
+ 
+  <target name="runtests" description="Run a dir of tests recursively">
+ 
+   <taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpath="${mxunit.jar}"   />
+   <mxunittask server="localhost" port="8500">
+     <directory path="${user.dir}\mxunit_tests" recurse="true" componentPath="underscore.mxunit_tests" />
+   </mxunittask>
+ 
+  </target>
+</project>
