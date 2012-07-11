@@ -871,7 +871,7 @@ component {
  	/**
  	* 	@header _.arrayReverse(array) : array
  	* 	@hint Returns a copy of the array in reverse order.
- 	* 	@example _.arrayReverse([1, 2, 3]);<br />=> [3, 2, 1];
+ 	* 	@example _.arrayReverse([1, 2, 3]);<br />=> [3, 2, 1]
  	*/ 
  	public array function arrayReverse(array obj = this.obj) {
  		var result = [];
@@ -886,6 +886,22 @@ component {
  		return result;
  	}
 	
+	/**
+	* 	@header _.takeWhile(array) : array
+	* 	@hint Appends values to a new array as long as the iterator is true. 
+	* 	@example _.takeWhile([1, 2, 3, 4, 1, 2], function(val) { return val < 3; });<br />=> [1, 2]
+	*/ 
+ 	public array function takeWhile(array array = this.obj, iterator = _.identity, this = {}) {
+ 		var result = [];
+ 		for(val in arguments.array) {
+ 			if (!iterator(val)) {
+ 				break;
+ 			}
+ 			ArrayAppend(result, val);
+ 		}
+ 		return result;
+ 	}
+
 	/**
 	* 	@header _.without(array, [values]) : array 
 	*	@hint Returns a copy of the array with all instances of the values removed. 

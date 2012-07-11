@@ -170,10 +170,31 @@ component extends="mxunit.framework.TestCase" {
 		assertEquals(_.arrayConcat([true], [false]), [true, false], 'Can concatenate arrays of booleans');
 	}
 
+	public void function testTakeWhile() {
+		var ary = [1, 2, 3, 4, 1, 2];
+
+		var result = _.takeWhile(ary, function(val) {
+			return val < 3;
+		});
+
+		assertEquals(result, [1, 2], 'takeWhile stops when it should');
+
+		var result = _.takeWhile(ary, function(val) {
+			return val < 1;
+		});
+
+		assertEquals(result, [], 'takeWhile can return nothing');
+
+		var result = _.takeWhile(ary, function(val) {
+			return val < 5;
+		});
+
+		assertEquals(result, [1, 2, 3, 4, 1, 2], 'takeWhile can return the whole array');
+	}
+
 	public void function setUp() {
 		variables._ = new underscore.Underscore();
 	}
-
 
 	public void function tearDown() {
 		structDelete(variables, "_");
