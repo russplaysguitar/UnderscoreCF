@@ -14,6 +14,9 @@ component {
 		// used as the default iterator
 		_.identity = function(x) { return x; };
 
+		// for uniqueId
+		variables.counter = 1;
+
 		return this;
 	}
 
@@ -1663,6 +1666,17 @@ component {
 		});			
 	}
 
+	/**
+	* 	@header _.uniqueId([prefix]) : string
+	* 	@hint Generates an identifier that is unique for this instance of Backbone
+	* 	@example _.uniqueId('c');<br /> => 'c1' 
+	*/ 
+	public string function uniqueId(prefix = '') {
+		var result = prefix & variables.counter;
+		variables.counter++;
+		return result;
+	}
+	
 	/**
 	* 	@header _.escape(input) : string
 	* 	@hint Escapes a string for insertion into HTML, replacing &, <, >, and " characters.
