@@ -2,7 +2,6 @@
 * @name Underscore.cfc 
 * @hint A port of Underscore.js for Coldfusion
 * @introduction Underscore.cfc is a port of <a href="http://underscorejs.org">Underscore.js</a> for Coldfusion. It is a utility-belt library that provides a lot of the functional programming support that you would expect in Prototype.js (or Ruby). <br /><br />Underscore.cfc provides dozens of functions that support both the usual functional suspects: map, select, invoke - as well as more specialized helpers: function binding, sorting, deep equality testing, and so on. It delegates to built-in functions where applicable.<br /><br />Underscore.cfc is compatible with Adobe Coldfusion 10 and Railo 4.<br /><br />The project is <a href="http://github.com/russplaysguitar/underscorecf">hosted on GitHub</a>. Contributions are welcome.<br />
-* 
 */ 
 component { 
 
@@ -1088,27 +1087,25 @@ component {
 	*	@hint Bind a function to a structure, meaning that whenever the function is called, the value of "this" will be the structure. Optionally, bind arguments to the function to pre-fill them, also known as partial application.
 	* 	@example "func = function(args, this){ return args.greeting & ': ' & this.name; };<br />func = _.bind(func, {name : 'moe'}, {greeting: 'hi'});<br />func();<br />=> 'hi: moe'"
 	*/
-	public any function bind(func) {
+	public any function bind(func, context = {}) {
 		var boundArgs = _.slice(arguments, 3);
-
-		if (arrayLen(arguments) > 1) {
-			var context = arguments[2];
-		}
-		else {
-			var context = {};
-		}
 
 		if (!_.isFunction(func)) {
 			throw("bind() expected a function", "Underscore");
 		}
 
 		return function () {
-			var passedArgs = _.toArray(arguments);
-			var argsArray = _.arrayConcat(boundArgs, passedArgs);
 			var argStruct = {};
-			_.each(argsArray, function (val, index) {
-				argStruct[index] = val;
-			});
+			if (arrayLen(boundArgs) > 0) {
+				var passedArgs = _.toArray(arguments);
+				var argsArray = _.arrayConcat(boundArgs, passedArgs);
+				_.each(argsArray, function (val, index) {
+					argStruct[index] = val;
+				});
+			}
+			else {
+				argStruct = arguments;
+			}
 			argStruct.this = context;
 			return func(argumentCollection = argStruct);
 		};
