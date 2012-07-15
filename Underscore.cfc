@@ -1645,8 +1645,7 @@ component {
 	*	@hint Invokes the given iterator function n times.
 	* 	@example _.times(3, function(){ genie.grantWish(); });
 	*/
-	public void function times(n, iterator, this = {}) {
-
+	public void function times(required n, required iterator, this = {}) {
 		for (var i = 0; i < n; i++) {
 			iterator(i, arguments.this);
 		}
@@ -1657,11 +1656,20 @@ component {
 	*	@hint Allows you to extend Underscore with your own utility functions. Pass a struct of {name: function} definitions to have your functions added to the Underscore object, <s>as well as the OOP wrapper.</s>
 	* 	@example _.mixin({ <br />upper: function(string) { return uCase(string); }<br />});<br />_.upper("fabio");<br />=> "Fabio"'
 	*/
-	public void function mixin(object) {
+	public void function mixin(required object) {
 		// TODO: make this also work for the OOP wrapper
 		_.each(arguments.object, function (val, key, obj) {
 			_[key] = val;
 		});			
+	}
+
+	/**
+	* 	@header _.escape(input) : string
+	* 	@hint Escapes a string for insertion into HTML, replacing &, <, >, and " characters.
+	* 	@example _.escape('Curly, Larry & Moe');<br /> => "Curly, Larry &amp; Moe"
+	*/ 
+	public string function escape(required string input) {
+		return HTMLeditFormat(input);
 	}
 	
 	/**
@@ -1669,7 +1677,7 @@ component {
 	*	@hint If the value of the named property is a function then invoke it; otherwise, return it.
 	* 	@example 'object = {cheese: 'crumpets', stuff: function(){ return 'nonsense'; }};<br />_.result(object, 'cheese');<br />=> "crumpets"<br />_.result(object, 'stuff');<br />=> "nonsense"'
 	*/
-	public any function result(object, property) {
+	public any function result(object = this.obj, required property) {
 		var value = arguments.object[arguments.property];
 
 		if (_.isFunction(value)) {
@@ -1683,7 +1691,7 @@ component {
 	/*
 	* 	@hint Internal helper function. Converts boolean equivalents to boolean true or false. Helpful for keeping function return values consistent.
 	*/ 
-	private boolean function toBoolean(obj) {
+	private boolean function toBoolean(required obj) {
 		return !!arguments.obj;
 	}
 }
