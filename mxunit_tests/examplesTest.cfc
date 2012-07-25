@@ -229,6 +229,13 @@ component extends="mxunit.framework.TestCase" {
 		assertEquals([3, 2, 1], result);	
 	}
  
+	public void function testSplice() {
+		var result = _.splice([10, 90, 30], 2, 1, 20);
+		assertEquals([10, 20, 30], result);
+		var result = _.splice([10, 90, 30], 2, 2);
+		assertEquals([10], result);
+	}
+
 	public void function testBind() {
 		var func = function(args, this){ return args.greeting & ': ' & this.name; };
 		func = _.bind(func, {name : 'moe'}, {greeting: 'hi'});

@@ -192,6 +192,22 @@ component extends="mxunit.framework.TestCase" {
 		assertEquals(result, [1, 2, 3, 4, 1, 2], 'takeWhile can return the whole array');
 	}
 
+	public void function testSplice() {
+		var ary = [5, 4, 3, 2, 1, 0];
+
+		var result = _.splice(ary, 1, 0);
+		assertEquals(result, ary);
+
+		var result = _.splice(ary, 1, 0, 9);
+		assertEquals(result, [9, 5, 4, 3, 2, 1, 0]);
+
+		var result = _.splice(ary, 7, 0, 9);
+		assertEquals(result, [5, 4, 3, 2, 1, 0, 9]);
+
+		var result = _.splice(ary, 1, 6, 9, 10, 11);
+		assertEquals(result, [9, 10, 11]);				
+	}
+
 	public void function setUp() {
 		variables._ = new underscore.Underscore();
 	}

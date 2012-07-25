@@ -904,6 +904,33 @@ component {
  		return result;
  	}
 
+ 	/**
+ 	* 	@header _.splice(array, index, howMany, [*items]) : array
+ 	* 	@hint Adds or removes items to or from the array. Note: differs from Javascript splice() in that it does not return the removed elements.
+ 	* 	@example _.splice([10, 90, 30], 2, 2);<br /> => [10]<br />_.splice([10, 90, 30], 2, 1, 20);<br /> => [10, 20, 30]
+ 	*/ 
+ 	public array function splice(array array = this.obj, required numeric index, required numeric howMany) {
+ 		var items = _.slice(arguments, 4);
+
+ 		if (index < 1) {
+ 			// negative indices mean position from end of array
+ 			index = arrayLen(array) + index;
+ 		}
+
+ 		var left = _.slice(array, 1, index - 1);
+ 		var right = _.slice(array, index + howMany);
+
+ 		var result = [];
+ 		
+ 		arrayAppend(result, left, true);
+ 		_.each(items, function (item) {
+ 			arrayAppend(result, item);
+ 		});
+ 		arrayAppend(result, right, true);
+
+ 		return result;
+ 	}
+
 	/**
 	* 	@header _.without(array, [values]) : array 
 	*	@hint Returns a copy of the array with all instances of the values removed. 
