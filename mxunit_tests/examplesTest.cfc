@@ -40,7 +40,7 @@ component extends="mxunit.framework.TestCase" {
 
 	public void function testReduceRight() {
 		var list = [[0, 1], [2, 3], [4, 5]];
-		var flat = _.reduceRight(list, function(a, b) { return _.arrayConcat(a, b); }, []);
+		var flat = _.reduceRight(list, function(a, b) { return _.concat(a, b); }, []);
 		assertEquals([4, 5, 2, 3, 0, 1], flat);
 	}
 
@@ -219,13 +219,13 @@ component extends="mxunit.framework.TestCase" {
 		assertEquals([], result);
 	}
 
-	public void function testArrayConcat() {
-		var result = _.arrayConcat([1, 2, 3], [4, 5, 6]);
+	public void function testconcat() {
+		var result = _.concat([1, 2, 3], [4, 5, 6]);
 		assertEquals([1, 2, 3, 4, 5, 6], result);
 	}
 	
-	public void function testArrayReverse() {
-		var result = _.arrayReverse([1, 2, 3]);
+	public void function testReverse() {
+		var result = _.reverse([1, 2, 3]);
 		assertEquals([3, 2, 1], result);	
 	}
  

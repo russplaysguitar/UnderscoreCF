@@ -150,11 +150,11 @@ component {
  	/**
 	*	@header _.reduceRight(collection, [iterator], memo, [context])
 	*	@hint The right-associative version of reduce. 
-	* 	@example list = [[0, 1], [2, 3], [4, 5]];<br />flat = _.reduceRight(list, function(a, b) { return _.arrayConcat(a, b); }, []);<br />=> [4, 5, 2, 3, 0, 1]
+	* 	@example list = [[0, 1], [2, 3], [4, 5]];<br />flat = _.reduceRight(list, function(a, b) { return _.concat(a, b); }, []);<br />=> [4, 5, 2, 3, 0, 1]
  	*/
   	public any function reduceRight(obj = this.obj, iterator = _.identity, memo, this = {}) {
 		var initial = structKeyExists(arguments, 'memo');
-		var reversed = _.arrayReverse(_.toArray(arguments.obj));
+		var reversed = _.reverse(_.toArray(arguments.obj));
   
 		if (!_.isEmpty(this) && !initial) {
 			iterator = _.bind(iterator, arguments.this);
@@ -842,10 +842,10 @@ component {
 		return _.reduce(array, function(memo, value) {
 			if (isArray(value)) {
 				if (shallow) {
-					memo = _.arrayConcat(memo, value);
+					memo = _.concat(memo, value);
 				}
 				else {
-					memo = _.arrayConcat(memo, _.flatten(value));
+					memo = _.concat(memo, _.flatten(value));
 				}
 			}
 			else {
@@ -857,11 +857,11 @@ component {
 	}
 	
 	/**
-	* 	@header _.arrayConcat(array1, array2) : array
+	* 	@header _.concat(array1, array2) : array
 	* 	@hint Concatenates two arrays together an returns the result. Delegates to ArrayAppend().
-	* 	@example _.arrayConcat([1, 2, 3],[4, 5, 6]);<br />=> [1, 2, 3, 4, 5, 6];
+	* 	@example _.concat([1, 2, 3],[4, 5, 6]);<br />=> [1, 2, 3, 4, 5, 6];
 	*/ 
-	public array function arrayConcat(array array1 = [], array array2 = []) {
+	public array function concat(array array1 = [], array array2 = []) {
 		var result = [];
 
 		ArrayAppend(result, array1, true);
@@ -871,11 +871,11 @@ component {
 	}
 
  	/**
- 	* 	@header _.arrayReverse(array) : array
+ 	* 	@header _.reverse(array) : array
  	* 	@hint Returns a copy of the array in reverse order.
- 	* 	@example _.arrayReverse([1, 2, 3]);<br />=> [3, 2, 1]
+ 	* 	@example _.reverse([1, 2, 3]);<br />=> [3, 2, 1]
  	*/ 
- 	public array function arrayReverse(array obj = this.obj) {
+ 	public array function reverse(array obj = this.obj) {
  		var result = [];
  		var size = _.size(arguments.obj);
  		var i = size;
@@ -1101,7 +1101,7 @@ component {
 			var argStruct = {};
 			if (arrayLen(boundArgs) > 0) {
 				var passedArgs = _.toArray(arguments);
-				var argsArray = _.arrayConcat(boundArgs, passedArgs);
+				var argsArray = _.concat(boundArgs, passedArgs);
 				_.each(argsArray, function (val, index) {
 					argStruct[index] = val;
 				});

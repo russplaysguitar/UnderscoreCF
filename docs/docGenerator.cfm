@@ -6,13 +6,13 @@
 
 	collectionFunctions = "each,map,reduce,reduceRight,find,filter,reject,all,any,include,invoke,pluck,max,min,sortBy,groupBy,sortedIndex,shuffle,toArray,size";
 
-	arrayFunctions = "first,initial,last,rest,compact,flatten,without,union,intersection,difference,uniq,zip,indexOf,lastIndexOf,range,arrayConcat,arrayReverse,takeWhile";
+	arrayFunctions = "first,initial,last,rest,compact,flatten,without,union,intersection,difference,uniq,zip,indexOf,lastIndexOf,range,concat,reverse,takeWhile";
 
 	funcFunctions = "bind,bindAll,memoize,delay,once,after,wrap,compose";
 
 	objectFunctions = "keys,values,functions,extend,pick,defaults,clone,has,isEqual,isEmpty,isArray,isObject,isFunction,isString,isNumber,isBoolean,isDate";
 
-	utilFunctions = "times,mixin,result";
+	utilFunctions = "times,mixin,uniqueId,escape,result";
 
 	// chainFunctions = "chain,value";
 
