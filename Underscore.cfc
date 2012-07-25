@@ -906,7 +906,7 @@ component {
 
  	/**
  	* 	@header _.splice(array, index, howMany, [*items]) : array
- 	* 	@hint Adds or removes items to or from the array. Note: differs from Javascript splice() in that it does not return the removed elements.
+ 	* 	@hint Returns a copy of the array with howMany elements removed. Optionally inserts items at the index. Note: differs from Javascript splice() in that it does not return the removed elements.
  	* 	@example _.splice([10, 90, 30], 2, 2);<br /> => [10]<br />_.splice([10, 90, 30], 2, 1, 20);<br /> => [10, 20, 30]
  	*/ 
  	public array function splice(array array = this.obj, required numeric index, required numeric howMany) {
