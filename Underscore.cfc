@@ -910,7 +910,7 @@ component {
  	* 	@example _.splice([10, 90, 30], 2, 2);<br /> => [10]<br />_.splice([10, 90, 30], 2, 1, 20);<br /> => [10, 20, 30]
  	*/ 
  	public array function splice(array array = this.obj, required numeric index, required numeric howMany) {
- 		var items = _.slice(arguments, 4);
+ 		var items = isArray(arguments[4]) ? arguments[4] : _.slice(arguments, 4);
 
  		if (index < 1) {
  			// negative indices mean position from end of array
@@ -923,9 +923,7 @@ component {
  		var result = [];
  		
  		arrayAppend(result, left, true);
- 		_.each(items, function (item) {
- 			arrayAppend(result, item);
- 		});
+ 		arrayAppend(result, items, true);
  		arrayAppend(result, right, true);
 
  		return result;
