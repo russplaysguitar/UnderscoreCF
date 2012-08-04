@@ -244,10 +244,10 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testBindAll() {
-		var buttonView = {label: 'button', onClick : function(this){ return 'clicked: ' & this.label; }};
-		_.bindAll(buttonView);
-		var result = buttonView.onClick();
-		assertEquals('clicked: button', result);
+		var greeter = {hello: 'Hello, ', greet: function(this){ return this.hello & 'World!'; }};
+		_.bindAll(greeter);
+		var result = greeter.greet();
+		assertEquals('Hello, World!', result);
 	}
 	
 	public void function testMemoize() {

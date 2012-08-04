@@ -1098,7 +1098,7 @@ component {
 	/**
 	* 	@header _.bindAll(object, [*methodNames]) : any
 	*	@hint Bind all of an object's methods to that object. Useful for ensuring that all callbacks defined on an object belong to it.
-	* 	@example "buttonView = {label: 'button', onClick : function(this){ return 'clicked: ' & this.label; }};<br />_.bindAll(buttonView);<br />buttonView.onClick();<br />=> 'clicked: button'"
+	* 	@example "greeter = {hello: 'Hello, ', greet: function(this){ return this.hello & 'World!'; }};<br />_.bindAll(greeter);<br />greeter.greet();<br />=> 'Hello, World!'"
 	*/
 	public any function bindAll(obj) {
 		var local.obj = arguments.obj;
