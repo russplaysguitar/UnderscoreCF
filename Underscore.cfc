@@ -502,7 +502,7 @@ component {
 
 	/**
 	* 	@header _.sortBy(collection, [iterator], [context]) : array
-	*	@hint Returns a sorted copy of collection, ranked in ascending order by the results of running each value through iterator. Iterator may also be the string name of the object key to sort by. Uses a Merge Sort algorithm.
+	*	@hint Returns a sorted copy of collection, ranked in ascending order by the results of running each value through iterator. Iterator may also be the string name of the object key to sort by. Delegates to arraySort().
 	* 	@example _.sortBy([6, 2, 4, 3, 5, 1], function(num){ return num; });<br />=> [1, 2, 3, 4, 5, 6]
 	*/
 	public array function sortBy(obj = this.obj, val, this = {}) {
@@ -518,14 +518,14 @@ component {
 			};
 		}
 
-		var toSort = _.map(arguments.obj, function(value, index, collection, this) {
+		var result = _.map(arguments.obj, function(value, index, collection, this) {
 			return {
 				value : value,
 				criteria : iterator(value, index, collection, arguments.this)
 			};
 		});
 
-		var sorted = mergeSort(toSort, function(left, right) {
+		arraySort(result, function(left, right) {
 			if (!structKeyExists(left, 'criteria')) {
 				return 1;
 			}
@@ -537,51 +537,7 @@ component {
 			return _.comparison(a, b);
 		});
 
-		return _.pluck(sorted, 'value');
-	}
-
-	// for sortBy()
-	// note: this isn't part of UnderscoreJS, but CF doesn't have a sort() that can use a custom comparison function
-	private array function mergeSort(obj = this.obj, iterator = comparison) {
-		var array = _.toArray(arguments.obj);
-		if(arraylen(array) < 2) {
-			return array;
-		}
-		var middle = ceiling(arraylen(array) / 2);
-		var left = mergeSort(_.slice(array, 1, middle), iterator);
-		var right = mergeSort(_.slice(array, middle+1), iterator);
-		var merge = merge(left, right, iterator);
-		return merge;
-	}
-
-	// for sort()
-	private array function merge(left, right, comparison = this.comparison)
-	{
-		var result = [];
-		while((arraylen(left) > 0) && (arraylen(right) > 0))
-		{
-			if(comparison(left[1], right[1]) <= 0) {
-				var item = left[1];
-				arrayDeleteAt(left, 1);
-				arrayAppend(result, item);
-			}
-			else {
-				var item = right[1];
-				arrayDeleteAt(right, 1);
-				arrayAppend(result, item);
-			}
-		}
-		while(arraylen(left) > 0) {
-			var item = left[1];
-			arrayDeleteAt(left, 1);
-			arrayAppend(result, item);
-		}
-		while(arraylen(right) > 0) {
-			var item = right[1];
-			arrayDeleteAt(right, 1);
-			arrayAppend(result, item);
-		}
-		return result;
+		return _.pluck(result, 'value');
 	}
 
 	// default comparator for merge()
@@ -910,7 +866,7 @@ component {
  	* 	@example _.splice([10, 90, 30], 2, 2);<br /> => [10]<br />_.splice([10, 90, 30], 2, 1, 20);<br /> => [10, 20, 30]
  	*/ 
  	public array function splice(array array = this.obj, required numeric index, required numeric howMany) {
- 		var items = isArray(arguments[4]) ? arguments[4] : _.slice(arguments, 4);
+ 		var items = arrayLen(arguments) > 3 && isArray(arguments[4]) ? arguments[4] : _.slice(arguments, 4);
 
  		if (index < 1) {
  			// negative indices mean position from end of array
