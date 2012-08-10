@@ -69,7 +69,6 @@ component extends="mxunit.framework.TestCase" {
 		assertEquals(_.reduce(sparseArray, function(a, b){ return (a - b); }), 25, 'initially-sparse arrays with no memo');
 	}
 
-
 	public void function testReduceRight() {
 		var list = _.reduceRight(["foo", "bar", "baz"], function(memo, str){ return memo & str; }, '');
 		assertEquals(list, 'bazbarfoo', 'can perform right folds');
@@ -83,8 +82,6 @@ component extends="mxunit.framework.TestCase" {
 		var list = _.foldr(["foo", "bar", "baz"], function(memo, str, m, this){ return memo & str & this.q; }, 'start_', {q:'qux'});
 		assertEquals(list, 'start_bazquxbarquxfooqux', 'context');		
 	}
-	
-	
 	
 	public void function testDetect() {
 	   var result = _.detect([1, 2, 3], function(num){ return num * 2 == 4; });
@@ -108,7 +105,14 @@ component extends="mxunit.framework.TestCase" {
 	    	return (val == 30);
 	    }, expectedContext);
 
-	    assertEquals(result, [30], 'Iterator tests should have run');	    
+	    assertEquals(result, [30], 'Iterator tests should have run');	
+
+	    var keyCorrect = false;
+	    _.filter({someKey:1},function (val, key) {
+	    	if (key == 'someKey') keyCorrect = true;
+	    	return true;
+	    });
+	    assertTrue(keyCorrect, "Iterator key should be object key");    
 	}
 	
 	public void function testReject() {
@@ -126,6 +130,13 @@ component extends="mxunit.framework.TestCase" {
 	    }, expectedContext);
 
 	    assertEquals(result, [30], 'Iterator tests should have run');
+
+	    var keyCorrect = false;
+	    _.reject({someKey:1},function (val, key) {
+	    	if (key == 'someKey') keyCorrect = true;
+	    	return true;
+	    });
+	    assertTrue(keyCorrect, "Iterator key should be object key"); 	    
 	}
 	
 	public void function testAll() {
@@ -137,6 +148,13 @@ component extends="mxunit.framework.TestCase" {
 	    assertTrue(_.all([1], _.identity) == true, 'cast to boolean - true');
 	    assertTrue(_.all([0], _.identity) == false, 'cast to boolean - false');
 	    assertTrue(_.every([true, true, true], _.identity), 'aliased as "every"');
+
+	    var keyCorrect = false;
+	    _.all({someKey:1},function (val, key) {
+	    	if (key == 'someKey') keyCorrect = true;
+	    	return true;
+	    });
+	    assertTrue(keyCorrect, "Iterator key should be object key"); 	    
 	}
 	
 	public void function testAny() {
@@ -150,6 +168,13 @@ component extends="mxunit.framework.TestCase" {
 	    assertTrue(_.any([1], _.identity) == true, 'cast to boolean - true');
 	    assertTrue(_.any([0], _.identity) == false, 'cast to boolean - false');
 	    assertTrue(_.some([false, false, true]), 'aliased as "some"');
+
+	    var keyCorrect = false;
+	    _.any({someKey:1},function (val, key) {
+	    	if (key == 'someKey') keyCorrect = true;
+	    	return true;
+	    });
+	    assertTrue(keyCorrect, "Iterator key should be object key"); 	    
 	}
 	
 	public void function testInclude() {
@@ -290,6 +315,36 @@ component extends="mxunit.framework.TestCase" {
 	    assertEquals(result[1], [7, 5, 1], 'first array sorted');
 	    assertEquals(result[2], [3, 2, 1], 'second array sorted');
 	}
+	
+	public void function testFind() {
+		var obj = {
+			one: 100
+		};
+		var keyIsKeyAndNotIndex = false;
+		var valIsExpected = false;
+
+		_.find(obj, function (val, key) {
+			if (key == 'one') keyIsKeyAndNotIndex = true;
+			if (val == 100) valIsExpected = true;
+			return true;
+		});
+
+		assertTrue(keyIsKeyAndNotIndex);
+		assertTrue(valIsExpected);
+
+		var valCorrect = false;
+		var idxCorrect = false;
+
+		_.find([10], function (val, index) {
+			if (val == 10) valCorrect = true;
+			if (index == 1) idxCorrect = true;
+			return true;
+		});
+
+		assertTrue(valCorrect);
+		assertTrue(idxCorrect);
+	}
+	
 	
 	
 	

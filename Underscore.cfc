@@ -191,7 +191,7 @@ component {
 			var index  = 1;
 			for (key in arguments.obj) {
 				var val = arguments.obj[key];
-				if (iterator(val, index, arguments.obj, arguments.this)) {
+				if (iterator(val, key, arguments.obj, arguments.this)) {
 					result = val;
 					break;
 				}
@@ -238,7 +238,7 @@ component {
 			var resultIndex = 1;
 			for (key in arguments.obj) {
 				var val = arguments.obj[key];
-				var success = iterator(val, index, arguments.obj, arguments.this);
+				var success = iterator(val, key, arguments.obj, arguments.this);
 				if (success) {
 					result[resultIndex] = val;
 					resultIndex++;
@@ -286,7 +286,7 @@ component {
 			var resultIndex = 1;
 			for (key in arguments.obj) {
 				var val = arguments.obj[key];
-				var success = iterator(val, index, arguments.obj, arguments.this);
+				var success = iterator(val, key, arguments.obj, arguments.this);
 				if (!success) {
 					result[resultIndex] = val;
 					resultIndex++;
@@ -328,7 +328,7 @@ component {
 			var index  = 1;
 			for (key in arguments.obj) {
 				var val = arguments.obj[key];
-				result = iterator(val, index, arguments.obj, arguments.this);
+				result = iterator(val, key, arguments.obj, arguments.this);
 				if (!result) {
 					break;
 				}
@@ -371,7 +371,7 @@ component {
 			var index  = 1;
 			for (key in arguments.obj) {
 				var value = arguments.obj[key];
-				result = iterator(value, index, arguments.obj, arguments.this);
+				result = iterator(value, key, arguments.obj, arguments.this);
 				if (result) {
 					break;
 				}
