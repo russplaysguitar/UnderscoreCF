@@ -64,7 +64,7 @@
 <body>
 	<div id="sidebar" class="interface">
 		<a class="toc_title" href="#">
-		    Underscore.cfc <span class="version">(2.1)</span>
+		    Underscore.cfc <span class="version">(2.2)</span>
 	    </a>
 	    <a class="toc_title" href="#">
 	    	Introduction
@@ -93,7 +93,7 @@
 			<cfoutput>#metadata.introduction#</cfoutput>
 		</p>		
 		<h2>Download</h2>
-		<div><a href="https://github.com/downloads/russplaysguitar/UnderscoreCF/Underscore.cfc.2.1.zip">Version 2.1</a> - <i>37kb, Includes unit tests and doc generator</i></div>
+		<div><a href="https://github.com/downloads/russplaysguitar/UnderscoreCF/Underscore.cfc.2.2.zip">Version 2.2</a> - <i>~40kb, Includes unit tests and doc generator</i></div>
 		<h2 id="Collections">Collection Functions (Arrays, Structs, Queries, or Objects)</h2>
 		<cfset display(metadata, collectionFunctions) >
 		<h2 id="Arrays">Array Functions</h2>
@@ -105,6 +105,17 @@
 		<h2 id="Utilities">Utility Functions</h2>
 		<cfset display(metadata, utilFunctions) >
 		<p id="changelog">
+			<h2>Change Log</h2>
+			<p>
+		        <b class="header">2.2</b> -- <small><i>August 10th, 2012</i></small><br>
+	        </p>	
+	        <ul>
+	        	<li>Added splice(), uniqueId(), takeWhile(), and escape()</li>
+	        	<li>Changed arrayConcat and arrayReverse to concat and reverse</li>
+	        	<li>Implemented native arraySort for sortBy()</li>
+	        	<li>Fixed iterator "key" parameter for Collection functions</li>
+	        	<li>Fixed bind() argument mixup</li>
+	        </ul>
 			<h2>Change Log</h2>
 			<p>
 		        <b class="header">2.1</b> -- <small><i>July 9th, 2012</i></small><br>
