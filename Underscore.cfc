@@ -523,7 +523,7 @@ component {
 				value : value,
 				criteria : iterator(value, index, collection, arguments.this)
 			};
-		});
+		}, arguments.this);
 
 		arraySort(result, function(left, right) {
 			if (!structKeyExists(left, 'criteria')) {
@@ -1617,12 +1617,10 @@ component {
 
 
 	/* UTILITY FUNCTIONS */
-	// TODO: stub out all utlity functions
 	/*
 		Returns the same value that is used as the argument. In math: f(x) = x
 		This function looks useless, but is used throughout UnderscoreCF as a default iterator.
 	*/
-	// pointless: noConflict()
 
 	/**
 	* 	@header _.times(n, iterator) : void

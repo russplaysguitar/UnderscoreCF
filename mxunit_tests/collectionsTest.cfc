@@ -218,6 +218,12 @@ component extends="mxunit.framework.TestCase" {
 		var list = ["one", "two", "three", "four", "five"];
 		var sorted = _.sortBy(list, function(val) { return len(val); });
 		assertEquals(sorted, ['one', 'two', 'four', 'five', 'three'], 'sorted by length');
+
+		var ctx = { works: false };
+		_.sortBy([1], function (v,i,c,context) {
+			context.works = true;
+		}, ctx);
+		assertTrue(ctx.works);
 	}
 	
 	public void function testGroupBy() {
