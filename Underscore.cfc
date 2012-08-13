@@ -1269,7 +1269,7 @@ component {
 			return _.keys(toArray(arguments.obj));
 		}
 		else {
-			throw("_.keys() expects an array, object, struct, or query", "Underscore");
+			throw("keys() expects an array, object, struct, or query", "Underscore");
 		}
 	}
 
