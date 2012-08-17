@@ -1172,8 +1172,17 @@ component {
 		leading edge, instead of the trailing.
 	*/
 	public any function debounce(func, wait, immediate) {
-		// TODO
-		return;
+		// TODO: in progress
+		// var lastInvokeTime = GetTickCount();
+		// return function () {
+		// 	var thisInvokeTime = GetTickCount();
+		// 	if (thisInvokeTime - lastInvokeTime > wait) {
+		// 		func();
+		// 	}
+		// 	else {
+		// 	}
+		// 	lastInvokeTime = GetTickCount();
+		// };
 	}
 
 	/**
@@ -1398,7 +1407,7 @@ component {
 		if (isArray(arguments.obj)) {
 			return _.include(arguments.obj, key);
 		}
-		else if (isObject(arguments.obj) || isStruct(arguments.obj)) {
+		else if (isObject(arguments.obj) || isStruct(arguments.obj) || isXml(arguments.obj)) {
 			return structKeyExists(arguments.obj, key);
 		}
 		else {
@@ -1474,6 +1483,8 @@ component {
 			// don't bother comparing if the types don't even match
 			return false;
 		}
+
+		// return a.equals(b) && b.equals(a);
 
 		if (isArray(a) && arrayLen(a) != arrayLen(b)) {
 			return false;
