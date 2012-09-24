@@ -1,0 +1,7 @@
+{
+	"name": "UnderscoreCF",
+	"description":"An UnderscoreJS port for Coldfusion. Functional programming library.",
+	"version": "2.2.0",
+	"main":"./Underscore",
+	"author": "russplaysguitar"
+}
