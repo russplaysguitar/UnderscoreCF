@@ -43,6 +43,17 @@ component extends="mxunit.framework.TestCase" {
 		assertTrue(_.isEqual(result, expected1) || _.isEqual(result, expected2), 'can convert an object into pairs');  
 	}
 	
+	public void function testInvert() {
+		var obj = {FIRST: 'MOE', SECOND: 'LARRY', THIRD: 'CURLY'};
+		var result = _.invert(obj);
+		var expected = {MOE: 'FIRST', LARRY: 'SECOND', CURLY: 'THIRD'};
+		assertTrue(_.isEqual(result, expected), 'can invert an object');
+		assertTrue(_.isEqual(_.invert(_.invert(obj)), obj), 'two inverts gets you back where you started');
+
+		var obj = {length: 3};
+		assertTrue(_.invert(obj)['3'] == 'length', 'can invert an object with "length"');
+	}
+
 	public void function testFunctions() {
 	    var obj = {A: 'dash', B: _.map, C: _.reduce};
 	    assertTrue(_.isEqual(['B', 'C'], _.functions(obj)), 'can grab the function names of any passed-in object');

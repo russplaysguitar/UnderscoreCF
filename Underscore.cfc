@@ -1321,13 +1321,24 @@ component {
 
 	/**
 	*	@header _.pairs(object) : array
-	*	@hint Convert an object into a list of [key, value] pairs. Note: Resulting item order is not guaranteed.
-	*	@example _.pairs({one: 1, two: 2, three: 3});<br />=> [["one", 1], ["two", 2], ["three", 3]]
+	*	@hint Convert an object into a list of [key, value] pairs. Notes: Resulting item order is not guaranteed. Key capitalization will depend on your CF engine.
+	*	@example _.pairs({ONE: 1, TWO: 2, THREE: 3});<br />=> [["ONE", 1], ["TWO", 2], ["THREE", 3]]
 	*/
 	public array function pairs(obj = this.obj) {
 		var pairs = [];
 	    for (var key in obj) if (_.has(obj, key)) arrayAppend(pairs, [key, obj[key]]);
 	    return pairs;
+	}
+
+	/**
+	*	@header _.invert(object) : object
+	*	@hint Returns a copy of the object where the keys have become the values and the values the keys. For this to work, all of your object's values should be unique and string serializable. Note: Capitalization will depend on your CF engine.
+	*	@example _.invert({Moe: "Moses", Larry: "Louis", Curly: "Jerome"});<br />=> {Moses: "Moe", Louis: "Larry", Jerome: "Curly"};
+	*/
+	public any function invert(obj = this.obj) {
+		var result = {};
+		for (var key in obj) if (_.has(obj, key)) result[obj[key]] = key;
+		return result;
 	}
 
 	/**
