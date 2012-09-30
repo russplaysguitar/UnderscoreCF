@@ -35,6 +35,13 @@ component extends="mxunit.framework.TestCase" {
 		var values = _.values({one : 1, two : 2});
 	    assertTrue(_.isEqual(values, [1,2]) || _.isEqual(values, [2,1]), 'can extract the values from an object');
 	}
+
+	public void function testPairs() {
+		var result = _.pairs({ONE: 1, TWO: 2});
+		var expected1 = [['ONE', 1], ['TWO', 2]];
+		var expected2 = [['TWO', 2], ['ONE', 1]];
+		assertTrue(_.isEqual(result, expected1) || _.isEqual(result, expected2), 'can convert an object into pairs');  
+	}
 	
 	public void function testFunctions() {
 	    var obj = {A: 'dash', B: _.map, C: _.reduce};

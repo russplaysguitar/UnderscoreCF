@@ -1320,6 +1320,17 @@ component {
 	}
 
 	/**
+	*	@header _.pairs(object) : array
+	*	@hint Convert an object into a list of [key, value] pairs. Note: Resulting item order is not guaranteed.
+	*	@example _.pairs({one: 1, two: 2, three: 3});<br />=> [["one", 1], ["two", 2], ["three", 3]]
+	*/
+	public array function pairs(obj = this.obj) {
+		var pairs = [];
+	    for (var key in obj) if (_.has(obj, key)) arrayAppend(pairs, [key, obj[key]]);
+	    return pairs;
+	}
+
+	/**
 	* 	@header _.functions(object) : array
 	*	@hint Returns a sorted array of the names of every method in an object -- that is to say, the name of every function property of the object.
 	* 	@example _.functions(_);<br />=> ["all", "any", "bind", "bindAll", "clone", "compact", "compose" ...
