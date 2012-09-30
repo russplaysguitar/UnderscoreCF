@@ -459,6 +459,21 @@ component {
 	}
 
 	/**
+	*	@header _.where(list, properties) : array
+	*	@hint Looks through each value in the list, returning an array of all the values that contain all of the key-value pairs listed in properties.
+	*	@example _.where(listOfPlays, {author: "Shakespeare", year: 1611});<br />=> [{title: "Cymbeline", author: "Shakespeare", year: 1611},<br />    {title: "The Tempest", author: "Shakespeare", year: 1611}]
+	*/
+	public array function where(obj = this.obj, required attrs) {
+		if (_.isEmpty(attrs)) return [];
+		return _.filter(obj, function(value) {
+			for (var key in attrs) {
+				if (attrs[key] != value[key]) return false;
+			}
+			return true;
+		});
+	}
+
+	/**
 	* 	@header _.max(collection, [iterator], [context]) : any
 	*	@hint Returns the maximum value in collection. If iterator is passed, it will be used on each value to generate the criterion by which the value is ranked.
 	* 	@example stooges = [{name : 'moe', age : 40}, {name : 'larry', age : 50}, {name : 'curly', age : 60}];<br />_.max(stooges, function(stooge){ return stooge.age; });<br />=> {name : 'curly', age : 60};

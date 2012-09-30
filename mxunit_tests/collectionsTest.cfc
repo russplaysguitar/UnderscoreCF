@@ -189,6 +189,16 @@ component extends="mxunit.framework.TestCase" {
 	    assertEquals(_.pluck(people, 'name'), ['moe','curly'], 'pulls names out of objects');
 	}
 	
+	public void function testWhere() {
+		var list = [{a: 1, b: 2}, {a: 2, b: 2}, {a: 1, b: 3}, {a: 1, b: 4}];
+	    var result = _.where(list, {a: 1});
+	    assertEquals(_.size(result), 3);
+	    assertEquals(result[_.size(result)].b, 4);
+	    result = _.where(list, {b: 2});
+	    assertEquals(_.size(result), 2);
+	    assertEquals(result[1].a, 1);
+	}
+
 	public void function testMax() {
 	    assertEquals(3, _.max([1, 2, 3]), 'can perform a regular Math.max');
 
