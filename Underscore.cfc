@@ -552,6 +552,21 @@ component {
 			return 1;
 	}
 
+	// An internal function used for aggregate "group by" operations.
+	private struct function group(obj = this.obj, value = _.identity, this = {}, required behavior) {
+		var result = {};
+		if (_.isFunction(value)) {
+			var iterator = value;
+		}
+		else {
+			var iterator = function(obj) { return obj[value]; };
+		}
+		_.each(arguments.obj, function(val, index, obj, this) {
+			behavior(result, iterator(val, index, obj, this), val);
+		});
+		return result;
+	}
+
 	/**
 	* 	@header _.groupBy(collection, iterator) : struct
 	*	@hint Splits a collection into sets, grouped by the result of running each value through iterator. If iterator is a string instead of a function, groups by the property named by iterator on each of the values.
@@ -573,6 +588,19 @@ component {
 			arrayAppend(result[key], value);
 		});
 		return result;
+	}
+
+	/**
+	*	@header _.countBy(collection, iterator) : struct
+	*	@hint Sorts a collection into groups and returns a count for the number of objects in each group. Similar to groupBy, but instead of returning a list of values, returns a count for the number of values in that group.
+	*	@example _.countBy([1, 2, 3, 4, 5], function(num) { return num % 2 == 0 ? 'even' : 'odd'; });<br />=> {odd: 3, even: 2}
+	*/
+	public any function countBy(obj = this.obj, value, this = {}) {
+		return group(obj, value, this, function(required result, key, value) {
+			var k = isNull(arguments.key) ? "" : arguments.key;
+			if (!_.has(result, k)) result[k] = 0;
+			result[k]++;
+		});
 	}
 
 	/**

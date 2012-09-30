@@ -239,6 +239,32 @@ component extends="mxunit.framework.TestCase" {
 	    assertEquals(grouped['5'], ['three', 'seven', 'eight']);		
 	}
 	
+	public void function testCountBy() {
+		var parity = _.countBy([1, 2, 3, 4, 5], function(num){ 
+			return num % 2 == 0 ? 'even' : 'odd';
+		});
+		assertEquals(parity['even'], 2);
+		assertEquals(parity['odd'], 3);
+
+		var list = [{length: 3}, {length:3}, {length: 5}, {length:4}];
+		var grouped = _.countBy(list, 'length');
+		assertEquals(grouped['3'], 2);
+		assertEquals(grouped['4'], 1);
+		assertEquals(grouped['5'], 1);
+
+		var context = {};
+		_.countBy([{}], function(val, idx, obj, this){ assertTrue(_.isEqual(this, context)); }, context);
+
+		grouped = _.countBy([4.2, 6.1, 6.4], function(num) {
+			return fix(num) > 4 ? 'b' : 'a';
+		});
+		assertEquals(grouped.a, 1);
+		assertEquals(grouped.b, 2);
+
+		var array = [{}];
+		_.countBy(array, function(value, index, obj){ assertEquals(obj, array); });
+	}
+
 	public void function testSortedIndex() {
 	    var numbers = [10, 20, 30, 40, 50];
 	    var num = 35;
