@@ -1727,6 +1727,19 @@ component {
 		}
 	}
 
+	/*
+	*	@header _.random(min, max) : numeric
+	*	@hint Returns a random integer between min and max, inclusive. If you only pass one argument, it will return a number between 0 and that number. Delegates to RandRange().
+	*	@example _.random(0, 100);<br />=> 42
+	*/
+	public numeric function random(required numeric min, numeric max) {
+		if (!structKeyExists(arguments, "max")) {
+			max = min;
+			min = 0;
+		}
+		return RandRange(min, max);
+	}
+
 	/**
 	* 	@header _.mixin(object) : void
 	*	@hint Allows you to extend Underscore with your own utility functions. Pass a struct of {name: function} definitions to have your functions added to the Underscore object, <s>as well as the OOP wrapper.</s>

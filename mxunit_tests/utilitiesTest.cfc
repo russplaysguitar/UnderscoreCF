@@ -17,6 +17,11 @@ component extends="mxunit.framework.TestCase" {
 	    // assertTrue(_.isEqual(vals, [0,1,2]), "works as a wrapper");
 	}
 	
+	public void function testRandom() {
+		assertTrue(_.random(0) == 0, 'should be 0');
+		assertTrue(_.random(1, 1) == 1, 'should be 1');
+	}
+
 	public void function testMixin() {
 	    _.mixin({
 	      myReverse: function(string) {
