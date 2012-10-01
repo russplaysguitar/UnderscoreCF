@@ -141,11 +141,22 @@ component extends="mxunit.framework.TestCase" {
 	    num = 40;
 	    index = _.indexOf(numbers, num, true);
 	    assertequals(index, 2, '40 is in the list');
+
+	    numbers = [1, 2, 3, 1, 2, 3, 1, 2, 3];
+		index = _.indexOf(numbers, 2, 6);
+		assertEquals(index, 8, 'supports the fromIndex argument');
+
+	    numbers = [1, 2, 3, 1];
+		index = _.indexOf(numbers, 1, 5);
+		assertEquals(index, 0, 'handles invalid fromIndex argument');		
 	}
 	
 	public void function testLastIndexOf() {
 	    var numbers = [1, 0, 1, 0, 0, 1, 0, 0, 0];
 	    assertEquals(_.lastIndexOf(numbers, 0), 9, 'lastIndexOf the other element');
+	    numbers = [1, 2, 3, 1, 2, 3, 1, 2, 3];
+	    var index = _.lastIndexOf(numbers, 2, 2);
+	    assertEquals(index, 2, 'supports the fromIndex argument');
 	    // var result = (function(){ return _.lastIndexOf(arguments, 1); })(1, 0, 1, 0, 0, 1, 0, 0, 0);
 	    // equal(result, 5, 'works on an arguments object');
 	}

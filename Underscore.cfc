@@ -1048,11 +1048,13 @@ component {
 	}
 
 	/**
-	* 	@header _.indexOf(array, value, [isSorted]) : numeric
+	* 	@header _.indexOf(array, value, [isSorted/fromIndex]) : numeric
 	*	@hint Returns the index at which value can be found in the array, or 0 if value is not present in the array. Uses the native ArrayFind() function. If you're working with a large array, and you know that the array is already sorted, pass true for isSorted to use a faster binary search.
 	* 	@example _.indexOf([1, 2, 3], 2);<br />=> 2
 	*/
-	public numeric function indexOf(array array = this.obj, item, isSorted = false) {
+	public numeric function indexOf(array array = this.obj, item, isSorted_fromIndex = false) {
+		var fromIndex = isNumeric(isSorted_fromIndex) ? isSorted_fromIndex : 0;
+		var isSorted = isNumeric(isSorted_fromIndex) ? false : isSorted_fromIndex;
 		if (isSorted) {
 			var i = _.sortedIndex(array, item);
 			if (array[i] == item) {
@@ -1062,6 +1064,10 @@ component {
 				return 0;
 			}
 		}
+		else if (fromIndex > 0) {
+			for (var i = fromIndex; i <= arrayLen(array); i++) if (array[i] == item) return i;
+			return 0;
+		} 
 		else {
 			return ArrayFind(array, item);
 		}
@@ -1069,19 +1075,20 @@ component {
 
 	/**
 	* 	@header _.lastIndexOf(array, value) : numeric
-	*	@hint Returns the index of the last occurrence of value in the array, or -1 if value is not present.
+	*	@hint Returns the index of the last occurrence of value in the array, or 0 if value is not present.
 	* 	@example _.lastIndexOf([1, 2, 3, 1, 2, 3], 2);<br />=> 5
 	*/
-	public numeric function lastIndexOf(array array = this.obj, item) {
+	public numeric function lastIndexOf(array array = this.obj, item, from) {
+		var hasIndex = structKeyExists(arguments, "from");
 		if (!structKeyExists(arguments, 'array')) {
-			return -1;
+			return 0;
 		}
-		for(var i = arrayLen(array); i > 0; i--) {
+		for(var i = (hasIndex ? from : arrayLen(array)); i > 0; i--) {
 			if (array[i] == item) {
 				return i;
 			}
 		}
-		return -1;
+		return 0;
 	}
 
 	/**
