@@ -80,6 +80,16 @@ component extends="mxunit.framework.TestCase" {
 	    assertTrue(_.isEqual(result, {a:1, b:2}), 'can restrict properties to those named in mixed args');		
 	}
 	
+	public void function testOmit() {
+		var result = "";
+		result = _.omit({a:1, b:2, c:3}, 'b');
+		assertTrue(_.isEqual(result, {a:1, c:3}), 'can omit a single named property');
+		result = _.omit({a:1, b:2, c:3}, 'a', 'c');
+		assertTrue(_.isEqual(result, {b:2}), 'can omit several named properties');
+		result = _.omit({a:1, b:2, c:3}, ['b', 'c']);
+		assertTrue(_.isEqual(result, {a:1}), 'can omit properties named in an array');
+	}
+
 	public void function testDefaults() {
 	    var result = "";
 	    var options = {zero: 0, one: 1, empty: "", string: "string"};

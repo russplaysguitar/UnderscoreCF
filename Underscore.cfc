@@ -1411,6 +1411,24 @@ component {
 	}
 
 	/**
+	*	@header _.omit(object, *keys) : struct
+	*	@hint Return a copy of the object, filtered to omit the blacklisted keys (or array of keys).
+	*	@example _.omit({NAME: 'moe', AGE: 50, USERID: 'moe1'}, 'userid');<br />=> {NAME: 'moe', AGE: 50}
+	*/
+	public struct function omit(obj = this.obj) {
+		var copy = {};
+		var args = _.slice(arguments, 2);
+		var keys = _.map(_.flatten(args), function (k) {
+			return ucase(k);
+		});
+
+		for (var key in obj) {
+			if (!_.include(keys, ucase(key))) copy[key] = obj[key];
+		}
+		return copy;
+	}
+
+	/**
 	* 	@header _.defaults(object, *defaults) : any
 	*	@hint Fill in missing properties in object with default values from the defaults objects, and return the object. As soon as the property is filled, further defaults will have no effect.
 	* 	@example iceCream = {flavor : "chocolate"};<br />_.defaults(iceCream, {flavor : "vanilla", sprinkles : "lots"});<br />=> {flavor : "chocolate", sprinkles : "lots"}
