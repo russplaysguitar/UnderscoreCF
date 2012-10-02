@@ -1078,12 +1078,9 @@ component {
 	*	@hint Returns the index of the last occurrence of value in the array, or 0 if value is not present.
 	* 	@example _.lastIndexOf([1, 2, 3, 1, 2, 3], 2);<br />=> 5
 	*/
-	public numeric function lastIndexOf(array array = this.obj, item, from) {
-		var hasIndex = structKeyExists(arguments, "from");
-		if (!structKeyExists(arguments, 'array')) {
-			return 0;
-		}
-		for(var i = (hasIndex ? from : arrayLen(array)); i > 0; i--) {
+	public numeric function lastIndexOf(required array array = this.obj, item, from) {
+		arguments.from = structKeyExists(arguments, "from") ? from : arrayLen(array);
+		for(var i = arguments.from; i > 0; i--) {
 			if (array[i] == item) {
 				return i;
 			}

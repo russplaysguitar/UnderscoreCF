@@ -152,6 +152,8 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testLastIndexOf() {
+		var numbers = [1, 0, 1];	
+		assertEquals(_.lastIndexOf(numbers, 1), 3);
 	    var numbers = [1, 0, 1, 0, 0, 1, 0, 0, 0];
 	    assertEquals(_.lastIndexOf(numbers, 0), 9, 'lastIndexOf the other element');
 	    numbers = [1, 2, 3, 1, 2, 3, 1, 2, 3];
