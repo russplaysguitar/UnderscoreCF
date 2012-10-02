@@ -123,6 +123,17 @@ component extends="mxunit.framework.TestCase" {
 	    assertEquals(stooges, [['moe',30,true],['larry',40],['curly',50]], 'zipped together arrays of different lengths');
 	}
 	
+	public void function testObject() {
+		var result = _.object(['MOE', 'LARRY', 'CURLY'], [30, 40, 50]);
+		var shouldBe = {MOE: 30, LARRY: 40, CURLY: 50};
+		assertTrue(_.isEqual(result, shouldBe), 'two arrays zipped together into an object');
+		result = _.object([['ONE', 1], ['TWO', 2], ['THREE', 3]]);
+		shouldBe = {ONE: 1, TWO: 2, THREE: 3};
+		assertTrue(_.isEqual(result, shouldBe), 'an array of pairs zipped together into an object');
+		var stooges = {MOE: 30, LARRY: 40, CURLY: 50};
+		assertTrue(_.isEqual(_.object(_.pairs(stooges)), stooges), 'an object converted to pairs and back to an object');
+	}
+
 	public void function testIndexOf() {
 	    // var result = (function(){ return _.indexOf(arguments, 2); })(1, 2, 3);
 	    // equal(result, 1, 'works on an arguments object');

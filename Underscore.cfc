@@ -822,6 +822,13 @@ component {
 	}
 
 	/**
+	*	@alias rest
+	*/
+	public array function drop(array, index, guard) {
+		return _.rest(argumentCollection = arguments);
+	}
+
+	/**
 	* 	@header _.compact(array) : array
 	*	@hint Returns a copy of the array with all falsy values removed. In Coldfusion, false, 0, and "" are all falsy.
 	* 	@example _.compact([0, 1, false, 2, '', 3]);<br />=> [1, 2, 3]
@@ -1045,6 +1052,26 @@ component {
 			results[i] = _.pluck(args, i);
 		}
 		return results;
+	}
+
+	/**
+	*	@header _.object(array, [values]) 
+	*	@hint Converts an array into a struct. Pass either a single array of [key, value] pairs, or an array of keys, and an array of values. 
+	*/
+	public struct function object(required array list = this.obj, array values) {
+		var result = {};
+		var hasValuesArray = structKeyExists(arguments, "values");
+		var isKeyValuePair = isArray(list[1]);//note: only tests first element for speed
+		if (!hasValuesArray && !isKeyValuePair)
+			throw("object() expects either an array of key/value pairs or an array of keys and an array of values", "Underscore");
+		for (var i = 1; i <= arrayLen(list); i++) {
+			if (hasValuesArray) {
+				result[list[i]] = values[i];
+			} else {
+				result[list[i][1]] = list[i][2];
+			}
+		}
+		return result;
 	}
 
 	/**
