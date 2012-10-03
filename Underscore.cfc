@@ -8,6 +8,8 @@ component {
 	public any function init(obj = {}) {
 		this.obj = arguments.obj;
 
+		this.value = function() { return this.obj; };
+
 		// _ is referenced throughout this cfc
 		variables._ = this;
 
@@ -741,7 +743,7 @@ component {
 
 	// note: I originally wrote this because I didn't know about CF 10's arraySlice()
 	// TODO: replace this with native arraySlice()
-	public any function slice(array = [], from = 2, to) {
+	public any function slice(array = [], numeric from = 2, numeric to) {
 		var result = [];
 		var j = 1;
 		var arrLen = arrayLen(array);
@@ -1136,6 +1138,69 @@ component {
 		}
 
 		return range;
+	}
+
+	/**
+	*	@header _.push(array, *values) : array
+	*	@hint Returns a new array with values appended to the end of it. Does not modify the original array.
+	*	@example _.push([1, 2], 3, 4);<br />=> [1, 2, 3, 4]
+	*/
+	public array function push(array array = this.obj) {
+		var result = [];
+		var values = _.slice(arguments, 2);
+
+		ArrayAppend(result, array, true);
+		ArrayAppend(result, values, true);
+
+		return result;
+	}
+
+	/**
+	*	@alias last
+	*/
+	public any function pop() {
+		return this.last(argumentCollection = arguments);
+	}
+
+	/**
+	*	@alias first
+	*/
+	public any function shift() {
+		return this.first(argumentCollection = arguments);
+	}
+
+	/**
+	*	@header _.unshift(array, *values) : array
+	*	@hint Returns a new array with values prepended to the array. Does not modify the original array.
+	*	@example _.unshift(["end"], "start", "middle");<br />=> ["start", "middle", "end"]
+	*/
+	public array function unshift(array array = this.obj) {
+		var result = [];
+		var values = _.slice(arguments, 2);
+
+		ArrayAppend(result, values, true);
+		ArrayAppend(result, array, true);
+
+		return result;
+	}	
+
+	/**
+	*	@header _.join(array, [separator]) : string
+	*	@hint Returns a string with all array elements joined together. Default separator is a single space.
+	*	@example _.join([1, 2], " and ");<br />=> "1 and 2"
+	*/
+	public string function join(array array = this.obj, string separator = ' ') {
+		var length = ArrayLen(array);
+		var result = "";
+
+		if (length < 1) return result;
+
+		result &= array[1];
+		for (var i = 2; i <= length; i++) {
+			result &= separator & array[i];
+		}
+
+		return result;
 	}
 
 	/* FUNCTION FUNCTIONS */

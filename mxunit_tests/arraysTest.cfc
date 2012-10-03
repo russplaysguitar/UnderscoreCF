@@ -232,6 +232,62 @@ component extends="mxunit.framework.TestCase" {
 		assertEquals(result, [9, 10, 11]);				
 	}
 
+	public void function testPush() {
+		var result = _.push([], 10);
+		assertEquals(result, [10], 'Basic push');
+
+		var result = _.push([], -22);
+		assertEquals(result, [-22], 'Negative push');
+
+		var result = _.push(["first"], "second");
+		assertEquals(result, ["first", "second"], 'Pre-existing values still exist');
+
+		var result = _.push([], 11, -33, "a", {}, [], 0, "");
+		var expected = [11, -33, "a", {}, [], 0, ""];
+		assertEquals(result, 
+			expected, 
+			'Multiple push with various types');
+
+		var _ary = _.init([]);
+		_ary.push([], 10);
+		assertEquals(_ary.value(), [], 'Does not modify wrapped array');		
+	}
+
+	public void function testPop() {
+		var result = _.pop([10, 20]);
+		assertEquals(result, 20, 'pop returns last element');
+	}
+
+	public void function testUnshift() {
+		var result = _.unshift(["last"], "first", "second");
+		var expected = ["first", "second", "last"];
+		assertEquals(result, expected, "adds elements to beginning of array");
+
+		var result = _.unshift(["single"]);
+		var expected = ["single"];
+		assertEquals(result, expected, "adding nothing results in same array");
+	}
+
+	public void function testShift() {
+		var result = _.shift(["first", "second", "third"]);
+		var expected = "first";
+		assertEquals(result, expected, "returns first element");
+	}
+
+	public void function testJoin() {
+		var result = _.join(["one", "two", "three"]);
+		var expected = "one two three";
+		assertEquals(result, expected, "should join strings");
+
+		var result = _.join([1, 2, 3]);
+		var expected = "1 2 3";
+		assertEquals(result, expected, "should join numbers");
+
+		var result = _.join([1, 2], " and ");
+		var expected = "1 and 2";
+		assertEquals(result, expected, "custom separator");
+	}
+
 	public void function setUp() {
 		variables._ = new underscore.Underscore();
 	}
