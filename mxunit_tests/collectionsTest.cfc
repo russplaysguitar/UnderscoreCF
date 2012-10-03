@@ -80,7 +80,37 @@ component extends="mxunit.framework.TestCase" {
 		assertEquals(list, 'bazbarfoo', 'default initial value');
 
 		var list = _.foldr(["foo", "bar", "baz"], function(memo, str, m, this){ return memo & str & this.q; }, 'start_', {q:'qux'});
-		assertEquals(list, 'start_bazquxbarquxfooqux', 'context');		
+		assertEquals(list, 'start_bazquxbarquxfooqux', 'context');	
+
+// TODO....
+		// Assert that the correct arguments are being passed
+
+	// 	var args = [];
+	// 	var memo = {};
+	// 	var object = {a: 1, b: 2};
+	// 	var lastKey = _.keys(object).pop(); 	
+
+	// 	var expected = lastKey == 'a'
+	// 		? [memo, 1, 'a', object]
+	// 		: [memo, 2, 'b', object]; 	
+
+	// 	_.reduceRight(object, function() {
+	// 		args || (args = _.toArray(arguments));
+	// 	}, memo); 	
+
+	// 	assertTrue(_.isEqual(args, expected));
+
+	// 	// And again, with numeric keys
+
+	// 	object = {'2': 'a', '1': 'b'};
+	// 	lastKey = _.keys(object).pop();
+	// 	args = null; 	
+
+	// 	expected = lastKey == '2'? [memo, 'a', '2', object]: [memo, 'b', '1', object]; 	
+
+	// 	_.reduceRight(object, function() {args || (args = _.toArray(arguments));}, memo); 	
+
+	// 	deepEqual(args, expected);			
 	}
 	
 	public void function testDetect() {
