@@ -762,16 +762,6 @@ component {
 		return result;
 	}
 
-	// TODO: write a shift() method and add it with unshift() to Underscore.cfc
-	// wrote this for some reason, then didn't end up needing it?
-	// public any function unshift(obj = this.obj) {
-	// 	var elements = _.slice(arguments, 2);
-	// 	for (var i = arrayLen(elements); i > 0; i--) {
-	// 		arrayPrepend(obj, elements[i]);
-	// 	}
-	// 	return obj;
-	// }
-
 	/**
 	* 	@header _.initial(array, [n]) : array
 	*	@hint Returns everything but the last entry of the array. Especially useful on the arguments object. Pass n to exclude the last n elements from the result. Note: CF arrays start at an index of 1
@@ -786,7 +776,6 @@ component {
 		}
 		return _.slice(array, 1, arrayLen(array) - exclude);
 	}
-
 
 	/**
 	* 	@header _.last(array, [n]) : any
@@ -1122,7 +1111,7 @@ component {
 	*	@hint A function to create flexibly-numbered arrays of integers, handy for each and map loops. start, if omitted, defaults to 0; step defaults to 1. Returns an array of integers from start to stop, incremented (or decremented) by step, exclusive.
 	* 	@example _.range(10);<br />=> [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]<br />_.range(1, 11);<br />=> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]<br />_.range(0, 30, 5);<br />=> [0, 5, 10, 15, 20, 25]<br />_.range(0, -10, -1);<br />=> [0, -1, -2, -3, -4, -5, -6, -7, -8, -9]<br />_.range(0);<br />=> []
 	*/
-	public array function range(start = 0, stop, step = 1) {
+	public array function range(numeric start = 0, numeric stop, numeric step = 1) {
 		if (!structKeyExists(arguments, 'stop')) {
 			stop = start;
 			start = 0;
@@ -1158,14 +1147,14 @@ component {
 	/**
 	*	@alias last
 	*/
-	public any function pop() {
+	public any function pop(array, n, guard) {
 		return this.last(argumentCollection = arguments);
 	}
 
 	/**
 	*	@alias first
 	*/
-	public any function shift() {
+	public any function shift(array, n, guard) {
 		return this.first(argumentCollection = arguments);
 	}
 
