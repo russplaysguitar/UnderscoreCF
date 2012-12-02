@@ -101,10 +101,10 @@ component extends="mxunit.framework.TestCase" {
 	
 	public void function testUnion() {
 	    var result = _.union([1, 2, 3], [2, 30, 1], [1, 40]);
-	    assertEquals(result, [1, 2, 3, 30, 40], 'takes the union of a list of arrays');
+	    assertEquals([1, 2, 3, 30, 40], result, 'takes the union of a list of arrays');
 
 	    var result = _.union([1, 2, 3], [2, 30, 1], [1, 40, [1]]);
-	    assertEquals(result, [1, 2, 3, 30, 40, 1], 'takes the union of a list of nested arrays');
+	    assertEquals([1, 2, 3, 30, 40, [1]], result, 'takes the union of a list of nested arrays');
 	}
 	
 	public void function testDifference() {
