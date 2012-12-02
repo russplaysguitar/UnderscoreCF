@@ -236,6 +236,13 @@ component extends="mxunit.framework.TestCase" {
 		assertEquals([10], result);
 	}
 
+	public void function testSlice() {
+		assertEquals( [2, 3, 4], _.slice([1, 2, 3, 4]) );
+		assertEquals( [3, 4], _.slice([1, 2, 3, 4], 3) );
+		assertEquals( [2, 3], _.slice([1, 2, 3, 4], 2, -1) );
+		assertEquals( [2, 3], _.slice([1, 2, 3, 4], -3, -1) );
+	}
+
 	public void function testBind() {
 		var func = function(args, this){ return args.greeting & ': ' & this.name; };
 		func = _.bind(func, {name : 'moe'}, {greeting: 'hi'});

@@ -741,25 +741,24 @@ component {
 		return _.first(argumentCollection = arguments);
 	}
 
-	// note: I originally wrote this because I didn't know about CF 10's arraySlice()
-	// TODO: replace this with native arraySlice()
+	/**
+	* 	@header _.slice(array, [from], [to])
+	* 	@hint Returns a subsection of the array. Negative values for to and from offset from the end of the array.
+	* 	@example _.slice([1, 2, 3, 4]);<br/> => [2, 3, 4]<br/><br/>_.slice([1, 2, 3, 4], 3);<br/> => [3, 4]<br/><br/>_.slice([1, 2, 3, 4], 2, -1);<br/> => [2, 3]<br/><br/>_.slice([1, 2, 3, 4], -3, -1);<br/> => [2, 3]
+	*/
 	public any function slice(array = [], numeric from = 2, numeric to) {
-		var result = [];
-		var j = 1;
-		var arrLen = arrayLen(array);
-
-		if (!structKeyExists(arguments, 'to')) {
-			arguments.to = arrLen;
-		}
-		else if (to > arrLen) {
-			to = arrLen;
-		}
-
-		for (var i = from; i <= to; i++) {
-			result[j] = array[i];
-			j++;
-		}
-		return result;
+		var len = arrayLen(array);
+		to = (!structKeyExists(arguments, 'to')) ? len + 1 :
+			 (to > (len + 1)) ? len + 1 :
+			 (to < 0) ? to + len + 1 :
+			 to + 1;
+		from = (from > 0) ? from :
+			   (from < 0) ? from + len + 1 :
+			   0;
+		if (from == 0){ throw("CF Arrays start with index 1", "Underscore"); }
+		var sliceLen = arguments.to - arguments.from;
+		if (sliceLen <= 0){ return []; }
+		return arraySlice(array, from, sliceLen);
 	}
 
 	/**

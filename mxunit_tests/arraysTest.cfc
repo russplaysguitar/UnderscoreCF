@@ -288,6 +288,19 @@ component extends="mxunit.framework.TestCase" {
 		assertEquals(result, expected, "custom separator");
 	}
 
+	public void function testSlice() {
+		var ary = [1, 2, 3, 4, 5];
+		assertEquals( [], _.slice(ary, 1, 0) );
+		assertEquals( [], _.slice(ary, 2, 0) );
+		assertEquals( [4, 5], _.slice(ary, 4) );
+		assertEquals( [2, 3, 4], _.slice(ary, 2, 4) );
+		assertEquals( [2, 3], _.slice(ary, 2, -2) );
+		assertEquals( [], _.slice(ary, -1, 0) );
+		assertEquals( [], _.slice(ary, -1, 3) );
+		assertEquals( [5], _.slice(ary, -1, 5) );
+		assertEquals( [3, 4, 5], _.slice(ary, -3, 5) );
+	}
+
 	public void function setUp() {
 		variables._ = new underscore.Underscore();
 	}
