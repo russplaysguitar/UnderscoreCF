@@ -1,13 +1,11 @@
-
 component extends="mxunit.framework.TestCase" {
-
 	
 	public void function testKeys() {
 		var keys = _.keys({one: 1, two: 2});
 		assertTrue(_.any(keys, function(val){ return val =='one'; }) && _.any(keys, function(val){ return val =='two'; }), 'can extract the keys from an object');
 		var a = []; 
 		a[2] = 0;
-		assertEquals(_.keys(a), [2], 'is not fooled by sparse arrays');
+		assertEquals([2], _.keys(a), 'is not fooled by sparse arrays');
 	}
 
 	/**
@@ -51,43 +49,43 @@ component extends="mxunit.framework.TestCase" {
 		assertTrue(_.isEqual(_.invert(_.invert(obj)), obj), 'two inverts gets you back where you started');
 
 		var obj = {length: 3};
-		assertTrue(_.invert(obj)['3'] == 'length', 'can invert an object with "length"');
+		assertEquals('length', _.invert(obj)['3'], 'can invert an object with "length"');
 	}
 
 	public void function testFunctions() {
 	    var obj = {A: 'dash', B: _.map, C: _.reduce};
-	    assertTrue(_.isEqual(['B', 'C'], _.functions(obj)), 'can grab the function names of any passed-in object');
+	    assertEquals(['B', 'C'], _.functions(obj), 'can grab the function names of any passed-in object');
 	}
 	
 	public void function testExtend() {
 		var result = "";
-		assertEquals(_.extend({}, {a:'b'}).a, 'b', 'can extend an object with the attributes of another');
-		assertEquals(_.extend({a:'x'}, {a:'b'}).a, 'b', 'properties in source override destination');
-		assertEquals(_.extend({x:'x'}, {a:'b'}).x, 'x', 'properties not in source dont get overriden');
+		assertEquals('b', _.extend({}, {a:'b'}).a, 'can extend an object with the attributes of another');
+		assertEquals('b', _.extend({a:'x'}, {a:'b'}).a, 'properties in source override destination');
+		assertEquals('x', _.extend({x:'x'}, {a:'b'}).x, 'properties not in source dont get overriden');
 		result = _.extend({x:'x'}, {a:'a'}, {b:'b'});
-		assertTrue(_.isEqual(result, {x:'x', a:'a', b:'b'}), 'can extend from multiple source objects');
+		assertEquals({x:'x', a:'a', b:'b'}, result, 'can extend from multiple source objects');
 		result = _.extend({x:'x'}, {a:'a', x:2}, {a:'b'});
-		assertTrue(_.isEqual(result, {x:2, a:'b'}), 'extending from multiple source objects last property trumps');
+		assertEquals({x:2, a:'b'}, result, 'extending from multiple source objects last property trumps');
 	}
 	
 	public void function testPick() {
 	    var result = "";
 	    result = _.pick({a:1, b:2, c:3}, 'a', 'c');
-	    assertTrue(_.isEqual(result, {a:1, c:3}), 'can restrict properties to those named');
+	    assertEquals({a:1, c:3}, result, 'can restrict properties to those named');
 	    result = _.pick({a:1, b:2, c:3}, ['b', 'c']);
-	    assertTrue(_.isEqual(result, {b:2, c:3}), 'can restrict properties to those named in an array');
+	    assertEquals({b:2, c:3}, result, 'can restrict properties to those named in an array');
 	    result = _.pick({a:1, b:2, c:3}, ['a'], 'b');
-	    assertTrue(_.isEqual(result, {a:1, b:2}), 'can restrict properties to those named in mixed args');		
+	    assertEquals({a:1, b:2}, result, 'can restrict properties to those named in mixed args');		
 	}
 	
 	public void function testOmit() {
 		var result = "";
 		result = _.omit({a:1, b:2, c:3}, 'b');
-		assertTrue(_.isEqual(result, {a:1, c:3}), 'can omit a single named property');
+		assertEquals({a:1, c:3}, result, 'can omit a single named property');
 		result = _.omit({a:1, b:2, c:3}, 'a', 'c');
-		assertTrue(_.isEqual(result, {b:2}), 'can omit several named properties');
+		assertEquals({b:2}, result, 'can omit several named properties');
 		result = _.omit({a:1, b:2, c:3}, ['b', 'c']);
-		assertTrue(_.isEqual(result, {a:1}), 'can omit properties named in an array');
+		assertEquals({a:1}, result, 'can omit properties named in an array');
 	}
 
 	public void function testDefaults() {
@@ -95,27 +93,27 @@ component extends="mxunit.framework.TestCase" {
 	    var options = {zero: 0, one: 1, empty: "", string: "string"};
 
 	    _.defaults(options, {zero: 1, one: 10, twenty: 20});
-	    assertEquals(options.zero, 0, 'value exists');
-	    assertEquals(options.one, 1, 'value exists');
-	    assertEquals(options.twenty, 20, 'default applied');
+	    assertEquals(0, options.zero, 'value exists');
+	    assertEquals(1, options.one, 'value exists');
+	    assertEquals(20, options.twenty, 'default applied');
 
 	    _.defaults(options, {empty: "full"}, {nan: "nan"}, {word: "word"}, {word: "dog"});
-	    assertEquals(options.empty, "", 'value exists');
-	    assertEquals(options.word, "word", 'new value is added, first one wins');
+	    assertEquals("", options.empty, 'value exists');
+	    assertEquals("word", options.word, 'new value is added, first one wins');
 	}
 	
 	public void function testClone() {
 	    var moe = {name : 'moe', lucky: {array:[13, 27, 34]}};
 	    var clone = _.clone(moe);
-	    assertEquals(clone.name, 'moe', 'the clone as the attributes of the original');
+	    assertEquals('moe', clone.name, 'the clone as the attributes of the original');
 
 	    clone.name = 'curly';
 	    assertTrue(clone.name == 'curly' && moe.name == 'moe', 'clones can change shallow attributes without affecting the original');
 
 	    arrayAppend(clone.lucky.array, 101);
-	    assertEquals(_.last(moe.lucky.array), 101, 'changes to deep attributes are shared with the original');
+	    assertEquals(101, _.last(moe.lucky.array), 'changes to deep attributes are shared with the original');
 
-	    assertEquals(_.clone(1), 1, 'non objects should not be changed by clone');	  
+	    assertEquals(1, _.clone(1), 'non objects should not be changed by clone');	  
 
 	    var original = new MyClass();
 	    original.subObj = new MyClass();
@@ -144,10 +142,10 @@ component extends="mxunit.framework.TestCase" {
 	
 	    // String object and primitive comparisons.
 	    assertTrue(_.isEqual("Curly", "Curly"), "Identical string primitives are equal");
-	    assertTrue(!_.isEqual("Curly", "Larry"), "String primitives with different values are not equal");
+	    assertFalse(_.isEqual("Curly", "Larry"), "String primitives with different values are not equal");
 
 	    // Number object and primitive comparisons.
-	    assertTrue(_.isEqual(num75, num75), "Identical number primitives are equal");
+	    assertTrue(_.isEqual(75, num75), "Identical number primitives are equal");
 
 	    // Boolean object and primitive comparisons.
 	    assertTrue(_.isEqual(true, true), "Identical boolean primitives are equal");
@@ -159,17 +157,17 @@ component extends="mxunit.framework.TestCase" {
 	    // assertTrue(!_.isEqual(1, true), "Number and boolean primitives with like values are not equal");
 	    // Dates.
 	    assertTrue(_.isEqual(CreateDate(2009, 9, 25), CreateDate(2009, 9, 25)), "Date objects referencing identical times are equal");
-	    assertTrue(!_.isEqual(CreateDate(2009, 9, 25), CreateDate(2009, 11, 13)), "Date objects referencing different times are not equal");
+	    assertFalse(_.isEqual(CreateDate(2009, 9, 25), CreateDate(2009, 11, 13)), "Date objects referencing different times are not equal");
 
 	    // Empty arrays, array-like objects, and object literals.
 	    assertTrue(_.isEqual({}, {}), "Empty object literals are equal");
 	    assertTrue(_.isEqual([], []), "Empty array literals are equal");
 	    assertTrue(_.isEqual([{}], [{}]), "Empty nested arrays and objects are equal");
-	    assertTrue(!_.isEqual({length: 0}, []), "Array-like objects and arrays are not equal.");
-	    assertTrue(!_.isEqual([], {length: 0}), "Commutative equality is implemented for array-like objects");
+	    assertFalse(_.isEqual({length: 0}, []), "Array-like objects and arrays are not equal.");
+	    assertFalse(_.isEqual([], {length: 0}), "Commutative equality is implemented for array-like objects");
 
-	    assertTrue(!_.isEqual({}, []), "Object literals and array literals are not equal");
-	    assertTrue(!_.isEqual([], {}), "Commutative equality is implemented for objects and arrays");
+	    assertFalse(_.isEqual({}, []), "Object literals and array literals are not equal");
+	    assertFalse(_.isEqual([], {}), "Commutative equality is implemented for objects and arrays");
 
 	    // Arrays with primitive and object values.
 	    assertTrue(_.isEqual([1, "Larry", true], [1, "Larry", true]), "Arrays containing identical primitives are equal");
@@ -194,16 +192,16 @@ component extends="mxunit.framework.TestCase" {
 	    var b = [];
 	    arrayResize(b, 6);
 	    assertTrue(_.isEqual(a, a), "Sparse arrays of identical lengths are equal");
-	    assertTrue(!_.isEqual(a, b), "Sparse arrays of different lengths are not equal when both are empty");
+	    assertFalse(_.isEqual(a, b), "Sparse arrays of different lengths are not equal when both are empty");
 
 	    // Simple objects.
 	    assertTrue(_.isEqual({a: "Curly", b: 1, c: true}, {a: "Curly", b: 1, c: true}), "Objects containing identical primitives are equal");
 	    assertTrue(_.isEqual({a: "Curly", b: CreateDate(2009, 11, 13)}, {a: "Curly", b: CreateDate(2009, 11, 13)}), "Objects containing equivalent members are equal");
-	    assertTrue(!_.isEqual({a: 63, b: 75}, {a: 61, b: 55}), "Objects of identical sizes with different values are not equal");
-	    assertTrue(!_.isEqual({a: 63, b: 75}, {a: 61, c: 55}), "Objects of identical sizes with different property names are not equal");
-	    assertTrue(!_.isEqual({a: 1, b: 2}, {a: 1}), "Objects of different sizes are not equal");
-	    assertTrue(!_.isEqual({a: 1}, {a: 1, b: 2}), "Commutative equality is implemented for objects");
-	    assertTrue(!_.isEqual({x: 1, z: 1}, {x: 1, z: 2}), "Objects with identical keys and different values are not equivalent");
+	    assertFalse(_.isEqual({a: 63, b: 75}, {a: 61, b: 55}), "Objects of identical sizes with different values are not equal");
+	    assertFalse(_.isEqual({a: 63, b: 75}, {a: 61, c: 55}), "Objects of identical sizes with different property names are not equal");
+	    assertFalse(_.isEqual({a: 1, b: 2}, {a: 1}), "Objects of different sizes are not equal");
+	    assertFalse(_.isEqual({a: 1}, {a: 1, b: 2}), "Commutative equality is implemented for objects");
+	    assertFalse(_.isEqual({x: 1, z: 1}, {x: 1, z: 2}), "Objects with identical keys and different values are not equivalent");
 
 	    // `A` contains nested objects and arrays.
 	    a = {
@@ -242,13 +240,13 @@ component extends="mxunit.framework.TestCase" {
 	    var Second = new MyClass();
 	    Second.value = 2;
 	    assertTrue(_.isEqual(First, First), "Object instances are equal");
-	    assertTrue(!_.isEqual(First, Second), "Objects with different constructors and identical own properties are not equal");
+	    assertFalse(_.isEqual(First, Second), "Objects with different constructors and identical own properties are not equal");
 	    // TODO: determine if the following case should be true or false
-	    // assertTrue(!_.isEqual(new MyClass({value: 1}), First), "Object instances and objects sharing equivalent properties are not equal");
-	    assertTrue(!_.isEqual({value: 2}, Second), "The prototype chain of objects should not be examined");
+	    // assertFalse(_.isEqual(new MyClass({value: 1}), First), "Object instances and objects sharing equivalent properties are not equal");
+	    assertFalse(_.isEqual({value: 2}, Second), "The prototype chain of objects should not be examined");
 
 	    // Chaining.
-	    // assertTrue(!_.isEqual(_({x: 1, y: undefined}).chain(), _({x: 1, z: 2}).chain()), 'Chained objects containing different values are not equal');
+	    // assertFalse(_.isEqual(_({x: 1, y: undefined}).chain(), _({x: 1, z: 2}).chain()), 'Chained objects containing different values are not equal');
 	    // equal(_({x: 1, y: 2}).chain().isEqual(_({x: 1, y: 2}).chain()).value(), true, '`isEqual` can be chained');
 
 	    // Custom `isEqual` methods.
@@ -257,21 +255,20 @@ component extends="mxunit.framework.TestCase" {
 
 	    assertTrue(_.isEqual(isEqualObj, isEqualObjClone), 'Both objects implement identical `isEqual` methods');
 	    assertTrue(_.isEqual(isEqualObjClone, isEqualObj), 'Commutative equality is implemented for objects with custom `isEqual` methods');
-	    assertTrue(!_.isEqual(isEqualObj, {}), 'Objects that do not implement equivalent `isEqual` methods are not equal');
-	    assertTrue(!_.isEqual({}, isEqualObj), 'Commutative equality is implemented for objects with different `isEqual` methods');
+	    assertFalse(_.isEqual(isEqualObj, {}), 'Objects that do not implement equivalent `isEqual` methods are not equal');
+	    assertFalse(_.isEqual({}, isEqualObj), 'Commutative equality is implemented for objects with different `isEqual` methods');
 	    
-	    assertFalse(_.isEqual({}, new MyClass()), 'empty structs and objects are not the same');
 	    assertFalse(_.isEqual({}, new MyClass()), 'empty structs and objects are not the same');
 	}
 	
 	public void function testIsEmpty() {
-	    assertTrue(!_.isEmpty([1]), '[1] is not empty');
+	    assertFalse(_.isEmpty([1]), '[1] is not empty');
 	    assertTrue(_.isEmpty([]), '[] is empty');
-	    assertTrue(!_.isEmpty({one : 1}), '{one : 1} is not empty');
+	    assertFalse(_.isEmpty({one : 1}), '{one : 1} is not empty');
 	    assertTrue(_.isEmpty({}), '{} is empty');
 	    // assertTrue(_.isEmpty(javaCast("null", 0)), 'null is empty');
 	    assertTrue(_.isEmpty(''), 'the empty string is empty');
-	    assertTrue(!_.isEmpty('moe'), 'but other strings are not');
+	    assertFalse(_.isEmpty('moe'), 'but other strings are not');
 
 	    var obj = {one : 1};
 	    structDelete(obj, "one");
@@ -279,12 +276,12 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testIsObject() {
-	    assertTrue(!_.isObject([1, 2, 3]), 'arrays are not objects');
+	    assertFalse(_.isObject([1, 2, 3]), 'arrays are not objects');
 	    // assertTrue(_.isObject(function () {}), 'functions are objects');
-	    // assertTrue(!_.isObject(javaCast("null", 0)), 'null is not an object');
-	    assertTrue(!_.isObject('string'), 'string is not an object');
-	    assertTrue(!_.isObject(12), 'number is not an object');
-	    assertTrue(!_.isObject(true), 'boolean is not an object');
+	    // assertFalse(_.isObject(javaCast("null", 0)), 'null is not an object');
+	    assertFalse(_.isObject('string'), 'string is not an object');
+	    assertFalse(_.isObject(12), 'number is not an object');
+	    assertFalse(_.isObject(true), 'boolean is not an object');
 	}
 	
 	public void function testIsArray() {
@@ -324,8 +321,8 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testIsFunction() {
-	    assertTrue(!_.isFunction([1, 2, 3]), 'arrays are not functions');
-	    assertTrue(!_.isFunction('moe'), 'strings are not functions');
+	    assertFalse(_.isFunction([1, 2, 3]), 'arrays are not functions');
+	    assertFalse(_.isFunction('moe'), 'strings are not functions');
 	    assertTrue(_.isFunction(_.isFunction), 'but functions are');
 	}
 	
