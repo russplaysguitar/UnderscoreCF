@@ -9,14 +9,14 @@ component extends="mxunit.framework.TestCase" {
 		assertTrue(_.has(output, 1));
 	    assertTrue(_.has(output, 2));
 	    assertTrue(_.has(output, 3));
-	    assertEquals(arrayLen(output), 3);
+	    assertEquals(3, arrayLen(output));
 
 	    output = [];
 	    _.each({one : 1, two : 2, three : 3}, function(num, key){ arrayAppend(output, num); });
 		assertTrue(_.has(output, 1));
 	    assertTrue(_.has(output, 2));
 	    assertTrue(_.has(output, 3));
-	    assertEquals(arrayLen(output), 3);
+	    assertEquals(3, arrayLen(output));
 	}
 
 	public void function testMap() {
@@ -24,14 +24,14 @@ component extends="mxunit.framework.TestCase" {
 		assertTrue(_.has(result, 3));
 	    assertTrue(_.has(result, 6));
 	    assertTrue(_.has(result, 9));
-	    assertEquals(arrayLen(result), 3);		
+	    assertEquals(3, arrayLen(result));
 
 		result = _.map({one : 1, two : 2, three : 3}, function(num, key){ return num * 3; });
 		assertTrue(_.has(result, 3));
 	    assertTrue(_.has(result, 6));
 	    assertTrue(_.has(result, 9));
-	    assertEquals(arrayLen(result), 3);		
-	}		
+	    assertEquals(3, arrayLen(result));		
+	}
 
 	public void function testReduce() {
 		var sum = _.reduce([1, 2, 3], function(memo, num){ return memo + num; }, 0);
@@ -124,7 +124,7 @@ component extends="mxunit.framework.TestCase" {
 		var result = _.toArray({a:10,b:20});
 		assertTrue(_.has(result, 10));
 	    assertTrue(_.has(result, 20));
-	    assertEquals(arrayLen(result), 2);				
+	    assertEquals(2, arrayLen(result));
 	}
 	
 	public void function testSize() {
@@ -236,6 +236,13 @@ component extends="mxunit.framework.TestCase" {
 		assertEquals([10], result);
 	}
 
+	public void function testSlice() {
+		assertEquals( [2, 3, 4], _.slice([1, 2, 3, 4]) );
+		assertEquals( [3, 4], _.slice([1, 2, 3, 4], 3) );
+		assertEquals( [2, 3], _.slice([1, 2, 3, 4], 2, -1) );
+		assertEquals( [2, 3], _.slice([1, 2, 3, 4], -3, -1) );
+	}
+
 	public void function testBind() {
 		var func = function(args, this){ return args.greeting & ': ' & this.name; };
 		func = _.bind(func, {name : 'moe'}, {greeting: 'hi'});
@@ -259,9 +266,13 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testDelay() {
-		var result = _.delay(function (msg) {return msg;}, 1000, {msg = "hi"});
+		var startTime = getTickCount();
+		var delay = 1000;
+		var result = _.delay(function (msg) {return msg;}, delay, {msg = "hi"});
+		var endTime = getTickCount();
 		assertEquals("hi", result);
-		//TODO: add assertion for the delay time
+		debug('delay was: ' & (endTime-startTime) & 'ms');
+		assertTrue((endTime-startTime) >= delay, "function delay is at least as long as requested");
 	}
 	
 	public void function testOnce() {
@@ -321,7 +332,8 @@ component extends="mxunit.framework.TestCase" {
 			upper: function(string) { return uCase(string); }
 		});
 		var result = _.upper("fabio");
-		assertEquals("Fabio", result);
+		assertEquals("FABIO", result);
+		//todo this assertion doesn't actually check that the case of both strings is the same
 	}
 	
 	public void function testResult() {
@@ -337,7 +349,7 @@ component extends="mxunit.framework.TestCase" {
 		assertTrue(_.has(result, 'ONE'));
 	    assertTrue(_.has(result, 'TWO'));
 	    assertTrue(_.has(result, 'THREE'));
-	    assertEquals(arrayLen(result), 3);				
+	    assertEquals(3, arrayLen(result));
 	}
 	
 	public void function testValues() {
@@ -345,7 +357,7 @@ component extends="mxunit.framework.TestCase" {
 		assertTrue(_.has(result, 1));
 	    assertTrue(_.has(result, 2));
 	    assertTrue(_.has(result, 3));
-	    assertEquals(arrayLen(result), 3);				
+	    assertEquals(3, arrayLen(result));
 	}
 	
 	public void function testFunctions() {
@@ -397,42 +409,31 @@ component extends="mxunit.framework.TestCase" {
 	}
 
 	public void function testIsEmpty() {
-		var result = _.isEmpty([1, 2, 3]);
-		assertEquals(false, result);
-		result = _.isEmpty({});
-		assertEquals(true, result);		
+		assertFalse(_.isEmpty([1, 2, 3]));
+		assertTrue(_.isEmpty({}));
 	}
 	
 	public void function testIsArray() {
-		var result = _.isArray({one: 1});
-		assertFalse(result);
-		result = _.isArray([1,2,3]);
-		assertTrue(result);
+		assertFalse(_.isArray({one: 1}));
+		assertTrue(_.isArray([1,2,3]));
 	}
 	
 	public void function testIsObject() {
-		var result = _.isObject({});
-		assertFalse(result); 
-		result = _.isObject(1);
-		assertFalse(result);
-		result = _.isObject(new MyClass());
-		assertTrue(result);
+		assertFalse(_.isObject({})); 
+		assertFalse(_.isObject(1));
+		assertTrue(_.isObject(new MyClass()));
 	}
 	
 	public void function testIsFunction() {
-		var result = _.isFunction(function(){ return 1; });
-		assertTrue(result);
-		result = _.isFunction(1);
-		assertFalse(result);
+		assertTrue(_.isFunction(function(){ return 1; }));
+		assertFalse(_.isFunction(1));
 	}
 	
 	public void function testIsString() {
-		var result = _.isString("moe");
-		assertTrue(result);
+		assertTrue(_.isString("moe"));
 		// result = _.isString(1);
 		// assertTrue(result);
-		result = _.isString(JavaCast("int", 1));
-		assertFalse(result);
+		assertFalse(_.isString(JavaCast("int", 1)));
 	}
 	
 	public void function testIsNumber() {
@@ -470,6 +471,5 @@ component extends="mxunit.framework.TestCase" {
 	public void function tearDown() {
 		structDelete(variables, "_");
 	}
-	
-		
+
 }
