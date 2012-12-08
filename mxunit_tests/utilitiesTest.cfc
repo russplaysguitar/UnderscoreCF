@@ -3,7 +3,7 @@ component extends="mxunit.framework.TestCase" {
 	
 	public void function testIdentity() {
 	    var moe = {name : 'moe'};
-	    assertEquals(_.identity(moe), moe, 'moe is the same as his identity');		
+	    assertEquals(moe, _.identity(moe), 'moe is the same as his identity');		
 	}
 	
 	public void function testTimes() {
@@ -18,8 +18,8 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testRandom() {
-		assertTrue(_.random(0) == 0, 'should be 0');
-		assertTrue(_.random(1, 1) == 1, 'should be 1');
+		assertEquals(0, _.random(0), 'should be 0');
+		assertEquals(1, _.random(1, 1), 'should be 1');
 	}
 
 	public void function testMixin() {
@@ -28,7 +28,7 @@ component extends="mxunit.framework.TestCase" {
 	        return reverse(string);
 	      }
 	    });
-	    assertEquals(_.myReverse('panacea'), 'aecanap', 'mixed in a function to _');
+	    assertEquals('aecanap', _.myReverse('panacea'), 'mixed in a function to _');
 	}
 	
 	public void function testResult() {
@@ -36,9 +36,9 @@ component extends="mxunit.framework.TestCase" {
 		obj.w = '';
 		obj.x = 'x';
 		obj.y = function(){ return obj.x; };
-	    assertEquals(_.result(obj, 'w'), '');
-	    assertEquals(_.result(obj, 'x'), 'x');
-	    assertEquals(_.result(obj, 'y'), 'x');
+	    assertEquals('', _.result(obj, 'w'));
+	    assertEquals('x', _.result(obj, 'x'));
+	    assertEquals('x', _.result(obj, 'y'));
 	}
 	
 	public void function setUp() {
