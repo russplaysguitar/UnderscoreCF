@@ -16,26 +16,26 @@ component extends="mxunit.framework.TestCase" {
 			}
 		};
 	    var bound = _.bind(func, context);
-	    assertEquals(bound(), 'name: moe', 'can bind a function to a context');		
+	    assertEquals('name: moe', bound(), 'can bind a function to a context');		
 
 	    // TODO: once OO-style binding is ready
 	    // bound = _(func).bind(context);
-	    // equal(bound(), 'name: moe', 'can do OO-style binding');
+	    // equal('name: moe', bound(), 'can do OO-style binding');
 
 	    bound = _.bind(func, {}, 'curly');
-	    assertEquals(bound(), 'name: curly', 'can bind without specifying a context');
+	    assertEquals('name: curly', bound(), 'can bind without specifying a context');
 
 	    func = function(salutation, name) { return salutation & ': ' & name; };
 	    
 	    func = _.bind(func, {}, 'hello');
-	    assertEquals(func('moe'), 'hello: moe', 'the function was partially applied in advance');
+	    assertEquals('hello: moe', func('moe'), 'the function was partially applied in advance');
 
 	    var func2 = _.bind(func, {}, 'curly');
-	    assertEquals(func2(), 'hello: curly', 'the function was completely applied in advance');
+	    assertEquals('hello: curly', func2(), 'the function was completely applied in advance');
 
 	    var func = function(salutation, firstname, lastname) { return salutation & ': ' & firstname & ' ' & lastname; };
 	    func = _.bind(func, {}, 'hello', 'moe', 'curly');
-	    assertEquals(func(), 'hello: moe curly', 'the function was partially applied in advance and can accept multiple arguments');
+	    assertEquals('hello: moe curly', func(), 'the function was partially applied in advance and can accept multiple arguments');
 	}
 
 	public void function testBindAll() {
@@ -49,7 +49,7 @@ component extends="mxunit.framework.TestCase" {
 	    _.bindAll(moe, 'getName', 'sayHi');
 	    curly.sayHi = moe.sayHi;
 
-	    assertEquals(curly.sayHi(), 'hi: moe', 'bound function is still bound to original object');
+	    assertEquals('hi: moe', curly.sayHi(), 'bound function is still bound to original object');
 
 	    curly = {name : 'curly'};
 	    moe = {
@@ -59,7 +59,7 @@ component extends="mxunit.framework.TestCase" {
 	    };
 	    _.bindAll(moe);
 	    curly.sayHi = moe.sayHi;
-	    assertEquals(curly.sayHi(), 'hi: moe', 'calling bindAll with no arguments binds all functions to the object');	
+	    assertEquals('hi: moe', curly.sayHi(), 'calling bindAll with no arguments binds all functions to the object');	
 	}
 	
 	public void function testMemoize() {
@@ -67,15 +67,15 @@ component extends="mxunit.framework.TestCase" {
 	      return n < 2 ? n : fib(n - 1) + fib(n - 2);
 	    };
 	    var fastFib = _.memoize(fib);
-	    assertEquals(fib(10), 55, 'a memoized version of fibonacci produces identical results');
-	    assertEquals(fastFib(10), 55, 'a memoized version of fibonacci produces identical results');
+	    assertEquals(55, fib(10), 'a memoized version of fibonacci produces identical results');
+	    assertEquals(55, fastFib(10), 'a memoized version of fibonacci produces identical results');
 
 	    var o = function(str) {
 	      return str;
 	    };
 	    var fastO = _.memoize(o);
-	    assertEquals(o('toString'), 'toString', 'checks hasOwnProperty');
-	    assertEquals(fastO('toString'), 'toString', 'checks hasOwnProperty');
+	    assertEquals('toString', o('toString'), 'checks hasOwnProperty');
+	    assertEquals('toString', fastO('toString'), 'checks hasOwnProperty');
 	}
 	
 	public void function testOnce() {
@@ -83,40 +83,40 @@ component extends="mxunit.framework.TestCase" {
 	    var increment = _.once(function(){ num++; });
 	    increment();
 	    increment();
-	    assertEquals(num, 1);
+	    assertEquals(1, num, "once prevents duplicate invocation");
 
 	    var num = 0;
 	    var increment2 = _.once(function(){ num++; return num; });
 		var result1 = increment2();
 		var result2 = increment2();
-		assertEquals(result1, result2);
+		assertEquals(result1, result2, "once prevents duplicate invocation");
 	}
 	
 	public void function testWrap() {
 	    var greet = function(name){ return "hi: " & name; };
 	    var backwards = _.wrap(greet, function(name, func){ return func(name) & ' ' & reverse(name); });
-	    assertEquals(backwards('moe'), 'hi: moe eom', 'wrapped the saluation function');
+	    assertEquals('hi: moe eom', backwards('moe'), 'wrapped the saluation function');
 
 	    var inner = function(){ return "Hello "; };
 	    var obj   = {name : "Moe"};
 	    obj.hi    = _.wrap(inner, function(func){ return func() & obj.name; });
-	    assertEquals(obj.hi(), "Hello Moe");
+	    assertEquals("Hello Moe", obj.hi());
 
 	    var noop    = function(){};
 	    var wrapped = _.wrap(noop, function(input){ return _.slice(arguments, 1); });
 	    var ret     = wrapped(['whats', 'your'], 'vector', 'victor');
 	    var expected = [['whats', 'your'], 'vector', 'victor', noop];
-	    assertTrue(_.isEqual(_.sortBy(ret), _.sortBy(expected)));
+	    assertTrue(_.isEqual(_.sortBy(expected), _.sortBy(ret)));
 	}
 	
 	public void function testCompose() {
 	    var greet = function(name){ return "hi: " & name; };
 	    var exclaim = function(sentence){ return sentence & '!'; };
 	    var composed = _.compose(exclaim, greet);
-	    assertEquals(composed('moe'), 'hi: moe!', 'can compose a function that takes another');
+	    assertEquals('hi: moe!', composed('moe'), 'can compose a function that takes another');
 
 	    composed = _.compose(greet, exclaim);
-	    assertEquals(composed('moe'), 'hi: moe!', 'in this case, the functions are also commutative');		
+	    assertEquals('hi: moe!', composed('moe'), 'in this case, the functions are also commutative');		
 	}
 
 	public void function testAfter() {
@@ -129,9 +129,9 @@ component extends="mxunit.framework.TestCase" {
 	      return afterCalled;
 	    };
 
-	    assertEquals(testAfter(5, 5), 1, "after(N) should fire after being called N times");
-	    assertEquals(testAfter(5, 4), 0, "after(N) should not fire unless called N times");
-	    assertEquals(testAfter(0, 0), 1, "after(0) should fire immediately");
+	    assertEquals(1, testAfter(5, 5), "after(N) should fire after being called N times");
+	    assertEquals(0, testAfter(5, 4), "after(N) should not fire unless called N times");
+	    assertEquals(1, testAfter(0, 0), "after(0) should fire immediately");
 	}
 	
 	public void function setUp() {
