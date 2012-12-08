@@ -342,6 +342,12 @@ component extends="mxunit.framework.TestCase" {
 	    
 	    var objectWithToArrayValue = {toArray: 1};
 	    assertEquals(_.toArray(objectWithToArrayValue), [1], 'toArray property ignored if not a function');
+	
+	    assertEquals([1,2,'',4], _.toArray('1,2,,4'), "Empty list elements should create zero-length string value");
+	    assertEquals([1,2,3,''], _.toArray('1,2,3,'), "Empty list elements should create zero-length string value");
+	    assertEquals(['',2,3,4], _.toArray(',2,3,4'), "Empty list elements should create zero-length string value");
+	    assertEquals(['','','',''], _.toArray(',,,'), "Empty list elements should create zero-length string value");
+	    assertEquals([''], _.toArray(''), "Empty list elements should create zero-length string value");
 	}
 	
 	public void function testSize() {
