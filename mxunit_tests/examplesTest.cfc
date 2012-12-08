@@ -266,9 +266,13 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testDelay() {
-		var result = _.delay(function (msg) {return msg;}, 1000, {msg = "hi"});
+		var startTime = getTickCount();
+		var delay = 1000;
+		var result = _.delay(function (msg) {return msg;}, delay, {msg = "hi"});
+		var endTime = getTickCount();
 		assertEquals("hi", result);
-		//TODO: add assertion for the delay time
+		debug('delay was: ' & (endTime-startTime) & 'ms');
+		assertTrue((endTime-startTime) >= delay, "function delay is at least as long as requested");
 	}
 	
 	public void function testOnce() {
