@@ -1838,7 +1838,7 @@ component {
 
 	/**
 	* 	@header _.uniqueId([prefix]) : string
-	* 	@hint Generates an identifier that is unique for this instance of Backbone
+	* 	@hint Generates an identifier that is unique for this instance of Underscore
 	* 	@example _.uniqueId('c');<br /> => 'c1'
 	*/
 	public string function uniqueId(prefix = '') {
