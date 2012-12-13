@@ -1292,11 +1292,10 @@ component {
 		return;
 	}
 
-	/*
-		Returns a function, that, as long as it continues to be invoked, will not
-		be triggered. The function will be called after it stops being called for
-		N milliseconds. If `immediate` is passed, trigger the function on the
-		leading edge, instead of the trailing.
+	/**
+	* 	@header _.debounce(function, wait, immediate) : function
+	* 	@hint Returns a function that, as long as it continues to be invoked, will not be triggered. The function will be called after it stops being called for N milliseconds. If immediate is passed, trigger the function on the leading edge, instead of the trailing. (Immediate requires a Wait cooldown period beteween calls.)
+	* 	@example keepCalm = _.debounce(function(){}, 300, true);<br/>for (var i = 0; i<10; i++){ keepCalm(); }<br/>=>//function argument is called only once
 	*/
 	public any function debounce(func, wait, immediate = false) {
 		var threadNameBase = '_debounced_' & createUUID() & '_';
