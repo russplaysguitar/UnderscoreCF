@@ -1298,18 +1298,30 @@ component {
 		N milliseconds. If `immediate` is passed, trigger the function on the
 		leading edge, instead of the trailing.
 	*/
-	public any function debounce(func, wait, immediate) {
-		// TODO: in progress
-		// var lastInvokeTime = GetTickCount();
-		// return function () {
-		// 	var thisInvokeTime = GetTickCount();
-		// 	if (thisInvokeTime - lastInvokeTime > wait) {
-		// 		func();
-		// 	}
-		// 	else {
-		// 	}
-		// 	lastInvokeTime = GetTickCount();
-		// };
+	public any function debounce(func, wait, immediate = false) {
+		var threadNameBase = '_debounced_' & createUUID() & '_';
+		var threadCount = 0;
+		var threadName = '_debounced_x';
+		var called = false;
+		var setCalled = function(v){ called = v; };
+		return function () {
+			if (structKeyExists(cfthread, threadName) && cfthread[threadName].status neq "completed"){
+				thread action='terminate' name=threadName;
+			}
+			threadCount++;
+			threadName = threadNameBase & threadCount;
+			if (!structKeyExists(cfthread, threadName)){
+				thread action='run' name=threadName wait=wait func=func immediate=immediate setCalled=setCalled called=called {
+					if (immediate && !called) func();
+					setCalled(true);
+					sleep(attributes.wait);
+					if (!immediate) func();
+					setCalled(false);
+				}
+			}else{
+				throw;
+			}
+		};
 	}
 
 	/**
