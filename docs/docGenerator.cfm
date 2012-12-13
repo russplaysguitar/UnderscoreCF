@@ -4,15 +4,15 @@
 
 	metadata = getComponentMetaData("underscore.Underscore");
 
-	collectionFunctions = "each,map,reduce,reduceRight,find,filter,reject,all,any,include,invoke,pluck,max,min,sortBy,groupBy,sortedIndex,shuffle,toArray,size";
+	collectionFunctions = "each,map,reduce,reduceRight,find,filter,where,reject,all,any,include,invoke,pluck,max,min,sortBy,groupBy,countBy,sortedIndex,shuffle,toArray,size";
 
-	arrayFunctions = "first,initial,last,rest,compact,flatten,without,union,intersection,difference,uniq,zip,indexOf,lastIndexOf,range,concat,reverse,takeWhile,splice";
+	arrayFunctions = "first,initial,last,rest,compact,flatten,without,union,intersection,difference,uniq,zip,object,indexOf,lastIndexOf,range,concat,reverse,takeWhile,splice,push,unshift,join,slice";
 
 	funcFunctions = "bind,bindAll,memoize,delay,once,after,wrap,compose";
 
-	objectFunctions = "keys,values,functions,extend,pick,defaults,clone,has,isEqual,isEmpty,isArray,isObject,isFunction,isString,isNumber,isBoolean,isDate";
+	objectFunctions = "keys,values,pairs,invert,functions,extend,pick,omit,defaults,clone,has,isEqual,isEmpty,isArray,isObject,isFunction,isString,isNumber,isBoolean,isDate";
 
-	utilFunctions = "times,mixin,uniqueId,escape,result";
+	utilFunctions = "times,random,mixin,uniqueId,escape,result";
 
 	// chainFunctions = "chain,value";
 
@@ -64,7 +64,7 @@
 <body>
 	<div id="sidebar" class="interface">
 		<a class="toc_title" href="#">
-		    Underscore.cfc <span class="version">(2.2)</span>
+		    Underscore.cfc <span class="version">(2.3)</span>
 	    </a>
 	    <a class="toc_title" href="#">
 	    	Introduction
@@ -93,7 +93,7 @@
 			<cfoutput>#metadata.introduction#</cfoutput>
 		</p>		
 		<h2>Download</h2>
-		<div><a href="https://github.com/downloads/russplaysguitar/UnderscoreCF/Underscore.cfc.2.2.zip">Version 2.2</a> - <i>~40kb, Includes unit tests and doc generator</i></div>
+		<div><a href="https://github.com/russplaysguitar/UnderscoreCF/archive/v2.3.zip">Version 2.3</a> - <i>~40kb, Includes all development files</i></div>
 		<h2 id="Collections">Collection Functions (Arrays, Structs, Queries, or Objects)</h2>
 		<cfset display(metadata, collectionFunctions) >
 		<h2 id="Arrays">Array Functions</h2>
@@ -107,6 +107,18 @@
 		<p id="changelog">
 			<h2>Change Log</h2>
 			<p>
+		        <b class="header">2.3</b> -- <small><i>December 12th, 2012</i></small><br>
+	        </p>	
+	        <ul>
+	        	<li>Updated slice to delegate to native arraySlice()</li>
+	        	<li>Fixed mxunit testing expected/actual ordering</li>
+	        	<li>Added handling for empty list values to toArray()</li>
+	        	<li>Added value(), push(), pop(), shift(), unshift(), and join()</li>
+	        	<li>Added fromIndex to lastIndexOf() and indexOf()</li>
+	        	<li>Added countBy(), pairs(), invert(), random(), where(), omit(), and objects()</li>
+	        	<li>Added Foundry support</li>
+	        </ul>
+			<p>
 		        <b class="header">2.2</b> -- <small><i>August 10th, 2012</i></small><br>
 	        </p>	
 	        <ul>
@@ -116,7 +128,6 @@
 	        	<li>Fixed iterator "key" parameter for Collection functions</li>
 	        	<li>Fixed bind() argument mixup</li>
 	        </ul>
-			<h2>Change Log</h2>
 			<p>
 		        <b class="header">2.1</b> -- <small><i>July 9th, 2012</i></small><br>
 	        </p>	
