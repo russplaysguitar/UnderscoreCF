@@ -158,7 +158,7 @@ component extends="mxunit.framework.TestCase" {
 		currentTime = getTickCount() - startTime;
 		debug('total time: ' & currentTime & 'ms');
 		debug(cfthread);
-		assertTrue(currentTime >= 435, "not waiting long enough!!!!!!11eleven");
+		assertTrue(currentTime >= 60, "not waiting long enough!!!!!!11eleven");
 		debug('final touchCount: ' & touchCount);
 		assertEquals(2, touchCount, "debounce calms overzealous method calling");
 	}
