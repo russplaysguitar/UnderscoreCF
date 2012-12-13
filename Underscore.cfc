@@ -742,9 +742,9 @@ component {
 	}
 
 	/**
-	* 	@header _.slice(array, [from], [to])
+	* 	@header _.slice(array, [from], [to]) : array
 	* 	@hint Returns a subsection of the array. Negative values for to and from offset from the end of the array.
-	* 	@example _.slice([1, 2, 3, 4]);<br/> => [2, 3, 4]<br/><br/>_.slice([1, 2, 3, 4], 3);<br/> => [3, 4]<br/><br/>_.slice([1, 2, 3, 4], 2, -1);<br/> => [2, 3]<br/><br/>_.slice([1, 2, 3, 4], -3, -1);<br/> => [2, 3]
+	* 	@example _.slice([1, 2, 3, 4]);<br/>=> [2, 3, 4]<br/><br/>_.slice([1, 2, 3, 4], 3);<br/>=> [3, 4]<br/><br/>_.slice([1, 2, 3, 4], 2, -1);<br/>=> [2, 3]<br/><br/>_.slice([1, 2, 3, 4], -3, -1);<br/>=> [2, 3]
 	*/
 	public any function slice(array = [], numeric from = 2, numeric to) {
 		var len = arrayLen(array);
@@ -1811,7 +1811,7 @@ component {
 		}
 	}
 
-	/*
+	/**
 	*	@header _.random(min, max) : numeric
 	*	@hint Returns a random integer between min and max, inclusive. If you only pass one argument, it will return a number between 0 and that number. Delegates to RandRange().
 	*	@example _.random(0, 100);<br />=> 42
