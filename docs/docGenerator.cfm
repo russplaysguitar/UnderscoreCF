@@ -24,6 +24,8 @@
 		{title: "Utilities", list: utilFunctions}
 	];
 
+	crlf = chr(13) & chr(10);
+
 	display = function (metadata, functionList) {
 		var functions = listToArray(functionList);
 		var funcMetas = _.map(functions, function(v){
@@ -37,7 +39,7 @@
 		});
 		_.each(funcMetas, function(val, key) {
 			if(structKeyExists(val, "hint")) {
-				writeOutput("<p id='" & val.name &"'>");
+				writeOutput("#crlf & crlf#<p id='" & val.name &"'>");
 				writeOutput("<b class='header'>" & val.name & "</b> ");
 				if(structKeyExists(val, "header")) {
 					writeOutput("<code>" & val.header & "</code>");
