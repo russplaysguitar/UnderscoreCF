@@ -61,7 +61,7 @@
 	<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="chrome=1" />
 	<meta name="viewport" content="width=device-width" />
-	<link rel="stylesheet" type="text/css" href="style.css" />
+	<link rel="stylesheet" type="text/css" href="index_files/style.css" />
 </head>
 <body>
 	<div id="sidebar" class="interface">
