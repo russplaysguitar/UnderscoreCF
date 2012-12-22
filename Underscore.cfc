@@ -1025,7 +1025,7 @@ component {
 
 	/**
 	* 	@header _.zip(*arrays) : array
-	*	@hint Merges together the values of each of the arrays with the values at the corresponding position. Useful when you have separate data sources that are coordinated through matching array indexes. If you're working with a matrix of nested arrays, zip.apply can transpose the matrix in a similar fashion.
+	*	@hint Merges together the values of each of the arrays with the values at the corresponding position. Useful when you have separate data sources that are coordinated through matching array indexes.
 	* 	@example _.zip(['moe', 'larry', 'curly'], [30, 40, 50], [true, false, false]);<br />=> [["moe", 30, true], ["larry", 40, false], ["curly", 50, false]]
 	*/
 	public array function zip() {
