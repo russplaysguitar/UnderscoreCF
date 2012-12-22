@@ -191,6 +191,7 @@ component extends="mxunit.framework.TestCase" {
 		assertEquals([1],                _.concat([1], []), 'Concatenating an empty array with a non-empty array results in non-empty array');
 		assertEquals([{one:1}, {two:2}], _.concat([{one:1}], [{two:2}]), 'Can concatenate arrays of structs');
 		assertEquals([true, false],      _.concat([true], [false]), 'Can concatenate arrays of booleans');
+		assertEquals([1, 2, 3],			 _.concat([1], [2], [3]), 'Can concatenate multiple arrays');
 	}
 
 	public void function testTakeWhile() {

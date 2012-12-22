@@ -853,16 +853,19 @@ component {
 	}
 
 	/**
-	* 	@header _.concat(array1, array2) : array
-	* 	@hint Concatenates two arrays together an returns the result. Delegates to ArrayAppend().
-	* 	@example _.concat([1, 2, 3],[4, 5, 6]);<br />=> [1, 2, 3, 4, 5, 6];
+	* 	@header _.concat(*arrays) : array
+	* 	@hint Concatenates any number of arrays together an returns the result. Delegates to ArrayAppend().
+	* 	@example _.concat([1, 2, 3], [4, 5, 6]);<br />=> [1, 2, 3, 4, 5, 6];
 	*/
-	public array function concat(array array1 = [], array array2 = []) {
+	public array function concat() {
+		var numArgs = _.size(arguments);
 		var result = [];
-
-		ArrayAppend(result, array1, true);
-		ArrayAppend(result, array2, true);
-
+		for(var i = 1; i <= numArgs; i++) {
+			if (!isArray(arguments[i])) {
+				throw("Cannot concat() non-array collections", "Underscore");
+			}
+			ArrayAppend(result, arguments[i], true);
+		}
 		return result;
 	}
 
