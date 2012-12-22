@@ -349,6 +349,60 @@ component extends="mxunit.framework.TestCase" {
 	    assertEquals([''], _.toArray(''), "Empty list elements should create zero-length string value");
 	}
 	
+	public void function testToQuery() {
+		// note: Using _.isEqual() within this test because assertEquals() isn't currently correct for queries.
+		// If converting to assertEquals (someday), please ensure that these tests can fail on mismatching queries
+
+		assertTrue(_.isEqual(QueryNew(""), _.toQuery([])), "Empty array returns an empty query");
+
+		var array = [{someColumn: "StringValue"}];
+		var expected = QueryNew("someColumn");
+		QueryAddRow(expected);
+		QuerySetCell(expected, "someColumn", "StringValue", 1);
+		assertTrue(_.isEqual(array, _.toArray(expected)), "Sanity test");
+		assertTrue(_.isEqual(expected, _.toQuery(array)), "Can convert a single column, single row query with a string value");
+
+		var array = [{someColumn: 10}];
+		var expected = QueryNew("someColumn");
+		QueryAddRow(expected);
+		QuerySetCell(expected, "someColumn", 10, 1);
+		assertTrue(_.isEqual(array, _.toArray(expected)), "Sanity test");
+		assertTrue(_.isEqual(expected, _.toQuery(array)), "Can convert a single column, single row query with integer value");
+
+		var array = [{someColumn: 2.2}];
+		var expected = QueryNew("someColumn");
+		QueryAddRow(expected);
+		QuerySetCell(expected, "someColumn", 2.2, 1);
+		assertTrue(_.isEqual(array, _.toArray(expected)), "Sanity test");
+		assertTrue(_.isEqual(expected, _.toQuery(array)), "Can convert a single column, single row query with float value");
+
+		var array = [{someColumn: 0}];
+		var expected = QueryNew("someColumn");
+		QueryAddRow(expected);
+		QuerySetCell(expected, "someColumn", 0, 1);
+		assertTrue(_.isEqual(array, _.toArray(expected)), "Sanity test");
+		assertTrue(_.isEqual(expected, _.toQuery(array)), "Can convert a single column, single row query with numeric zero value");
+
+		var array = [{someColumn: "row 1"}, {someColumn: "row 2"}];
+		var expected = QueryNew("someColumn");
+		QueryAddRow(expected, 2);
+		QuerySetCell(expected, "someColumn", "row 1", 1);
+		QuerySetCell(expected, "someColumn", "row 2", 2);
+		assertTrue(_.isEqual(array, _.toArray(expected)), "Sanity test");
+		assertTrue(_.isEqual(expected, _.toQuery(array)), "Can convert a single column, multi-row query with string value");
+
+		var array = [{firstColumn: "col1 row1", secondColumn: "col2 row1"}, 
+					 {firstColumn: "col1 row2", secondColumn: "col2 row2"}];
+		var expected = QueryNew("firstColumn,secondColumn");
+		QueryAddRow(expected, 2);
+		QuerySetCell(expected, "firstColumn", "col1 row1", 1);
+		QuerySetCell(expected, "secondColumn", "col2 row1", 1);
+		QuerySetCell(expected, "firstColumn", "col1 row2", 2);
+		QuerySetCell(expected, "secondColumn", "col2 row2", 2);
+		assertTrue(_.isEqual(array, _.toArray(expected)), "Sanity test");
+		assertTrue(_.isEqual(expected, _.toQuery(array)), "Can convert a multi-column, multi-row query with string value");
+	}
+
 	public void function testSize() {
 	    assertEquals(3, _.size({one : 1, two : 2, three : 3}), 'can compute the size of an object');
 	    assertEquals(3, _.size([1, 2, 3]), 'can compute the size of an array');

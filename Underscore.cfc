@@ -672,7 +672,7 @@ component {
 			var result = [];
 			for (index = 1; index <= arguments.obj.RecordCount; index++) {
 				var row = {};
-				for (var colName in arguments.obj.columnList) {
+				for (var colName in listToArray(arguments.obj.columnList)) {
 					row[colName] = arguments.obj[colName][index];
 				}
 				result[index] = row;
@@ -689,6 +689,33 @@ component {
 		{
 			return [arguments.obj];
 		}
+	}
+
+	/**
+	*	@header _.toQuery(array) : query
+	*	@hint Converts an array of structs to a Coldfusion query.
+	*	@example _.toQuery([{someColumn: "row 1"}]); <br />=> (result is a query with one column titled "someColumn" and one row containing "row 1"
+	*/
+	public query function toQuery(required array array) {
+		if (!ArrayLen(array)) {
+			return QueryNew("");
+		}
+
+		var colsArray = _.keys(array[1]);
+		var cols = _.join(colsArray, ",");
+		var result = QueryNew(cols);
+
+		_.each(array, function (struct, row) {
+			if (_.join(_.keys(struct), ",") != cols) {
+				throw("Structs must have same keys for toQuery()", "Underscore");
+			}
+			QueryAddRow(result);
+			_.each(struct, function (val, key) {
+				QuerySetCell(result, key, val, row);
+			});
+		});
+
+		return result;
 	}
 
 	/**
@@ -1632,7 +1659,7 @@ component {
 			else if (isBinary(a) && isBinary(b)) {
 				return true;
 			}
-			else if (_.isFunction(a) && isFunction(b)) {
+			else if (_.isFunction(a) && _.isFunction(b)) {
 				return true;
 			}
 			else if (_.isNumber(a) && _.isNumber(b)) {
@@ -1660,10 +1687,14 @@ component {
 			return false;
 		}
 
-		if (_.isFunction(a) || _.isFunction(b)) {
+		if (_.isFunction(a)) {// we know b is same type already
 			var a_meta = getMetaData(a);
 			var b_meta = getMetaData(b);
 			return _.isEqual(a_meta.parameters, b_meta.parameters);
+		}
+
+		if (isQuery(a)) {// we know b is same type already
+			return _.isEqual(_.toArray(a), _.toArray(b));
 		}
 
 		var iterator = function (v, k) {
