@@ -720,8 +720,8 @@ component {
 
 	/**
 	* 	@header _.size(collection) : numeric
-	*	@hint Return the number of values in the collection.
-	* 	@example _.size({one : 1, two : 2, three : 3});<br />=> 3
+	*	@hint Return the number of values in the collection. Note: A simple value will be considered a single list item.
+	* 	@example _.size({one : 1, two : 2, three : 3});<br />=> 3<br />_.size(99);<br />=> 1<br />_.size("101");<br />=> 1<br />_.size();<br />=> 0
 	*/
 	public numeric function size(obj = this.obj) {
 		if (isObject(arguments.obj) || isStruct(arguments.obj)) {
@@ -733,8 +733,11 @@ component {
 		else if (isQuery(arguments.obj)) {
 			return arguments.obj.recordCount;
 		}
+		else if (isSimpleValue(arguments.obj)) {
+			return arrayLen(listToArray(arguments.obj));
+		}
 		else {
-			throw("size() is only compatible with objects, structs, queries, and arrays.", "Underscore");
+			throw("size() is only compatible with objects, structs, queries, arrays, and comma-delimeted lists.", "Underscore");
 		}
 	}
 

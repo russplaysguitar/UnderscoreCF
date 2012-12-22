@@ -435,6 +435,10 @@ component extends="mxunit.framework.TestCase" {
 	public void function testSize() {
 	    assertEquals(3, _.size({one : 1, two : 2, three : 3}), 'can compute the size of an object');
 	    assertEquals(3, _.size([1, 2, 3]), 'can compute the size of an array');
+	    assertEquals(3, _.size("1, 2, 3"), 'can compute the size of a comma-delimted list');
+	    assertEquals(1, _.size("10"), 'can compute the size of a comma-delimted list with a single number in it');
+	    assertEquals(1, _.size(99), 'can compute the size of a comma-delimted list with a single number in it');
+	    assertEquals(0, _.size(), 'can compute the size of a empty value');
 	}
 	
 	public void function testInvoke() {
