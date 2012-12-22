@@ -347,6 +347,35 @@ component extends="mxunit.framework.TestCase" {
 	    assertEquals(['',2,3,4], _.toArray(',2,3,4'), "Empty list elements should create zero-length string value");
 	    assertEquals(['','','',''], _.toArray(',,,'), "Empty list elements should create zero-length string value");
 	    assertEquals([''], _.toArray(''), "Empty list elements should create zero-length string value");
+
+
+		// note: Using _.isEqual() within this test because assertEquals() isn't currently correct for queries.
+		// If converting to assertEquals (someday), please ensure that these tests can fail on mismatching queries
+	    var query = QueryNew("someColumn,otherColumn");
+		assertTrue(_.isEqual([], _.toArray(query)), "Should convert empty queries to empty arrays");
+	
+		var expected = [{someColumn: "someValue"}];
+	    var query = QueryNew("someColumn");
+		QueryAddRow(query);
+		QuerySetCell(query, "someColumn", "someValue", 1);
+		assertTrue(_.isEqual(expected, _.toArray(query)), "Should convert single-column queries");
+
+		var expected = [{firstColumn: "value 1", secondColumn: "value 2"}];
+	    var query = QueryNew("firstColumn,secondColumn");
+		QueryAddRow(query);
+		QuerySetCell(query, "firstColumn", "value 1", 1);
+		QuerySetCell(query, "secondColumn", "value 2", 1);
+		assertTrue(_.isEqual(expected, _.toArray(query)), "Should convert multi-column queries");
+
+		var expected = [{firstColumn: "col1 row1", secondColumn: "col2 row1"}, 
+					 {firstColumn: "col1 row2", secondColumn: "col2 row2"}];
+		var query = QueryNew("firstColumn,secondColumn");
+		QueryAddRow(query, 2);
+		QuerySetCell(query, "firstColumn", "col1 row1", 1);
+		QuerySetCell(query, "secondColumn", "col2 row1", 1);
+		QuerySetCell(query, "firstColumn", "col1 row2", 2);
+		QuerySetCell(query, "secondColumn", "col2 row2", 2);
+		assertTrue(_.isEqual(expected, _.toArray(query)), "Should convert multi-column, multi-row queries");		
 	}
 	
 	public void function testToQuery() {
