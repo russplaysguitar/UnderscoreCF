@@ -697,18 +697,13 @@ component {
 	*	@example _.toQuery([{someColumn: "row 1"}]); <br />=> (result is a query with one column titled "someColumn" and one row containing "row 1"
 	*/
 	public query function toQuery(required array array) {
-		if (!ArrayLen(array)) {
-			return QueryNew("");
-		}
-
-		var colsArray = _.keys(array[1]);
+		var colsArray = _.reduce(array, function (memo, struct) {
+			return _.union(memo, _.keys(struct));
+		}, []);
 		var cols = _.join(colsArray, ",");
 		var result = QueryNew(cols);
 
 		_.each(array, function (struct, row) {
-			if (_.join(_.keys(struct), ",") != cols) {
-				throw("Structs must have same keys for toQuery()", "Underscore");
-			}
 			QueryAddRow(result);
 			_.each(struct, function (val, key) {
 				QuerySetCell(result, key, val, row);

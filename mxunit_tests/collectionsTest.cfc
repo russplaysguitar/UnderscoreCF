@@ -430,6 +430,15 @@ component extends="mxunit.framework.TestCase" {
 		QuerySetCell(expected, "secondColumn", "col2 row2", 2);
 		assertTrue(_.isEqual(array, _.toArray(expected)), "Sanity test");
 		assertTrue(_.isEqual(expected, _.toQuery(array)), "Can convert a multi-column, multi-row query with string value");
+
+		var array = [{firstColumn: "col1 row1"}, 
+					 {secondColumn: "col2 row2"}];
+		var expected = QueryNew("firstColumn,secondColumn");
+		QueryAddRow(expected, 2);
+		QuerySetCell(expected, "firstColumn", "col1 row1", 1);
+		QuerySetCell(expected, "secondColumn", "col2 row2", 2);
+		// assertTrue(_.isEqual(array, _.toArray(expected)), "Sanity test");// this doesn't work because empty cells have empty strings in them
+		assertTrue(_.isEqual(expected, _.toQuery(array)), "Can convert sparse-key array of structs to a multi-column, multi-row query with string value");
 	}
 
 	public void function testSize() {
