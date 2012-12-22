@@ -692,25 +692,23 @@ component {
 	}
 
 	/**
-	*	@header _.toQuery(array) : query
-	*	@hint Converts an array of structs to a Coldfusion query.
+	*	@header _.toQuery(array, [columnNames], [columnTypes]) : query
+	*	@hint Converts an array of structs to a Coldfusion query. Columns are created dynamically unless a comma-delimited list of column names are provided. Column types are "varchar" unless a comma-delimited list of column types is provided. Delegates to native QueryNew().
 	*	@example _.toQuery([{someColumn: "row 1"}]); <br />=> (result is a query with one column titled "someColumn" and one row containing "row 1"
 	*/
-	public query function toQuery(required array array) {
-		var colsArray = _.reduce(array, function (memo, struct) {
-			return _.union(memo, _.keys(struct));
-		}, []);
-		var cols = _.join(colsArray, ",");
-		var result = QueryNew(cols);
-
-		_.each(array, function (struct, row) {
-			QueryAddRow(result);
-			_.each(struct, function (val, key) {
-				QuerySetCell(result, key, val, row);
-			});
-		});
-
-		return result;
+	public query function toQuery(required array array, string columnNames, string columnTypes) {
+		if (!ArrayLen(array)) return QueryNew("");
+		if (isNull(arguments.columnNames)) {
+			var colsArray = _.reduce(arguments.array, function (memo, struct) {
+				return _.union(memo, _.keys(struct));
+			}, []);
+			arguments.columnNames = _.join(colsArray, ",");
+		}
+		if (isNull(arguments.columnTypes)) {
+			var typesArray = _.map(_.toArray(arguments.columnNames), function () { return "varchar"; });
+			arguments.columnTypes = _.join(typesArray, ",");
+		}
+		return QueryNew(arguments.columnNames, arguments.columnTypes, arguments.array);
 	}
 
 	/**

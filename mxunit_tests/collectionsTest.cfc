@@ -439,6 +439,22 @@ component extends="mxunit.framework.TestCase" {
 		QuerySetCell(expected, "secondColumn", "col2 row2", 2);
 		// assertTrue(_.isEqual(array, _.toArray(expected)), "Sanity test");// this doesn't work because empty cells have empty strings in them
 		assertTrue(_.isEqual(expected, _.toQuery(array)), "Can convert sparse-key array of structs to a multi-column, multi-row query with string value");
+
+		var array = [{someColumn: "val", otherColumn: "other val"}];
+		var expected = QueryNew("someColumn,otherColumn");
+		QueryAddRow(expected);
+		QuerySetCell(expected, "someColumn", "val", 1);
+		QuerySetCell(expected, "otherColumn", "other val", 1);
+		assertTrue(_.isEqual(array, _.toArray(expected)), "Sanity test");
+		assertTrue(_.isEqual(expected, _.toQuery(array, "someColumn,otherColumn")), "Can pass in the column name list");		
+
+		var array = [{someColumn: 10, otherColumn: "other val"}];
+		var expected = QueryNew("someColumn,otherColumn");
+		QueryAddRow(expected);
+		QuerySetCell(expected, "someColumn", 10, 1);
+		QuerySetCell(expected, "otherColumn", "other val", 1);
+		assertTrue(_.isEqual(array, _.toArray(expected)), "Sanity test");
+		assertTrue(_.isEqual(expected, _.toQuery(array, "someColumn,otherColumn", "integer,varchar")), "Can pass in the column type list");
 	}
 
 	public void function testSize() {
