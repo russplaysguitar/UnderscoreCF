@@ -8,7 +8,7 @@
 
 	arrayFunctions = "first,initial,last,rest,compact,flatten,without,union,intersection,difference,uniq,zip,object,indexOf,lastIndexOf,range,concat,reverse,takeWhile,splice,push,unshift,join,slice";
 
-	funcFunctions = "bind,bindAll,memoize,delay,once,after,wrap,compose";
+	funcFunctions = "bind,bindAll,memoize,delay,once,debounce,after,wrap,compose";
 
 	objectFunctions = "keys,values,pairs,invert,functions,extend,pick,omit,defaults,clone,has,isEqual,isEmpty,isArray,isObject,isFunction,isString,isNumber,isBoolean,isDate";
 
@@ -24,6 +24,8 @@
 		{title: "Utilities", list: utilFunctions}
 	];
 
+	crlf = chr(13) & chr(10);
+
 	display = function (metadata, functionList) {
 		var functions = listToArray(functionList);
 		var funcMetas = _.map(functions, function(v){
@@ -37,7 +39,7 @@
 		});
 		_.each(funcMetas, function(val, key) {
 			if(structKeyExists(val, "hint")) {
-				writeOutput("<p id='" & val.name &"'>");
+				writeOutput("#crlf & crlf#<p id='" & val.name &"'>");
 				writeOutput("<b class='header'>" & val.name & "</b> ");
 				if(structKeyExists(val, "header")) {
 					writeOutput("<code>" & val.header & "</code>");
@@ -59,7 +61,7 @@
 	<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="chrome=1" />
 	<meta name="viewport" content="width=device-width" />
-	<link rel="stylesheet" type="text/css" href="style.css" />
+	<link rel="stylesheet" type="text/css" href="index_files/style.css" />
 </head>
 <body>
 	<div id="sidebar" class="interface">
