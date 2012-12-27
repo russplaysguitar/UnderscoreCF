@@ -144,22 +144,22 @@ component extends="mxunit.framework.TestCase" {
 		toucher(); // touchCount==1
 		assertEquals(1, touchCount, "closure isn't working...");
 
-		var lazyToucher = _.debounce(toucher, 20);
+		var lazyToucher = _.debounce(toucher, 100);
 
 		for (var i = 0; i < 3; i++){
-			sleep(10);
+			sleep(36);
 			lazyToucher();
 		}
 
 		var currentTime = getTickCount() - startTime;
 		debug("time since first call: " & currentTime & "ms");
 
-		sleep(30);
+		sleep(100);
 		currentTime = getTickCount() - startTime;
 		debug('total time: ' & currentTime & 'ms');
 		debug(cfthread);
-		assertTrue(currentTime >= 60, "not waiting long enough!!!!!!11eleven");
-		debug('final touchCount: ' & touchCount);
+		assertTrue(currentTime >= 208, "not waiting long enough!!!!!!11eleven");
+		sleep(50);
 		assertEquals(2, touchCount, "debounce calms overzealous method calling");
 	}
 
@@ -173,16 +173,16 @@ component extends="mxunit.framework.TestCase" {
 		toucher(); // touchCount==1
 		assertEquals(1, touchCount, "closure isn't working...");
 
-		var lazyToucher = _.debounce(toucher, 20, true);
+		var lazyToucher = _.debounce(toucher, 100, true);
 
 		for (var i = 0; i < 3; i++){
-			sleep(10);
+			sleep(36);
 			lazyToucher();
 		}
 
-		assertEquals(2, touchCount, 'once on the leading edge');
+		sleep(130); //allow cooldown period
 
-		sleep(30); //allow cooldown period
+		assertEquals(2, touchCount, 'once on the leading edge');
 
 		for (var i = 0; i < 3; i++){
 			sleep(10);
