@@ -1329,24 +1329,29 @@ component {
 		var threadName = '_debounced_x';
 		var called = false;
 		var setCalled = function(v){ called = v; };
-		return function () {
-			if (structKeyExists(cfthread, threadName) && cfthread[threadName].status neq "completed"){
+		return function() {
+			if (isdefined('cfthread') && structKeyExists(cfthread, threadName) && cfthread[threadName].status neq "completed"){
 				thread action='terminate' name=threadName;
 			}
 			threadCount++;
 			threadName = threadNameBase & threadCount;
-			if (!structKeyExists(cfthread, threadName)){
-				thread action='run' name=threadName wait=wait func=func immediate=immediate setCalled=setCalled called=called {
-					if (immediate && !called) func();
-					setCalled(true);
-					sleep(attributes.wait);
-					if (!immediate) func();
-					setCalled(false);
-				}
+			if (!isdefined('cfthread') || !structKeyExists(cfthread, threadName)){
+				debounceThread(threadName, wait, func, immediate, setCalled, called);
 			}else{
 				throw;
 			}
 		};
+	}
+
+	// this is a separate, "named" function for Railo compatibility only
+	private function debounceThread(threadName, wait, func, immediate, setCalled, called) {
+		thread action='run' name=threadName wait=wait func=func immediate=immediate setCalled=setCalled called=called {
+			if (immediate && !called) func();
+			setCalled(true);
+			sleep(attributes.wait);
+			if (!immediate) func();
+			setCalled(false);
+		}
 	}
 
 	/**
