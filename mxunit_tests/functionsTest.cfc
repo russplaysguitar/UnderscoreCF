@@ -133,6 +133,64 @@ component extends="mxunit.framework.TestCase" {
 	    assertEquals(0, testAfter(5, 4), "after(N) should not fire unless called N times");
 	    assertEquals(1, testAfter(0, 0), "after(0) should fire immediately");
 	}
+
+	public void function testDebounce_ImmediateFalse(){
+		var touchCount = 0;
+		var startTime = getTickCount();
+		var toucher = function(){
+			touchCount++;
+			return touchCount;
+		};
+		toucher(); // touchCount==1
+		assertEquals(1, touchCount, "closure isn't working...");
+
+		var lazyToucher = _.debounce(toucher, 100);
+
+		for (var i = 0; i < 3; i++){
+			sleep(36);
+			lazyToucher();
+		}
+
+		var currentTime = getTickCount() - startTime;
+		debug("time since first call: " & currentTime & "ms");
+
+		sleep(100);
+		currentTime = getTickCount() - startTime;
+		debug('total time: ' & currentTime & 'ms');
+		debug(cfthread);
+		assertTrue(currentTime >= 208, "not waiting long enough!!!!!!11eleven");
+		sleep(50);
+		assertEquals(2, touchCount, "debounce calms overzealous method calling");
+	}
+
+	public void function testDebounce_ImmediateTrue(){
+		var touchCount = 0;
+		var startTime = getTickCount();
+		var toucher = function(){
+			touchCount++;
+			return touchCount;
+		};
+		toucher(); // touchCount==1
+		assertEquals(1, touchCount, "closure isn't working...");
+
+		var lazyToucher = _.debounce(toucher, 100, true);
+
+		for (var i = 0; i < 3; i++){
+			sleep(36);
+			lazyToucher();
+		}
+
+		sleep(130); //allow cooldown period
+
+		assertEquals(2, touchCount, 'once on the leading edge');
+
+		for (var i = 0; i < 3; i++){
+			sleep(10);
+			lazyToucher();
+		}
+
+		assertEquals(3, touchCount, 'second time on the leading edge (after cooldown)');
+	}
 	
 	public void function setUp() {
 		variables._ = new underscore.Underscore();

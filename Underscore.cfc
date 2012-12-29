@@ -1220,11 +1220,11 @@ component {
 	/* FUNCTION FUNCTIONS */
 
 	/**
-	* 	@header _.bind(function, object, [*arguments]) : any
+	* 	@header _.bind(function, object, [*arguments]) : function
 	*	@hint Bind a function to a structure, meaning that whenever the function is called, the value of "this" will be the structure. Optionally, bind arguments to the function to pre-fill them, also known as partial application.
 	* 	@example "func = function(args, this){ return args.greeting & ': ' & this.name; };<br />func = _.bind(func, {name : 'moe'}, {greeting: 'hi'});<br />func();<br />=> 'hi: moe'"
 	*/
-	public any function bind(func, context = {}) {
+	public function function bind(func, context = {}) {
 		var boundArgs = _.slice(arguments, 3);
 
 		if (!_.isFunction(func)) {
@@ -1267,11 +1267,11 @@ component {
 	}
 
 	/**
-	* 	@header _.memoize(function, [hashFunction]) : any
+	* 	@header _.memoize(function, [hashFunction]) : function
 	*	@hint Memoizes a given function by caching the computed result. Useful for speeding up slow-running computations. If passed an optional hashFunction, it will be used to compute the hash key for storing the result, based on the arguments to the original function. The default hashFunction just uses the first argument to the memoized function as the key.
 	* 	@example fibonacci = _.memoize(function(n) {  return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2); });
 	*/
-	public any function memoize(func, hasher) {
+	public function function memoize(func, hasher) {
 		var memo = {};
 		if (!structKeyExists(arguments, 'hasher')) {
 			arguments.hasher = function(x) {
@@ -1300,11 +1300,11 @@ component {
 	}
 
 	/*
-	* 	@header _.defer(function, arguments) : any
+	* 	@header _.defer(function, arguments) : function
 	*	@hint Defers a function, scheduling it to run after the current call stack has cleared.
 	* 	@example
 	*/
-	public any function defer(func, args) {
+	public function function defer(func, args) {
 		// TODO: make sure this works, if it is possible in CF
 		return _.delay(func, 0, args);
 	}
@@ -1313,37 +1313,48 @@ component {
 		Returns a function, that, when invoked, will only be triggered at most once
 		during a given window of time.
   	*/
-	public any function throttle(func, wait) {
+	public function function throttle(func, wait) {
 		// TODO
 		return;
 	}
 
-	/*
-		Returns a function, that, as long as it continues to be invoked, will not
-		be triggered. The function will be called after it stops being called for
-		N milliseconds. If `immediate` is passed, trigger the function on the
-		leading edge, instead of the trailing.
+	/**
+	* 	@header _.debounce(function, wait, immediate) : function
+	* 	@hint Returns a function that, as long as it continues to be invoked, will not be triggered. The function will be called after it stops being called for N milliseconds. If immediate is passed, trigger the function on the leading edge, instead of the trailing. (Immediate requires a Wait cooldown period beteween calls.)
+	* 	@example keepCalm = _.debounce(function(){}, 300, true);<br/>for (var i = 0; i<10; i++){ keepCalm(); }<br/>=>//function argument is called only once
 	*/
-	public any function debounce(func, wait, immediate) {
-		// TODO: in progress
-		// var lastInvokeTime = GetTickCount();
-		// return function () {
-		// 	var thisInvokeTime = GetTickCount();
-		// 	if (thisInvokeTime - lastInvokeTime > wait) {
-		// 		func();
-		// 	}
-		// 	else {
-		// 	}
-		// 	lastInvokeTime = GetTickCount();
-		// };
+	public function function debounce(func, wait, immediate = false) {
+		var threadNameBase = '_debounced_' & createUUID() & '_';
+		var threadCount = 0;
+		var threadName = '_debounced_x';
+		var called = false;
+		var setCalled = function(v){ called = v; };
+		return function () {
+			if (structKeyExists(cfthread, threadName) && cfthread[threadName].status neq "completed"){
+				thread action='terminate' name=threadName;
+			}
+			threadCount++;
+			threadName = threadNameBase & threadCount;
+			if (!structKeyExists(cfthread, threadName)){
+				thread action='run' name=threadName wait=wait func=func immediate=immediate setCalled=setCalled called=called {
+					if (immediate && !called) func();
+					setCalled(true);
+					sleep(attributes.wait);
+					if (!immediate) func();
+					setCalled(false);
+				}
+			}else{
+				throw;
+			}
+		};
 	}
 
 	/**
-	* 	@header _.once(function) : any
+	* 	@header _.once(function) : function
 	*	@hint Returns a function that will be executed at most one time, no matter how often you call it. Useful for lazy initialization.
 	* 	@example i = 0;<br />once = _.once(function () { i = i+1; return i; });<br />once();<br />=> 1<br />once();<br />=> 1
 	*/
-	public any function once(func) {
+	public function function once(func) {
 		var ran = false;
 		var memo = {};
 		return function() {
@@ -1364,11 +1375,11 @@ component {
 	}
 
 	/**
-	* 	@header _.wrap(function, wrapper) : any
+	* 	@header _.wrap(function, wrapper) : function
 	*	@hint Returns the first function passed as an argument to the second, allowing you to adjust arguments, run code before and after, and conditionally execute the original function.
 	* 	@example "hello = function(name) { return "hello: " & name; };<br />hello = _.wrap(hello, function(func) {<br />return "before, " & func("moe") & ", after";<br />});<br />hello();<br />=> 'before, hello: moe, after'"
 	*/
-	public any function wrap(func, wrapper) {
+	public function function wrap(func, wrapper) {
 		// TODO make sure this handles arguments correctly
 		return function() {
 			arguments.func = func;
@@ -1377,11 +1388,11 @@ component {
 	}
 
 	/**
-	* 	@header _.compose(*functions) : any
+	* 	@header _.compose(*functions) : function
 	*	@hint Returns a function that is the composition of a list of functions, each function consumes the return value of the function that follows. In math terms, composing the functions f(), g(), and h() produces f(g(h())).
 	*	@example greet	= function(name){ return "hi: " & name; };<br />exclaim  = function(statement){ return statement & "!"; };<br />welcome = _.compose(exclaim, greet);<br />welcome('moe');<br />=> 'hi: moe!';
 	*/
-	public any function compose() {
+	public function function compose() {
 		var funcs = arguments;
 		return function() {
 			var args = arguments;
@@ -1396,7 +1407,7 @@ component {
 
 	/**
 	* 	@header _.after(count, function) : any
-	*	@hint Returns a function that will only be executed after being called N times.
+	*	@hint Returns a function that will only be executed after being called N times. When count <= 0, the result of calling the function immediately is returned.
 	* 	@example "func = function () { writeOutput("hi"); };<br />callFuncAfterTwo = _.after(2, func);<br />callFuncAfterTwo();<br />=> // nothing<br />callFuncAfterTwo();<br />=> 'hi'"
 	*/
 	public any function after(times, func) {
