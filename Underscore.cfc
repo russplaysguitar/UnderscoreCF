@@ -712,6 +712,54 @@ component {
 	}
 
 	/**
+	*	@header _.toXml(collection, [*elementNames]) : xml
+	*	@hint Converts a collection to an XML object. Element names default to variable types. If provided, element names will be assigned to unnamed elements (any element without a key) in the order they are listed.
+	*	@example _.toXml([1, 2]); <br />=> &lt;array>&lt;element>1&lt;/element>&lt;element>2&lt;/element>&lt;/array> <br /><br />_.toXml([3], 'myArray', 'number'); <br />=> &lt;myArray>&lt;number>3&lt;/number>&lt;myArray>
+	*/
+	public xml function toXml(required any value) {
+		var toXmlString = function(required any value, array elementNames = []) {
+			var xmlString = '';
+			var elementName = '';
+			var isArray = isArray(arguments.value);
+			var isQuery = isQuery(arguments.value);
+
+			if (_.size(elementNames) > 0)
+				elementName = _.first(elementNames);
+			else if (isArray)
+				elementName = 'array';
+			else if (isQuery)
+				elementName = 'query';
+			else if (isObject(arguments.value))
+				elementName = 'object';
+			else if (isStruct(arguments.value))
+				elementName = 'struct';
+			else
+				elementName = 'element';
+
+			xmlString &= '<' & elementName & '>';
+
+			if (isSimpleValue(arguments.value) || _.isFunction(arguments.value)) {
+				xmlString &= _.result(arguments, 'value');
+			}
+			else {
+				_.each(arguments.value, function (val, key) {
+					var remainingNames = _.rest(elementNames);
+					if (!isArray && !isQuery)
+						remainingNames = _.concat([key], remainingNames);// key is el name for non-array, non-query types
+					xmlString &= toXmlString(val, remainingNames);
+				});
+			}
+
+			xmlString &= '</' & elementName & '>';
+
+			return xmlString;
+		};
+		var elementNames = _.slice(arguments, 2);
+		var xmlString = toXmlString(value, elementNames);
+		return xmlParse(xmlString);
+	}	
+
+	/**
 	* 	@header _.size(collection) : numeric
 	*	@hint Return the number of values in the collection. Note: A simple value will be considered a single list item.
 	* 	@example _.size({one : 1, two : 2, three : 3});<br />=> 3<br />_.size(99);<br />=> 1<br />_.size("101");<br />=> 1<br />_.size();<br />=> 0
