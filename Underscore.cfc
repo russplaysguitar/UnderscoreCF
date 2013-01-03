@@ -723,8 +723,8 @@ component {
 			var isArray = isArray(arguments.value);
 			var isQuery = isQuery(arguments.value);
 
-			if (_.size(elementNames) > 0)
-				elementName = _.first(elementNames);
+			if (_.size(arguments.elementNames) > 0)
+				elementName = _.first(arguments.elementNames);
 			else if (isArray)
 				elementName = 'array';
 			else if (isQuery)
@@ -742,8 +742,8 @@ component {
 				xmlString &= _.result(arguments, 'value');
 			}
 			else {
+				var remainingNames = _.rest(arguments.elementNames);
 				_.each(arguments.value, function (val, key) {
-					var remainingNames = _.rest(elementNames);
 					if (!isArray && !isQuery)
 						remainingNames = _.concat([key], remainingNames);// key is el name for non-array, non-query types
 					xmlString &= toXmlString(val, remainingNames);
@@ -755,7 +755,7 @@ component {
 			return xmlString;
 		};
 		var elementNames = _.slice(arguments, 2);
-		var xmlString = toXmlString(value, elementNames);
+		var xmlString = toXmlString(arguments.value, elementNames);
 		return xmlParse(xmlString);
 	}	
 
