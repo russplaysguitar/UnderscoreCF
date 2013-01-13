@@ -196,6 +196,16 @@ component extends="mxunit.framework.TestCase" {
 		assertEquals(expected, result);
 	}
 	
+	public void function testObject() {
+		var expected = {MYKEY: 'myVal'};
+		var result = _.object([['MYKEY', 'myVal']]);
+		assertEquals(expected, result);
+
+		var expected = {KEY: 'myVal'};
+		var result = _.object(['KEY'], ['myVal']);
+		assertEquals(expected, result);
+	}
+
 	public void function testIndexOf() {
 		var result = _.indexOf([1, 2, 3], 2);
 		assertEquals(2, result);

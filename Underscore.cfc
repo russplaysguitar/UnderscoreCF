@@ -1121,6 +1121,7 @@ component {
 	/**
 	*	@header _.object(array, [values]) 
 	*	@hint Converts an array into a struct. Pass either a single array of [key, value] pairs, or an array of keys, and an array of values. 
+	* 	@example _.object([['MYKEY', 'myVal']]);<br />=> {MYKEY: 'myVal'}<br /><br />_.object(['KEY'], ['myVal']);<br />=> {KEY: 'value'}
 	*/
 	public struct function object(required array list = this.obj, array values) {
 		var result = {};
