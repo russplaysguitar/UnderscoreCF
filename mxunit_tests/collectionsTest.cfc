@@ -457,6 +457,51 @@ component extends="mxunit.framework.TestCase" {
 		assertTrue(_.isEqual(expected, _.toQuery(array, "someColumn,otherColumn", "integer,varchar")), "Can pass in the column type list");
 	}
 
+	public void function testToXml() {
+		assertTrue(isXml(_.toXml('')), "Should return xml object");
+
+		assertEquals(xmlParse("<element />"), _.toXml(''), "Convert empty string");
+		assertEquals(xmlParse("<array />"), _.toXml([]), "Convert empty array");
+		assertEquals(xmlParse("<struct />"), _.toXml({}), "Convert empty struct");
+		assertEquals(xmlParse("<element />"), _.toXml(function(){}), "Convert empty function");
+		assertEquals(xmlParse("<query />"), _.toXml(QueryNew('')), "Convert empty query");
+
+		assertEquals(xmlParse("<element>0</element>"), _.toXml(0), "Convert number 0");
+		assertEquals(xmlParse("<element>-1</element>"), _.toXml(-1), "Convert negative non-zero number");
+		assertEquals(xmlParse("<element>-0</element>"), _.toXml(-0), "Convert negative zero");
+		assertEquals(xmlParse("<element>1</element>"), _.toXml(1), "Convert non-zero number");
+		assertEquals(xmlParse("<element>A</element>"), _.toXml('A'), "Convert letter");
+
+		assertEquals(xmlParse("<array><element>A</element></array>"), _.toXml(['A']), "Convert single-element array");
+		assertEquals(xmlParse("<struct><a>1</a></struct>"), _.toXml({a: 1}), "Convert single-element struct");
+		assertEquals(xmlParse("<query><struct><a>1</a></struct></query>"), _.toXml(_.toQuery([{a: 1}])), "Convert single-element query");
+		assertEquals(xmlParse("<object><init /></object>"), _.toXml(new MyClass()), "Convert object");
+		assertEquals(xmlParse("<element>1, 2</element>"), _.toXml("1, 2"), "Convert list");
+		// TODO: make list conversion work like so??? What about single-item lists, though?
+		// assertEquals(xmlParse("<list><item>1</item><item>2</item></list>"), _.toXml("1, 2"), "Convert list");
+
+		assertEquals(xmlParse("<array><element>A</element><element>1</element></array>"), _.toXml(['A', 1]), "Convert multi-element array");
+		assertEquals(xmlParse("<struct><a>1</a><b>2</b></struct>"), _.toXml({a: 1, b: 2}), "Convert multi-element struct");
+		assertEquals(xmlParse("<query><struct><a>1</a><b>2</b></struct></query>"), _.toXml(_.toQuery([{a: 1, b: 2}])), "Convert multi-element query");
+		assertEquals(xmlParse("<object><init /><a>1</a></object>"), _.toXml(new MyClass({a: 1})), "Convert multi-property object");
+
+		assertEquals(xmlParse("<someName />"), _.toXml('', 'someName'), "Name empty string element");
+		assertEquals(xmlParse("<someName />"), _.toXml([], 'someName'), "Name empty array");
+		assertEquals(xmlParse("<someName />"), _.toXml({}, 'someName'), "Name empty struct");
+		assertEquals(xmlParse("<someName />"), _.toXml(function(){}, 'someName'), "Name empty function");
+		assertEquals(xmlParse("<someName />"), _.toXml(QueryNew(''), 'someName'), "Name empty query");
+		assertEquals(xmlParse("<someName><init /></someName>"), _.toXml(new MyClass(), 'someName'), "Name empty object");
+
+		var expected = xmlParse("<outer><inner /></outer>");
+		assertEquals(expected, _.toXml([[]], "outer", "inner"), "Name nested arrays");
+
+		var expected = xmlParse("<e1><e2><array /></e2></e1>");
+		assertEquals(expected, _.toXml([[[]]], "e1", "e2"), "Partially named nested arrays");
+
+		var expected = xmlParse("<outer><inner>1</inner></outer>");
+		assertEquals(expected, _.toXml([function(){ return 1; }], "outer", "inner"), "Name nested function");
+	}
+
 	public void function testSize() {
 	    assertEquals(3, _.size({one : 1, two : 2, three : 3}), 'can compute the size of an object');
 	    assertEquals(3, _.size([1, 2, 3]), 'can compute the size of an array');
