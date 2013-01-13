@@ -511,6 +511,15 @@ component extends="mxunit.framework.TestCase" {
 	    assertEquals(0, _.size(), 'can compute the size of a empty value');
 	}
 	
+	public void function testIssue30() {
+		var expected = 'a';
+		var actual = '';
+		_.each({a: 1}, function (val, key) {
+			actual = key;
+		});
+		assertEquals(expected, actual, "iterator key should be struct key");
+	}
+
 	public void function testInvoke() {
 	    var String = function() {
 	      local.call = function () {
