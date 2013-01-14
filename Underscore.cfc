@@ -696,7 +696,7 @@ component {
 	*	@hint Converts an array of structs to a Coldfusion query. Columns are created dynamically unless a comma-delimited list of column names are provided. Column types are "varchar" unless a comma-delimited list of column types is provided. Delegates to native QueryNew().
 	*	@example _.toQuery([{someColumn: "row 1"}]); <br />=> (result is a query with one column titled "someColumn" and one row containing "row 1"
 	*/
-	public query function toQuery(required array array, string columnNames, string columnTypes) {
+	public query function toQuery(array array = this.obj, string columnNames, string columnTypes) {
 		if (!ArrayLen(array)) return QueryNew("");
 		if (isNull(arguments.columnNames)) {
 			var colsArray = _.reduce(arguments.array, function (memo, struct) {
@@ -716,12 +716,12 @@ component {
 	*	@hint Converts a collection to an XML object. Element names default to variable types. If provided, element names will be assigned to unnamed elements (any element without a key) in the order they are listed.
 	*	@example _.toXml([1, 2]); <br />=> &lt;array>&lt;element>1&lt;/element>&lt;element>2&lt;/element>&lt;/array> <br /><br />_.toXml([3], 'myArray', 'number'); <br />=> &lt;myArray>&lt;number>3&lt;/number>&lt;myArray>
 	*/
-	public xml function toXml(required any value) {
-		var toXmlString = function(required any value, array elementNames = []) {
+	public xml function toXml(obj = this.obj) {
+		var toXmlString = function(required any obj, array elementNames = []) {
 			var xmlString = '';
 			var elementName = '';
-			var isArray = isArray(arguments.value);
-			var isQuery = isQuery(arguments.value);
+			var isArray = isArray(arguments.obj);
+			var isQuery = isQuery(arguments.obj);
 
 			if (_.size(arguments.elementNames) > 0)
 				elementName = _.first(arguments.elementNames);
@@ -729,21 +729,21 @@ component {
 				elementName = 'array';
 			else if (isQuery)
 				elementName = 'query';
-			else if (isObject(arguments.value))
+			else if (isObject(arguments.obj))
 				elementName = 'object';
-			else if (isStruct(arguments.value))
+			else if (isStruct(arguments.obj))
 				elementName = 'struct';
 			else
 				elementName = 'element';
 
 			xmlString &= '<' & elementName & '>';
 
-			if (isSimpleValue(arguments.value) || _.isFunction(arguments.value)) {
-				xmlString &= _.result(arguments, 'value');
+			if (isSimpleValue(arguments.obj) || _.isFunction(arguments.obj)) {
+				xmlString &= _.result(arguments, 'obj');
 			}
 			else {
 				var remainingNames = _.rest(arguments.elementNames);
-				_.each(arguments.value, function (val, key) {
+				_.each(arguments.obj, function (val, key) {
 					if (!isArray && !isQuery)
 						remainingNames = _.concat([key], remainingNames);// key is el name for non-array, non-query types
 					xmlString &= toXmlString(val, remainingNames);
@@ -755,7 +755,7 @@ component {
 			return xmlString;
 		};
 		var elementNames = _.slice(arguments, 2);
-		var xmlString = toXmlString(arguments.value, elementNames);
+		var xmlString = toXmlString(arguments.obj, elementNames);
 		return xmlParse(xmlString);
 	}	
 
