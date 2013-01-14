@@ -375,7 +375,31 @@ component extends="mxunit.framework.TestCase" {
 		QuerySetCell(query, "secondColumn", "col2 row1", 1);
 		QuerySetCell(query, "firstColumn", "col1 row2", 2);
 		QuerySetCell(query, "secondColumn", "col2 row2", 2);
-		assertTrue(_.isEqual(expected, _.toArray(query)), "Should convert multi-column, multi-row queries");		
+		assertTrue(_.isEqual(expected, _.toArray(query)), "Should convert multi-column, multi-row queries");
+
+		var expected = [];
+		var xml = xmlParse('<array />');
+		assertEquals(expected, _.toArray(xml), "Should convert empty xml to empty array");	
+
+		var expected = [1];
+		var xml = xmlParse('<array><element>1</element></array>');
+		assertEquals(expected, _.toArray(xml), "Should convert single-element xml to single-element array");	
+
+		var expected = ['a'];
+		var xml = xmlParse('<array><element>a</element></array>');
+		assertEquals(expected, _.toArray(xml), "Should convert single-element xml to single-element array");	
+
+		var expected = [[]];
+		var xml = xmlParse('<array><array /></array>');
+		assertEquals(expected, _.toArray(xml), "Should convert nested array");
+
+		var expected = [[], 1];
+		var xml = xmlParse('<array><array /><element>1</element></array>');
+		assertEquals(expected, _.toArray(xml));	
+
+		var expected = [];
+		var xml = xmlParse('<array a="1"/>');
+		assertEquals(expected, _.toArray(xml), "Should ignore attributes");			
 	}
 	
 	public void function testToQuery() {

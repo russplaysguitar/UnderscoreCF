@@ -658,7 +658,7 @@ component {
 
 	/**
 	*	@header _.toArray(collection) : array
-	*	@hint Converts the collection (object, struct, query, or cf-list), into an array. Useful for transmuting the arguments object.
+	*	@hint Converts the collection (object, struct, query, xml, or cf-list), into an array. 
 	* 	@example _.toArray({a:10,b:20});<br />=> [10, 20]
 	*/
 	public array function toArray(obj = this.obj) {
@@ -677,6 +677,21 @@ component {
 				}
 				result[index] = row;
 			}
+			return result;
+		}
+		else if (isXml(arguments.obj)) {
+			var xmlToArray = function (xml) {
+				return _.map(xml, function (node) {
+					if (!_.size(node.xmlChildren))
+						return node.xmlText;
+					else
+						return xmlToArray(node);
+				});
+			};
+			var result = [];
+			_.each(arguments.obj, function (node) {
+				arrayAppend(result, xmlToArray(node), true);
+			});
 			return result;
 		}
 		else if (isObject(arguments.obj) || isStruct(arguments.obj)) {
