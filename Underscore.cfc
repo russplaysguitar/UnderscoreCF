@@ -40,7 +40,7 @@ component {
 				index++;
 			}
 		}
-		else if (isObject(arguments.obj) || isStruct(arguments.obj)) {
+		else if (isObject(arguments.obj) || isStruct(arguments.obj) || isXmlNode(arguments.obj)) {
 			for (key in arguments.obj) {
 				var val = arguments.obj[key];
 				iterator(val, key, arguments.obj, arguments.this);
@@ -84,7 +84,7 @@ component {
 				resultIndex++;
 			}
 		}
-		else if (isObject(arguments.obj) || isStruct(arguments.obj)) {
+		else if (isObject(arguments.obj) || isStruct(arguments.obj) || isXmlNode(arguments.obj)) {
 			var index = 1;
 			for (key in arguments.obj) {
 				var val = arguments.obj[key];
@@ -177,13 +177,11 @@ component {
 	* 	@example even = _.find([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });<br />=> 2
  	*/
  	public any function find(obj = this.obj, iterator = _.identity, this = {}) {
- 		var result = 0;
-
 		if (isArray(arguments.obj)) {
 			var index = 1;
 			for (val in arguments.obj) {
 				if (iterator(val, index, arguments.obj, arguments.this)) {
-					result = val;
+					return val;
 					break;
 				}
 				index++;
@@ -194,7 +192,7 @@ component {
 			for (key in arguments.obj) {
 				var val = arguments.obj[key];
 				if (iterator(val, key, arguments.obj, arguments.this)) {
-					result = val;
+					return val;
 					break;
 				}
 				index++;
@@ -204,8 +202,6 @@ component {
 			// query or something else? convert to array and recurse
 			return _.find(toArray(arguments.obj), iterator, arguments.this);
 		}
-
-		return result;
  	}
 
  	/**
@@ -679,13 +675,13 @@ component {
 			}
 			return result;
 		}
-		else if (isXml(arguments.obj)) {
+		else if (isXmlNode(arguments.obj)) {
 			var xmlToArray = function (xml) {
-				return _.map(xml, function (node) {
-					if (!_.size(node.xmlChildren))
+				return _.map(xml.xmlChildren, function (node) {
+					if (!_.size(node.xmlChildren)) 
 						return node.xmlText;
-					else
-						return xmlToArray(node);
+					else 
+						return xmlToArray(node.xmlChildren); 
 				});
 			};
 			var result = [];
@@ -1680,7 +1676,7 @@ component {
 		if (isArray(arguments.obj)) {
 			return _.include(arguments.obj, key);
 		}
-		else if (isObject(arguments.obj) || isStruct(arguments.obj) || isXml(arguments.obj)) {
+		else if (isObject(arguments.obj) || isStruct(arguments.obj)) {
 			return structKeyExists(arguments.obj, key);
 		}
 		else {

@@ -23,6 +23,22 @@ component extends="mxunit.framework.TestCase" {
 	    answer = false;
 	    _.each([1, 2, 3], function(num, index, arr){ if (_.include(arr, num)) answer = true; });
 	    assertTrue(answer, 'can reference the original collection from inside the iterator');
+
+	    var didLoop = false;
+	    _.each(xmlNew(), function () {
+	    	didLoop = true;
+	    });
+	    assertFalse(didLoop, 'no loops for empty xml doc');
+
+	    counter = 0;
+		var xml = xmlParse('<root><b>1</b><b>2</b></root>');
+	    _.each(xml, function () { counter++; });
+	    assertEquals(1, counter, 'looping on xml object itself yields one loop, regardless of root.xmlChildren size');
+
+		counter = 0;
+		var xml = xmlParse('<root><b>1</b><b>2</b></root>');
+	    _.each(xml.root.xmlChildren, function () { counter++; });
+	    assertEquals(2, counter, 'looping on root element yields multiple loops accordording to xmlChildren size');	    
 	}
 	
 	public void function testMap() {
@@ -112,9 +128,19 @@ component extends="mxunit.framework.TestCase" {
 	// 	deepEqual(args, expected);			
 	}
 	
+	// a.k.a find()
 	public void function testDetect() {
-	   var result = _.detect([1, 2, 3], function(num){ return num * 2 == 4; });
-	   assertEquals(2, result, 'found the first "2" and broke the loop');
+		var result = _.detect([1, 2, 3], function(num){ return num * 2 == 4; });
+		assertEquals(2, result, 'found the first "2" and broke the loop');
+
+		var xml = xmlParse('<root><child>1</child><child>2</child><child>3</child></root>');
+		var result = _.find(xml.root.xmlChildren, function (node) {
+			return node.xmlText == 2;
+		});
+		assertEquals(xml.root.xmlChildren[2], result, 'found "2" in xml children');
+
+		var result = _.find([1], function () { return false; });
+		assertTrue(!isDefined('result'));
    	}
 	
 	public void function testSelect() {
@@ -381,7 +407,7 @@ component extends="mxunit.framework.TestCase" {
 		var xml = xmlParse('<array />');
 		assertEquals(expected, _.toArray(xml), "Should convert empty xml to empty array");	
 
-		var expected = [1];
+		var expected = ['1'];
 		var xml = xmlParse('<array><element>1</element></array>');
 		assertEquals(expected, _.toArray(xml), "Should convert single-element xml to single-element array");	
 
@@ -389,11 +415,15 @@ component extends="mxunit.framework.TestCase" {
 		var xml = xmlParse('<array><element>a</element></array>');
 		assertEquals(expected, _.toArray(xml), "Should convert single-element xml to single-element array");	
 
+		var expected = ['a', 'b'];
+		var xml = xmlParse('<array><element>a</element><element>b</element></array>');
+		assertEquals(expected, _.toArray(xml), "Should convert multi-element xml to multi-element array");
+
 		var expected = [[]];
 		var xml = xmlParse('<array><array /></array>');
 		assertEquals(expected, _.toArray(xml), "Should convert nested array");
 
-		var expected = [[], 1];
+		var expected = [[], '1'];
 		var xml = xmlParse('<array><array /><element>1</element></array>');
 		assertEquals(expected, _.toArray(xml));	
 
