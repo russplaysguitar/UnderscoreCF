@@ -1952,7 +1952,7 @@ component {
 
 	/**
 	* 	@header _.escape(input) : string
-	* 	@hint Escapes a string for insertion into HTML, replacing &, <, >, and " characters.
+	* 	@hint Escapes a string for insertion into HTML, replacing &, <, >, and " characters. Delegates to HTMLeditFormat().
 	* 	@example _.escape('Curly, Larry & Moe');<br /> => "Curly, Larry &amp; Moe"
 	*/
 	public string function escape(required string input) {
