@@ -13,7 +13,8 @@ component {
 		// _ is referenced throughout this cfc
 		variables._ = this;
 
-		// used as the default iterator
+		// Returns the same value that is used as the argument. In math: f(x) = x
+		// This function looks useless, but is used throughout UnderscoreCF as a default iterator.
 		_.identity = function(x) { return x; };
 
 		// for uniqueId
@@ -1901,10 +1902,6 @@ component {
 
 
 	/* UTILITY FUNCTIONS */
-	/*
-		Returns the same value that is used as the argument. In math: f(x) = x
-		This function looks useless, but is used throughout UnderscoreCF as a default iterator.
-	*/
 
 	/**
 	* 	@header _.times(n, iterator) : void
