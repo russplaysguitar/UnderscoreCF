@@ -1278,6 +1278,15 @@ component {
 		return result;
 	}
 
+	/**
+	*	@header _.split(string, [delimiters], [includeEmptyFields], [multiCharacterDelimiter]) : array
+	*	@hint Returns an array of strings from the string, separating the string at each of the delimeters passed to it (default is comma). Note: This is simply an alias for listToArray().
+	*	@example _.split("hello", '');<br />=> ['h', 'e', 'l', 'l', 'o']
+	*/
+	public array function split(string list = this.obj, string delimiters = ',', boolean includeEmptyFields = false, boolean multiCharacterDelimiter = false) {
+		return listToArray(arguments.list, arguments.delimiters, arguments.includeEmptyFields, arguments.multiCharacterDelimiter);
+	}
+
 	/* FUNCTION FUNCTIONS */
 
 	/**
