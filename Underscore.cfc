@@ -211,6 +211,21 @@ component {
   	public any function detect(obj, iterator, this) {
  		return _.find(argumentCollection = arguments);
  	}
+ 	
+ 	/**
+ 	* 	@header _.findWhere(collection, properties) : any
+ 	* 	@hint Looks through the collection and returns the first value that matches all of the key-value pairs listed in properties.
+ 	* 	@example _.findWhere(publicServicePulitzers, {newsroom: "The New York Times"});<br />=> {year: 1918, newsroom: "The New York Times",<br />    reason: "For its public service in publishing in full so many official reports,<br />    documents and speeches by European statesmen relating to the progress and<br />    conduct of the war."}
+ 	*/
+	public any function findWhere(obj = this.obj, required attrs) {
+		if (_.isEmpty(attrs)) return [];
+		return _.find(obj, function(value) {
+			for (var key in attrs) {
+				if (attrs[key] != value[key]) return false;
+				return true;	
+			}
+		});	
+	} 
 
  	/**
 	* 	@header _.filter(collection, iterator, [context]) : array
