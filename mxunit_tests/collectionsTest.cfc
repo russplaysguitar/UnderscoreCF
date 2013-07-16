@@ -253,6 +253,16 @@ component extends="mxunit.framework.TestCase" {
 	    assertEquals(2, _.size(result));
 	    assertEquals(1, result[1].a);
 	}
+	
+	public void function testFindWhere() {
+		var list = [{a: 1, b: 2}, {a: 2, b: 2}, {a: 1, b: 3}, {a: 1, b: 4}];
+	    var result = _.findWhere(list, {a: 1});
+	    assertEquals(2, result.b);
+	    result = _.findWhere(list, {b: 3});
+	    assertEquals(1, result.a);
+	    result = _.findWhere(list, {a: 1, b: 3});
+	    assertEquals(1, result.a);
+	}
 
 	public void function testMax() {
 	    assertEquals(3, _.max([1, 2, 3]), 'can perform a regular Math.max');
