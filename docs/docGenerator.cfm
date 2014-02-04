@@ -4,7 +4,7 @@
 
 	metadata = getComponentMetaData("underscore.Underscore");
 
-	collectionFunctions = "each,map,reduce,reduceRight,find,filter,where,reject,all,any,include,invoke,pluck,max,min,sortBy,groupBy,countBy,sortedIndex,shuffle,toArray,size";
+	collectionFunctions = "each,map,reduce,reduceRight,find,filter,where,findWhere,reject,all,any,include,invoke,pluck,max,min,sortBy,groupBy,countBy,sortedIndex,shuffle,toArray,toQuery,toXml,size";
 
 	arrayFunctions = "first,initial,last,rest,compact,flatten,without,union,intersection,difference,uniq,zip,object,indexOf,lastIndexOf,range,concat,reverse,takeWhile,splice,push,unshift,join,split,slice";
 
@@ -66,7 +66,7 @@
 <body>
 	<div id="sidebar" class="interface">
 		<a class="toc_title" href="#">
-		    Underscore.cfc <span class="version">(2.3)</span>
+		    Underscore.cfc <span class="version">(2.4)</span>
 	    </a>
 	    <a class="toc_title" href="#">
 	    	Introduction
@@ -95,7 +95,7 @@
 			<cfoutput>#metadata.introduction#</cfoutput>
 		</p>		
 		<h2>Download</h2>
-		<div><a href="https://github.com/russplaysguitar/UnderscoreCF/archive/v2.3.zip">Version 2.3</a> - <i>~40kb, Includes all development files</i></div>
+		<div><a href="https://github.com/russplaysguitar/UnderscoreCF/archive/v2.4.zip">Version 2.4</a> - <i>~40kb, Includes all development files</i></div>
 		<h2 id="Collections">Collection Functions (Arrays, Structs, Queries, or Objects)</h2>
 		<cfset display(metadata, collectionFunctions) >
 		<h2 id="Arrays">Array Functions</h2>
@@ -108,6 +108,15 @@
 		<cfset display(metadata, utilFunctions) >
 		<p id="changelog">
 			<h2>Change Log</h2>
+			<p>
+		      <b class="header">2.4</b> -- <small><i>Feb 3rd, 2014</i></small><br>
+	        </p>	
+	        <ul>
+	        	<li>Added debounce(), findWhere(), toQuery(), toXml(), and split()</li>
+	        	<li>Added support for comma-delimited lists to size()</li>
+	        	<li>Enhanced concat() to handle multiple arrays</li>
+	        </ul>
+			<p>
 			<p>
 		        <b class="header">2.3</b> -- <small><i>December 12th, 2012</i></small><br>
 	        </p>	
