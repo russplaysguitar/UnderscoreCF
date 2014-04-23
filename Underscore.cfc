@@ -1538,7 +1538,7 @@ component {
 
 	/**
 	* 	@header _.values(object) : array
-	*	@hint Returns true if any of the values in the object pass the iterator truth test. Short-circuits and stops traversing the object if a true element is found.
+	*	@hint Retrieve all of the values of the object's properties
 	* 	@example _.values({one : 1, two : 2, three : 3});<br />=> [1, 2, 3]
 	*/
 	public array function values(obj = this.obj) {
