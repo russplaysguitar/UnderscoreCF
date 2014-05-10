@@ -245,13 +245,16 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testWhere() {
-		var list = [{a: 1, b: 2}, {a: 2, b: 2}, {a: 1, b: 3}, {a: 1, b: 4}];
+	    var list = [{a: 1, b: 2}, {a: 2, b: 2, c: 9}, {a: 1, b: 3, c: 9}, {a: 1, b: 4, c: 7}];
 	    var result = _.where(list, {a: 1});
 	    assertEquals(3, _.size(result));
 	    assertEquals(4, result[_.size(result)].b);
 	    result = _.where(list, {b: 2});
 	    assertEquals(2, _.size(result));
 	    assertEquals(1, result[1].a);
+	    result = _.where(list, {c: 9});
+	    assertEquals(2, _.size(result));
+	    assertEquals(3, result[_.size(result)].b);
 	}
 	
 	public void function testFindWhere() {
