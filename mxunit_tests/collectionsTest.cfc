@@ -38,9 +38,9 @@ component extends="mxunit.framework.TestCase" {
 		counter = 0;
 		var xml = xmlParse('<root><b>1</b><b>2</b></root>');
 	    _.each(xml.root.xmlChildren, function () { counter++; });
-	    assertEquals(2, counter, 'looping on root element yields multiple loops accordording to xmlChildren size');	    
+	    assertEquals(2, counter, 'looping on root element yields multiple loops accordording to xmlChildren size');
 	}
-	
+
 	public void function testMap() {
 
 	    var doubled = _.map([1, 2, 3], function(num) { return num * 2; });
@@ -57,7 +57,7 @@ component extends="mxunit.framework.TestCase" {
 	    // var doubled = _([1, 2, 3]).map(function(num){ return num * 2; });
 	    // assertEquals(doubled, [2, 4, 6], 'OO-style doubled numbers');
 	}
-	
+
 	public void function testReduce(param) {
 		var sum = _.reduce([1, 2, 3], function(sum, num){ return sum + num; }, 0);
 		assertEquals(6, sum, 'can sum up an array');
@@ -95,7 +95,7 @@ component extends="mxunit.framework.TestCase" {
 		assertEquals('bazbarfoo', list, 'default initial value');
 
 		var list = _.foldr(["foo", "bar", "baz"], function(memo, str, m, this){ return memo & str & this.q; }, 'start_', {q:'qux'});
-		assertEquals('start_bazquxbarquxfooqux', list, 'context');	
+		assertEquals('start_bazquxbarquxfooqux', list, 'context');
 
 // TODO....
 		// Assert that the correct arguments are being passed
@@ -103,15 +103,15 @@ component extends="mxunit.framework.TestCase" {
 	// 	var args = [];
 	// 	var memo = {};
 	// 	var object = {a: 1, b: 2};
-	// 	var lastKey = _.keys(object).pop(); 	
+	// 	var lastKey = _.keys(object).pop();
 
 	// 	var expected = lastKey == 'a'
 	// 		? [memo, 1, 'a', object]
-	// 		: [memo, 2, 'b', object]; 	
+	// 		: [memo, 2, 'b', object];
 
 	// 	_.reduceRight(object, function() {
 	// 		args || (args = _.toArray(arguments));
-	// 	}, memo); 	
+	// 	}, memo);
 
 	// 	assertTrue(_.isEqual(args, expected));
 
@@ -119,15 +119,15 @@ component extends="mxunit.framework.TestCase" {
 
 	// 	object = {'2': 'a', '1': 'b'};
 	// 	lastKey = _.keys(object).pop();
-	// 	args = null; 	
+	// 	args = null;
 
-	// 	expected = lastKey == '2'? [memo, 'a', '2', object]: [memo, 'b', '1', object]; 	
+	// 	expected = lastKey == '2'? [memo, 'a', '2', object]: [memo, 'b', '1', object];
 
-	// 	_.reduceRight(object, function() {args || (args = _.toArray(arguments));}, memo); 	
+	// 	_.reduceRight(object, function() {args || (args = _.toArray(arguments));}, memo);
 
-	// 	deepEqual(args, expected);			
+	// 	deepEqual(args, expected);
 	}
-	
+
 	// a.k.a find()
 	public void function testDetect() {
 		var result = _.detect([1, 2, 3], function(num){ return num * 2 == 4; });
@@ -142,7 +142,7 @@ component extends="mxunit.framework.TestCase" {
 		var result = _.find([1], function () { return false; });
 		assertTrue(!isDefined('result'));
    	}
-	
+
 	public void function testSelect() {
 	    var evens = _.select([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });
 	    assertEquals([2, 4, 6], evens, 'selected each even number');
@@ -160,18 +160,18 @@ component extends="mxunit.framework.TestCase" {
 	    	return (val == 30);
 	    }, expectedContext);
 
-	    assertEquals([30], result, 'Iterator tests should have run');	
+	    assertEquals([30], result, 'Iterator tests should have run');
 
 	    var keyCorrect = false;
 	    _.filter({someKey:1},function (val, key) {
 	    	if (key == 'someKey') keyCorrect = true;
 	    	return true;
 	    });
-	    assertTrue(keyCorrect, "Iterator key should be object key");    
+	    assertTrue(keyCorrect, "Iterator key should be object key");
 	}
-	
+
 	public void function testReject() {
-	    var odds = _.reject([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });		
+	    var odds = _.reject([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });
 	    assertEquals([1, 3, 5], odds, 'rejected each even number');
 
 	    var expectedIndex = 1;
@@ -191,9 +191,9 @@ component extends="mxunit.framework.TestCase" {
 	    	if (key == 'someKey') keyCorrect = true;
 	    	return true;
 	    });
-	    assertTrue(keyCorrect, "Iterator key should be object key"); 	    
+	    assertTrue(keyCorrect, "Iterator key should be object key");
 	}
-	
+
 	public void function testAll() {
 	    assertTrue(_.all([], _.identity), 'the empty set');
 	    assertTrue(_.all([true, true, true], _.identity), 'all true values');
@@ -209,9 +209,9 @@ component extends="mxunit.framework.TestCase" {
 	    	if (key == 'someKey') keyCorrect = true;
 	    	return true;
 	    });
-	    assertTrue(keyCorrect, "Iterator key should be object key"); 	    
+	    assertTrue(keyCorrect, "Iterator key should be object key");
 	}
-	
+
 	public void function testAny() {
 	    assertFalse(_.any([]), 'the empty set');
 	    assertFalse(_.any([false, false, false]), 'all false values');
@@ -229,21 +229,21 @@ component extends="mxunit.framework.TestCase" {
 	    	if (key == 'someKey') keyCorrect = true;
 	    	return true;
 	    });
-	    assertTrue(keyCorrect, "Iterator key should be object key"); 	    
+	    assertTrue(keyCorrect, "Iterator key should be object key");
 	}
-	
+
 	public void function testInclude() {
 		assertTrue(_.include([1,2,3], 2), 'two is in the array');
 		assertFalse(_.include([1,3,9], 2), 'two is not in the array');
 		assertTrue(_.include({moe:1, larry:3, curly:9}, 3) == true, '_.include on objects checks their values');
 		// assertTrue(_([1,2,3]).include(2), 'OO-style include');
 	}
-	
+
 	public void function testPluck() {
 	    var people = [{name : 'moe', age : 30}, {name : 'curly', age : 50}];
 	    assertEquals(['moe','curly'], _.pluck(people, 'name'), 'pulls names out of objects');
 	}
-	
+
 	public void function testWhere() {
 	    var list = [{a: 1, b: 2}, {a: 2, b: 2, c: 9}, {a: 1, b: 3, c: 9}, {a: 1, b: 4, c: 7}];
 	    var result = _.where(list, {a: 1});
@@ -256,7 +256,7 @@ component extends="mxunit.framework.TestCase" {
 	    assertEquals(2, _.size(result));
 	    assertEquals(3, result[_.size(result)].b);
 	}
-	
+
 	public void function testFindWhere() {
 		var list = [{a: 1, b: 2}, {a: 2, b: 2}, {a: 1, b: 3}, {a: 1, b: 4}];
 	    var result = _.findWhere(list, {a: 1});
@@ -273,14 +273,14 @@ component extends="mxunit.framework.TestCase" {
 	    var neg = _.max([1, 2, 3], function(num){ return -num; });
 	    assertEquals(1, neg, 'can perform a computation-based max');
 	}
-	
+
 	public void function testMin() {
 		assertEquals(1, _.min([1, 2, 3]), 'can perform a regular Math.min');
 
 		var neg = _.min([1, 2, 3], function(num){ return -num; });
 		assertEquals(3, neg, 'can perform a computation-based min');
 	}
-	
+
 	public void function testSortBy() {
 		var people = [{name : 'curly', age : 50}, {name : 'moe', age : 30}];
 		people = _.sortBy(people, function(person){ return person.age; });
@@ -303,7 +303,7 @@ component extends="mxunit.framework.TestCase" {
 		}, ctx);
 		assertTrue(ctx.works);
 	}
-	
+
 	public void function testGroupBy() {
 	    var parity = _.groupBy([1, 2, 3, 4, 5, 6], function(num){ return num % 2; });
 	    assertTrue(_.has(parity, 0), 'created a group for each value 0');
@@ -316,9 +316,20 @@ component extends="mxunit.framework.TestCase" {
 	    assertEquals(['four', 'five', 'nine'], grouped['4']);
 	    assertEquals(['three', 'seven', 'eight'], grouped['5']);
 	}
-	
+
+	public void function testIndexBy() {
+	    var expected = { "40": {name: 'moe', age: 40}, "50": {name: 'larry', age: 50}, "60": {name: 'curly', age: 60} };
+	    var parity = _.indexBy([{name: 'moe', age: 40}, {name: 'larry', age: 50}, {name: 'curly', age: 60}], 'age');
+
+	    assertTrue(_.has(parity, 40), 'created a key for 40');
+	    assertTrue(_.has(parity, 50), 'created a key for 50');
+	    assertTrue(_.has(parity, 60), 'created a key for 66');
+
+	    assertEquals(parity, expected, 'put each items in the correct group');
+	}
+
 	public void function testCountBy() {
-		var parity = _.countBy([1, 2, 3, 4, 5], function(num){ 
+		var parity = _.countBy([1, 2, 3, 4, 5], function(num){
 			return num % 2 == 0 ? 'even' : 'odd';
 		});
 		assertEquals(2, parity['even']);
@@ -347,16 +358,16 @@ component extends="mxunit.framework.TestCase" {
 	    var numbers = [10, 20, 30, 40, 50];
 	    var num = 35;
 	    var index = _.sortedIndex(numbers, num);
-	    assertEquals(4, index, '35 should be inserted at index 4');		
+	    assertEquals(4, index, '35 should be inserted at index 4');
 	}
-	
+
 	public void function testShuffle() {
 		var numbers = _.range(100);
 		var shuffled = _.shuffle(numbers);
 		assertNotEquals(numbers, shuffled, 'shuffle actually shuffled');
 		assertEquals(numbers, _.sortBy(shuffled), 'contains the same members before and after shuffle');
 	}
-	
+
 	public void function testToArray() {
 		var testStruct = {one:1, two:2};
 	    assertFalse(_.isArray(testStruct), 'struct is not an array');
@@ -370,17 +381,17 @@ component extends="mxunit.framework.TestCase" {
 	    var numbers = _.toArray({one : 1, two : 2, three : 3});
 	    assertTrue(_.has(numbers, 1));
 	    assertTrue(_.has(numbers, 2));
-	    assertTrue(_.has(numbers, 3));	    
+	    assertTrue(_.has(numbers, 3));
 	    // assertEquals(numbers, [1, 2, 3], 'object flattened into array');
-	    
+
 	    var objectWithToArrayFunction = {toArray: function() {
 	        return [1, 2, 3];
 	    }};
 	    assertEquals([1, 2, 3], _.toArray(objectWithToArrayFunction), 'toArray method used if present');
-	    
+
 	    var objectWithToArrayValue = {toArray: 1};
 	    assertEquals([1], _.toArray(objectWithToArrayValue), 'toArray property ignored if not a function');
-	
+
 	    assertEquals([1,2,'',4], _.toArray('1,2,,4'), "Empty list elements should create zero-length string value");
 	    assertEquals([1,2,3,''], _.toArray('1,2,3,'), "Empty list elements should create zero-length string value");
 	    assertEquals(['',2,3,4], _.toArray(',2,3,4'), "Empty list elements should create zero-length string value");
@@ -392,7 +403,7 @@ component extends="mxunit.framework.TestCase" {
 		// If converting to assertEquals (someday), please ensure that these tests can fail on mismatching queries
 	    var query = QueryNew("someColumn,otherColumn");
 		assertTrue(_.isEqual([], _.toArray(query)), "Should convert empty queries to empty arrays");
-	
+
 		var expected = [{someColumn: "someValue"}];
 	    var query = QueryNew("someColumn");
 		QueryAddRow(query);
@@ -406,7 +417,7 @@ component extends="mxunit.framework.TestCase" {
 		QuerySetCell(query, "secondColumn", "value 2", 1);
 		assertTrue(_.isEqual(expected, _.toArray(query)), "Should convert multi-column queries");
 
-		var expected = [{firstColumn: "col1 row1", secondColumn: "col2 row1"}, 
+		var expected = [{firstColumn: "col1 row1", secondColumn: "col2 row1"},
 					 {firstColumn: "col1 row2", secondColumn: "col2 row2"}];
 		var query = QueryNew("firstColumn,secondColumn");
 		QueryAddRow(query, 2);
@@ -418,15 +429,15 @@ component extends="mxunit.framework.TestCase" {
 
 		var expected = [];
 		var xml = xmlParse('<array />');
-		assertEquals(expected, _.toArray(xml), "Should convert empty xml to empty array");	
+		assertEquals(expected, _.toArray(xml), "Should convert empty xml to empty array");
 
 		var expected = ['1'];
 		var xml = xmlParse('<array><element>1</element></array>');
-		assertEquals(expected, _.toArray(xml), "Should convert single-element xml to single-element array");	
+		assertEquals(expected, _.toArray(xml), "Should convert single-element xml to single-element array");
 
 		var expected = ['a'];
 		var xml = xmlParse('<array><element>a</element></array>');
-		assertEquals(expected, _.toArray(xml), "Should convert single-element xml to single-element array");	
+		assertEquals(expected, _.toArray(xml), "Should convert single-element xml to single-element array");
 
 		var expected = ['a', 'b'];
 		var xml = xmlParse('<array><element>a</element><element>b</element></array>');
@@ -438,13 +449,13 @@ component extends="mxunit.framework.TestCase" {
 
 		var expected = [[], '1'];
 		var xml = xmlParse('<array><array /><element>1</element></array>');
-		assertEquals(expected, _.toArray(xml));	
+		assertEquals(expected, _.toArray(xml));
 
 		var expected = [];
 		var xml = xmlParse('<array a="1"/>');
-		assertEquals(expected, _.toArray(xml), "Should ignore attributes");			
+		assertEquals(expected, _.toArray(xml), "Should ignore attributes");
 	}
-	
+
 	public void function testToQuery() {
 		// note: Using _.isEqual() within this test because assertEquals() isn't currently correct for queries.
 		// If converting to assertEquals (someday), please ensure that these tests can fail on mismatching queries
@@ -487,7 +498,7 @@ component extends="mxunit.framework.TestCase" {
 		assertTrue(_.isEqual(array, _.toArray(expected)), "Sanity test");
 		assertTrue(_.isEqual(expected, _.toQuery(array)), "Can convert a single column, multi-row query with string value");
 
-		var array = [{firstColumn: "col1 row1", secondColumn: "col2 row1"}, 
+		var array = [{firstColumn: "col1 row1", secondColumn: "col2 row1"},
 					 {firstColumn: "col1 row2", secondColumn: "col2 row2"}];
 		var expected = QueryNew("firstColumn,secondColumn");
 		QueryAddRow(expected, 2);
@@ -498,7 +509,7 @@ component extends="mxunit.framework.TestCase" {
 		assertTrue(_.isEqual(array, _.toArray(expected)), "Sanity test");
 		assertTrue(_.isEqual(expected, _.toQuery(array)), "Can convert a multi-column, multi-row query with string value");
 
-		var array = [{firstColumn: "col1 row1"}, 
+		var array = [{firstColumn: "col1 row1"},
 					 {secondColumn: "col2 row2"}];
 		var expected = QueryNew("firstColumn,secondColumn");
 		QueryAddRow(expected, 2);
@@ -513,7 +524,7 @@ component extends="mxunit.framework.TestCase" {
 		QuerySetCell(expected, "someColumn", "val", 1);
 		QuerySetCell(expected, "otherColumn", "other val", 1);
 		assertTrue(_.isEqual(array, _.toArray(expected)), "Sanity test");
-		assertTrue(_.isEqual(expected, _.toQuery(array, "someColumn,otherColumn")), "Can pass in the column name list");		
+		assertTrue(_.isEqual(expected, _.toQuery(array, "someColumn,otherColumn")), "Can pass in the column name list");
 
 		var array = [{someColumn: 10, otherColumn: "other val"}];
 		var expected = QueryNew("someColumn,otherColumn");
@@ -577,7 +588,7 @@ component extends="mxunit.framework.TestCase" {
 	    assertEquals(1, _.size(99), 'can compute the size of a comma-delimted list with a single number in it');
 	    assertEquals(0, _.size(), 'can compute the size of a empty value');
 	}
-	
+
 	public void function testIssue30() {
 		var expected = 'a';
 		var actual = '';
@@ -598,10 +609,10 @@ component extends="mxunit.framework.TestCase" {
 	    assertEquals(42, s.call(), "call function exists");
 
 		var getObj = function() {
-			var obj = { 
+			var obj = {
 				val: [],
 				sort: function () {
-					arraySort(obj.val, "numeric"); 
+					arraySort(obj.val, "numeric");
 					return obj.val;
 				}
 			};
@@ -625,7 +636,7 @@ component extends="mxunit.framework.TestCase" {
 	    assertEquals([7, 5, 1], result[1], 'first array sorted');
 	    assertEquals([3, 2, 1], result[2], 'second array sorted');
 	}
-	
+
 	public void function testFind() {
 		var obj = {
 			one: 100
@@ -661,5 +672,5 @@ component extends="mxunit.framework.TestCase" {
 
 	public void function tearDown() {
 		structDelete(variables, "_");
-	}	
+	}
 }

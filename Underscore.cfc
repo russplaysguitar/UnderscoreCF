@@ -211,7 +211,7 @@ component {
   	public any function detect(obj, iterator, this) {
  		return _.find(argumentCollection = arguments);
  	}
- 	
+
  	/**
  	* 	@header _.findWhere(collection, properties) : any
  	* 	@hint Looks through the collection and returns the first value that matches all of the key-value pairs listed in properties.
@@ -222,10 +222,10 @@ component {
 		return _.find(obj, function(value) {
 			for (var key in attrs) {
 				if (attrs[key] != value[key]) return false;
-				return true;	
+				return true;
 			}
-		});	
-	} 
+		});
+	}
 
  	/**
 	* 	@header _.filter(collection, iterator, [context]) : array
@@ -620,6 +620,30 @@ component {
 	}
 
 	/**
+	* 	@header _.indexBy(collection, iterator) : struct
+	*	@hint Indexes the object's values by a criterion, similar to `groupBy`, but for when you know that your index values will be unique.
+	*	@example var stooges = [{name: 'moe', age: 40}, {name: 'larry', age: 50}, {name: 'curly', age: 60}]; _.indexBy(stooges, 'age'); => { "40": {name: 'moe', age: 40}, "50": {name: 'larry', age: 50}, "60": {name: 'curly', age: 60} }
+	*/
+	public struct function indexBy(obj = this.obj, val) {
+		var result = {};
+
+		if (_.isFunction(val)) {
+			var iterator = val;
+		}
+		else {
+			var iterator = function(obj) { return obj[val]; };
+		}
+
+		_.each(arguments.obj, function(value, index) {
+			var key = iterator(value, index);
+
+			result[key] = value;
+		});
+
+		return result;
+	}
+
+	/**
 	*	@header _.countBy(collection, iterator) : struct
 	*	@hint Sorts a collection into groups and returns a count for the number of objects in each group. Similar to groupBy, but instead of returning a list of values, returns a count for the number of values in that group.
 	*	@example _.countBy([1, 2, 3, 4, 5], function(num) { return num % 2 == 0 ? 'even' : 'odd'; });<br />=> {odd: 3, even: 2}
@@ -670,7 +694,7 @@ component {
 
 	/**
 	*	@header _.toArray(collection) : array
-	*	@hint Converts the collection (object, struct, query, xml, or cf-list), into an array. 
+	*	@hint Converts the collection (object, struct, query, xml, or cf-list), into an array.
 	* 	@example _.toArray({a:10,b:20});<br />=> [10, 20]
 	*/
 	public array function toArray(obj = this.obj) {
@@ -694,10 +718,10 @@ component {
 		else if (isXmlNode(arguments.obj)) {
 			var xmlToArray = function (xml) {
 				return _.map(xml.xmlChildren, function (node) {
-					if (!_.size(node.xmlChildren)) 
+					if (!_.size(node.xmlChildren))
 						return node.xmlText;
-					else 
-						return xmlToArray(node.xmlChildren); 
+					else
+						return xmlToArray(node.xmlChildren);
 				});
 			};
 			var result = [];
@@ -784,7 +808,7 @@ component {
 		var elementNames = _.slice(arguments, 2);
 		var xmlString = toXmlString(arguments.obj, elementNames);
 		return xmlParse(xmlString);
-	}	
+	}
 
 	/**
 	* 	@header _.size(collection) : numeric
@@ -1146,8 +1170,8 @@ component {
 	}
 
 	/**
-	*	@header _.object(array, [values]) 
-	*	@hint Converts an array into a struct. Pass either a single array of [key, value] pairs, or an array of keys, and an array of values. 
+	*	@header _.object(array, [values])
+	*	@hint Converts an array into a struct. Pass either a single array of [key, value] pairs, or an array of keys, and an array of values.
 	* 	@example _.object([['MYKEY', 'myVal']]);<br />=> {MYKEY: 'myVal'}<br /><br />_.object(['KEY'], ['myVal']);<br />=> {KEY: 'value'}
 	*/
 	public struct function object(required array list = this.obj, array values) {
@@ -1186,7 +1210,7 @@ component {
 		else if (fromIndex > 0) {
 			for (var i = fromIndex; i <= arrayLen(array); i++) if (array[i] == item) return i;
 			return 0;
-		} 
+		}
 		else {
 			return ArrayFind(array, item);
 		}
@@ -1272,7 +1296,7 @@ component {
 		ArrayAppend(result, array, true);
 
 		return result;
-	}	
+	}
 
 	/**
 	*	@header _.join(array, [separator]) : string
