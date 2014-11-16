@@ -34,7 +34,7 @@ component {
 
 		if (isArray(arguments.obj)) {
 			var index = 1;
-			for (element in arguments.obj) {
+			for (var element in arguments.obj) {
 				if (arrayIsDefined(arguments.obj, index)) {
 					iterator(element, index, arguments.obj, arguments.this);
 				}
@@ -42,7 +42,7 @@ component {
 			}
 		}
 		else if (isObject(arguments.obj) || isStruct(arguments.obj) || isXmlNode(arguments.obj)) {
-			for (key in arguments.obj) {
+			for (var key in arguments.obj) {
 				var val = arguments.obj[key];
 				iterator(val, key, arguments.obj, arguments.this);
 			}
@@ -71,7 +71,7 @@ component {
 		if (isArray(arguments.obj)) {
 			var index = 1;
 			var resultIndex = 1;
-			for (element in arguments.obj) {
+			for (var element in arguments.obj) {
 				if (!arrayIsDefined(arguments.obj, index)) {
 					index++;
 					continue;
@@ -87,7 +87,7 @@ component {
 		}
 		else if (isObject(arguments.obj) || isStruct(arguments.obj) || isXmlNode(arguments.obj)) {
 			var index = 1;
-			for (key in arguments.obj) {
+			for (var key in arguments.obj) {
 				var val = arguments.obj[key];
 				var local = {};
 				local.tmp = iterator(val, key, arguments.obj, arguments.this);
@@ -180,7 +180,7 @@ component {
  	public any function find(obj = this.obj, iterator = _.identity, this = {}) {
 		if (isArray(arguments.obj)) {
 			var index = 1;
-			for (val in arguments.obj) {
+			for (var val in arguments.obj) {
 				if (iterator(val, index, arguments.obj, arguments.this)) {
 					return val;
 					break;
@@ -190,7 +190,7 @@ component {
 		}
 		else if (isObject(arguments.obj) || isStruct(arguments.obj)) {
 			var index  = 1;
-			for (key in arguments.obj) {
+			for (var key in arguments.obj) {
 				var val = arguments.obj[key];
 				if (iterator(val, key, arguments.obj, arguments.this)) {
 					return val;
@@ -238,7 +238,7 @@ component {
 		if (isArray(arguments.obj)) {
 			var index = 1;
 			var resultIndex = 1;
-			for (val in arguments.obj) {
+			for (var val in arguments.obj) {
 				var success = iterator(val, index, arguments.obj, arguments.this);
 				if (success) {
 					result[resultIndex] = val;
@@ -250,7 +250,7 @@ component {
 		else if (isObject(arguments.obj) || isStruct(arguments.obj)) {
 			var index = 1;
 			var resultIndex = 1;
-			for (key in arguments.obj) {
+			for (var key in arguments.obj) {
 				var val = arguments.obj[key];
 				var success = iterator(val, key, arguments.obj, arguments.this);
 				if (success) {
@@ -286,7 +286,7 @@ component {
 		if (isArray(arguments.obj)) {
 			var index = 1;
 			var resultIndex = 1;
-			for (val in arguments.obj) {
+			for (var val in arguments.obj) {
 				var success = iterator(val, index, arguments.obj, arguments.this);
 				if (!success) {
 					result[resultIndex] = val;
@@ -298,7 +298,7 @@ component {
 		else if (isObject(arguments.obj) || isStruct(arguments.obj)) {
 			var index = 1;
 			var resultIndex = 1;
-			for (key in arguments.obj) {
+			for (var key in arguments.obj) {
 				var val = arguments.obj[key];
 				var success = iterator(val, key, arguments.obj, arguments.this);
 				if (!success) {
@@ -327,7 +327,7 @@ component {
 
 		if (isArray(arguments.obj)) {
 			var index = 1;
-			for (val in arguments.obj) {
+			for (var val in arguments.obj) {
 				result = iterator(val, index, arguments.obj, arguments.this);
 				if (!result) {
 					break;
@@ -340,7 +340,7 @@ component {
 		}
 		else if (isObject(arguments.obj) || isStruct(arguments.obj)) {
 			var index  = 1;
-			for (key in arguments.obj) {
+			for (var key in arguments.obj) {
 				var val = arguments.obj[key];
 				result = iterator(val, key, arguments.obj, arguments.this);
 				if (!result) {
@@ -373,7 +373,7 @@ component {
 
 		if (isArray(arguments.obj)) {
 			var index = 1;
-			for (value in arguments.obj) {
+			for (var value in arguments.obj) {
 				result = iterator(value, index, arguments.obj, arguments.this);
 				if (result) {
 					break;
@@ -383,7 +383,7 @@ component {
 		}
 		else if (isObject(arguments.obj) || isStruct(arguments.obj)) {
 			var index  = 1;
-			for (key in arguments.obj) {
+			for (var key in arguments.obj) {
 				var value = arguments.obj[key];
 				result = iterator(value, key, arguments.obj, arguments.this);
 				if (result) {
@@ -706,7 +706,7 @@ component {
 		}
 		else if (isQuery(arguments.obj)) {
 			var result = [];
-			for (index = 1; index <= arguments.obj.RecordCount; index++) {
+			for (var index = 1; index <= arguments.obj.RecordCount; index++) {
 				var row = {};
 				for (var colName in listToArray(arguments.obj.columnList)) {
 					row[colName] = arguments.obj[colName][index];
