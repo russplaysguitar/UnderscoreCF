@@ -1,0 +1,42 @@
+{
+    "name": "UnderscoreCF",
+    "version": "2.4.0",
+    "author": "Russ Spivey",
+    "location": "russplaysguitar/UnderscoreCF",
+    "createPackageDirectory": true,
+    "packageDirectory": "",
+    "homepage": "https://github.com/russplaysguitar/underscorecf",
+    "documentation": "http://russplaysguitar.github.com/UnderscoreCF/",
+    "repository": {
+        "type": "git",
+        "URL": "https://github.com/russplaysguitar/underscorecf"
+    },
+    "bugs": "https://github.com/russplaysguitar/underscorecf/issues",
+    "slug": "underscorecf",
+    "shortDescription": "An UnderscoreJS port for Coldfusion. Functional programming library.",
+    "description": "",
+    "instructions": "",
+    "changelog": "",
+    "type": "modules",
+    "keywords": [
+
+    ],
+    "private": false,
+    "engines": [
+        {
+            "type": "railo",
+            "version": "=4.0.x"
+        },
+        {
+            "type": "adobe",
+            "version": ">=10.0.0"
+        }
+    ],
+    "ignore": [
+        "**/.*",
+        "build.xml",
+        "foundry.json",
+        "docs",
+        "mxunit_tests"
+    ]
+}
