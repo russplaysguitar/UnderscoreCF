@@ -1940,12 +1940,12 @@ component {
 	/*
 		Returns a wrapped object. Calling methods on this object will continue to return wrapped objects until value is used.
 	*/
-	// TODO: make this work
-	public any function chain(obj) {
-		var _obj = new Underscore(arguments.obj);
-		return _.wrap(_obj, function (func) {
-			return new Underscore(func(arguments));
-		});
+	public any function chain(any obj) {
+		if (! structKeyExists(arguments, "obj")) {
+			arguments.obj = this.obj;
+		}
+
+		return new UnderscoreWrapper(arguments.obj, this);
  	}
 
 
