@@ -14,11 +14,21 @@ component displayname="UnderscoreWrapper" {
 		return variables.obj;
 	}
 
-	public UnderscoreWrapper function onMissingMethod(required string methodName, required any methodArgs) {
-		var method = variables._[arguments.methodName];
-		arrayPrepend(arguments.methodArgs, variables.obj);
-		variables.obj = method(argumentCollection = arguments.methodArgs);
+	public UnderscoreWrapper function onMissingMethod(required string missingMethodName, required any missingMethodArguments) {
+		var methodToCall = variables._[arguments.missingMethodName];
+		
+		variables.obj = methodToCall(
+			argumentCollection = constructArgumentCollection(arguments.missingMethodArguments)
+		);
 
 		return this;
+	}
+
+	private struct function constructArgumentCollection(required struct args) {
+		var argumentCollection = { "1" = variables.obj };
+		for (var i = 1; i <= structCount(arguments.args); i++) {
+			argumentCollection[i + 1] = arguments.args[i];
+		}
+		return argumentCollection;
 	}
 }
