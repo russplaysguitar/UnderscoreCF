@@ -5,8 +5,12 @@
 */
 component {
 
+	variables.functionsToLeaveUnwrapped = ["WRAP", "CHAIN", "VALUE", "EACH"];
+
 	public any function init(obj = {}) {
 		this.obj = arguments.obj;
+
+		this._chain = false;
 
 		this.value = function() { return this.obj; };
 
@@ -20,8 +24,34 @@ component {
 		// for uniqueId
 		variables.counter = 1;
 
+		_.each(_.functions(this), function(name) {
+			var results = function(instance, obj) {
+				return arguments.instance._chain ? 
+					new Underscore(arguments.obj).chain() :
+					arguments.obj;
+			};
+
+			if (! arrayContains(variables.functionsToLeaveUnwrapped, name)) {
+				_[name] = _.wrap(_[name], function() {
+					var args = {};
+					if (this._chain) {
+						args = { "1" = this.obj };
+						for (var i = 1; i <= structCount(arguments); i++) {
+							args[i + 1] = arguments[i];
+						}
+					} else {
+						args = arguments;
+					}
+					var result = func(argumentCollection = args);
+					return results(this, result);
+				});
+			}
+		});
+
 		return this;
 	}
+
+	
 
 	/* COLLECTION FUNCTIONS (ARRAYS, STRUCTURES, OR OBJECTS) */
 
@@ -1940,12 +1970,11 @@ component {
 	/*
 		Returns a wrapped object. Calling methods on this object will continue to return wrapped objects until value is used.
 	*/
-	public any function chain(any obj) {
-		if (! structKeyExists(arguments, "obj")) {
-			arguments.obj = this.obj;
-		}
-
-		return new UnderscoreWrapper(arguments.obj, this);
+	// TODO: make this work
+	public any function chain(obj = this.obj) {
+		var instance = new Underscore(arguments.obj);
+		instance._chain = true;
+		return instance;
  	}
 
 
