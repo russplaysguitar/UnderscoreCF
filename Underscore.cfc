@@ -12,7 +12,10 @@ component {
 
 		this._chain = false;
 
-		this.value = function() { return this.obj; };
+		this.value = function() {
+			this._chain = false;
+			return this.obj;
+		};
 
 		// _ is referenced throughout this cfc
 		variables._ = this;
@@ -33,6 +36,7 @@ component {
 
 			if (! arrayContains(variables.functionsToLeaveUnwrapped, name)) {
 				_[name] = _.wrap(_[name], function() {
+					local.func = arguments.func;
 					var args = {};
 					if (this._chain) {
 						args = { "1" = this.obj };
@@ -42,8 +46,12 @@ component {
 					} else {
 						args = arguments;
 					}
-					var result = func(argumentCollection = args);
-					return results(this, result);
+					structDelete(args, 'func', false);
+					var res = local.func(argumentCollection = args);
+					if (isNull(res)) {
+						return results(this, JavaCast("null", ""));
+					}
+					return results(this, res);
 				});
 			}
 		});
@@ -60,13 +68,13 @@ component {
 	*	@hint Iterates over a collection of elements, yielding each in turn to an iterator function. The iterator is bound to the context object (component or struct), if one is passed. Each invocation of iterator is called with three arguments: (element, index, collection, this). If collection is an object/struct, iterator's arguments will be (value, key, collection, this).
 	* 	@example _.each([1, 2, 3], function(num){ writeDump(num); }); <br />=> dumps each number in turn... <br />_.each({one : 1, two : 2, three : 3}, function(num, key){ writeDump(num); });<br />=> dumps each number in turn...
 	*/
-	public void function each(obj = this.obj, iterator = _.identity, this = {}) {
+	public void function each(obj = this.obj, iterator = _.identity, context = {}) {
 
 		if (isArray(arguments.obj)) {
 			var index = 1;
 			for (var element in arguments.obj) {
 				if (arrayIsDefined(arguments.obj, index)) {
-					iterator(element, index, arguments.obj, arguments.this);
+					iterator(element, index, arguments.obj, arguments.context);
 				}
 				index++;
 			}
@@ -74,19 +82,19 @@ component {
 		else if (isObject(arguments.obj) || isStruct(arguments.obj) || isXmlNode(arguments.obj)) {
 			for (var key in arguments.obj) {
 				var val = arguments.obj[key];
-				iterator(val, key, arguments.obj, arguments.this);
+				iterator(val, key, arguments.obj, arguments.context);
 			}
 		}
 		else {
 			// query or something else? convert to array and recurse
-			_.each(toArray(arguments.obj), iterator, arguments.this);
+			_.each(toArray(arguments.obj), iterator, arguments.context);
 		}
  	}
 
  	/**
  	* 	@alias each
  	*/
-	public void function forEach(obj, iterator, this) {
+	public void function forEach(obj, iterator, context) {
 		_.each(argumentCollection = arguments);
  	}
 
@@ -95,7 +103,7 @@ component {
 	*	@hint Produces a new array of values by mapping each value in collection through a transformation function (iterator). If collection is an object/struct, iterator's arguments will be (value, key, collection, this).
 	* 	@example _.map([1, 2, 3], function(num){ return num * 3; }); <br />=> [3, 6, 9] <br />_.map({one : 1, two : 2, three : 3}, function(num, key){ return num * 3; });<br />=> [3, 6, 9]
 	*/
- 	public array function map(obj = this.obj, iterator = _.identity, this = {}) {
+ 	public array function map(obj = this.obj, iterator = _.identity, context = {}) {
  		var result = [];
 
 		if (isArray(arguments.obj)) {
@@ -107,7 +115,7 @@ component {
 					continue;
 				}
 				var local = {};
-				local.tmp = iterator(element, index, arguments.obj, arguments.this);
+				local.tmp = iterator(element, index, arguments.obj, arguments.context);
 				if (structKeyExists(local, "tmp")) {
 					result[resultIndex] = local.tmp;
 				}
@@ -120,7 +128,7 @@ component {
 			for (var key in arguments.obj) {
 				var val = arguments.obj[key];
 				var local = {};
-				local.tmp = iterator(val, key, arguments.obj, arguments.this);
+				local.tmp = iterator(val, key, arguments.obj, arguments.context);
 				if (structKeyExists(local, "tmp")) {
 					result[index] = local.tmp;
 				}
@@ -129,7 +137,7 @@ component {
 		}
 		else {
 			// query or something else? convert to array and recurse
-			result = _.map(toArray(arguments.obj), iterator, arguments.this);
+			result = _.map(toArray(arguments.obj), iterator, arguments.context);
 		}
 
 		return result;
@@ -138,7 +146,7 @@ component {
  	/**
  	* 	@alias map
  	*/
-  	public array function collect(obj, iterator, this) {
+  	public array function collect(obj, iterator, context) {
  		return _.map(argumentCollection = arguments);
  	}
 
@@ -147,21 +155,21 @@ component {
 	*	@hint Also known as inject and foldl, reduce boils down a collection of values into a single value. Memo is the initial state of the reduction, and each successive step of it should be returned by iterator.
 	* 	@example sum = _.reduce([1, 2, 3], function(memo, num){ return memo + num; }, 0);<br />=> 6
 	*/
- 	public any function reduce(obj = this.obj, iterator = _.identity, memo, this = {}) {
+ 	public any function reduce(obj = this.obj, iterator = _.identity, memo, context = {}) {
 
  		var outer = {};
  		if (structKeyExists(arguments, "memo")) {
 	 		outer.initial = memo;
  		}
-		_.each(arguments.obj, function(value, index, collection, this) {
+		_.each(arguments.obj, function(value, index, collection, context) {
 			if (!structKeyExists(outer, "initial")) {
 				memo = value;
 				outer.initial = true;
 			}
 			else {
-				memo = iterator(memo, value, index, this);
+				memo = iterator(memo, value, index, context);
 			}
-		}, arguments.this);
+		}, arguments.context);
 
 		return memo;
  	}
@@ -169,14 +177,14 @@ component {
  	/**
  	*	@alias reduce
  	*/
-  	public any function foldl(obj, iterator, memo, this) {
+  	public any function foldl(obj, iterator, memo, context) {
  		return _.reduce(argumentCollection = arguments);
  	}
 
  	/**
  	*	@alias reduce
  	*/
-   	public any function inject(obj, iterator, memo, this) {
+   	public any function inject(obj, iterator, memo, context) {
  		return _.reduce(argumentCollection = arguments);
  	}
 
@@ -185,18 +193,18 @@ component {
 	*	@hint The right-associative version of reduce.
 	* 	@example list = [[0, 1], [2, 3], [4, 5]];<br />flat = _.reduceRight(list, function(a, b) { return _.concat(a, b); }, []);<br />=> [4, 5, 2, 3, 0, 1]
  	*/
-  	public any function reduceRight(obj = this.obj, iterator = _.identity, memo, this = {}) {
+  	public any function reduceRight(obj = this.obj, iterator = _.identity, memo, context = {}) {
 		var initial = structKeyExists(arguments, 'memo');
 		var reversed = _.reverse(_.toArray(arguments.obj));
 
 		if (!_.isEmpty(this) && !initial) {
-			iterator = _.bind(iterator, arguments.this);
+			iterator = _.bind(iterator, arguments.context);
 		}
-		return initial ? _.reduce(reversed, iterator, memo, arguments.this) : _.reduce(reversed, iterator);
+		return initial ? _.reduce(reversed, iterator, memo, arguments.context) : _.reduce(reversed, iterator);
    	}
 
    	// alias of reduceRight
- 	public any function foldr(obj, iterator, memo, this) {
+ 	public any function foldr(obj, iterator, memo, context) {
  		return _.reduceRight(argumentCollection = arguments);
  	}
 
@@ -940,7 +948,7 @@ component {
 			return array[ArrayLen(array)];
 		}
 		else {
-			return JavaCast("null", 0);
+			return JavaCast("null", "");
 		}
 	}
 
