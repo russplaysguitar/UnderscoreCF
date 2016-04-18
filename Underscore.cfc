@@ -870,15 +870,15 @@ component {
 	*/
 	public any function slice(array = [], numeric from = 2, numeric to) {
 		var len = arrayLen(array);
-		to = (!structKeyExists(arguments, 'to')) ? len + 1 :
+		var calculatedTo = (!structKeyExists(arguments, 'to')) ? len + 1 :
 			 (to > (len + 1)) ? len + 1 :
 			 (to < 0) ? to + len + 1 :
 			 to + 1;
-		from = (from > 0) ? from :
+		var calculatedFrom = (from > 0) ? from :
 			   (from < 0) ? from + len + 1 :
 			   0;
 		if (from == 0){ throw("CF Arrays start with index 1", "Underscore"); }
-		var sliceLen = arguments.to - arguments.from;
+		var sliceLen = calculatedTo - calculatedFrom;
 		if (sliceLen <= 0){ return []; }
 		return arraySlice(array, from, sliceLen);
 	}
