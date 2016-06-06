@@ -880,7 +880,7 @@ component {
 		if (from == 0){ throw("CF Arrays start with index 1", "Underscore"); }
 		var sliceLen = calculatedTo - calculatedFrom;
 		if (sliceLen <= 0){ return []; }
-		return arraySlice(array, from, sliceLen);
+		return arraySlice(array, calculatedFrom, sliceLen);
 	}
 
 	/**
