@@ -137,10 +137,10 @@ component extends="mxunit.framework.TestCase" {
 		var result = _.find(xml.root.xmlChildren, function (node) {
 			return node.xmlText == 2;
 		});
-		assertEquals(xml.root.xmlChildren[2], result, 'found "2" in xml children');
+		assertTrue(xml.root.xmlChildren[2] == result, 'found "2" in xml children');
 
 		var result = _.find([1], function () { return false; });
-		assertTrue(!isDefined('result'));
+		assertTrue(!isDefined('result') || isNull(result) || (isStruct(result) && structIsEmpty(result)));
    	}
 
 	public void function testSelect() {
