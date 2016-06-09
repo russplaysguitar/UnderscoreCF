@@ -69,7 +69,7 @@
   <property name="railo41-osx.helper" value="railo" />
   <property name="railo42.helper" value="railo-42plus" />
   <property name="lucee452.helper" value="lucee" />
-  <property name="lucee5_beta.helper" value="lucee" />
+  <property name="lucee5_beta.helper" value="lucee5" />
   <property name="acf10-linux32.helper" value="acf" />
   <property name="acf10-linux64.helper" value="acf" />
   <property name="acf902-linux64.helper" value="acf9" />
