@@ -5,7 +5,7 @@
 */
 component {
 
-	variables.functionsToLeaveUnwrapped = ["WRAP", "CHAIN", "VALUE", "EACH"];
+	variables.functionsToLeaveUnwrapped = ["wrap", "chain", "value", "each"];
 
 	public any function init(obj = {}) {
 		this.obj = arguments.obj;
@@ -34,7 +34,8 @@ component {
 					obj;
 			};
 
-			if (! arrayContains(variables.functionsToLeaveUnwrapped, name)) {
+
+			if (! arrayContains(variables.functionsToLeaveUnwrapped, lcase(name))) {
 				_[name] = _.wrap(_[name], function() {
 					local.func = arguments.func;
 					var args = {};
@@ -161,6 +162,7 @@ component {
  		if (structKeyExists(arguments, "memo")) {
 	 		outer.initial = memo;
  		}
+
 		_.each(arguments.obj, function(value, index, collection, context) {
 			if (!structKeyExists(outer, "initial")) {
 				memo = value;
@@ -1541,7 +1543,6 @@ component {
 	* 	@example "hello = function(name) { return "hello: " & name; };<br />hello = _.wrap(hello, function(func) {<br />return "before, " & func("moe") & ", after";<br />});<br />hello();<br />=> 'before, hello: moe, after'"
 	*/
 	public function function wrap(func, wrapper) {
-		// TODO make sure this handles arguments correctly
 		return function() {
 			arguments.func = func;
 			return wrapper(argumentCollection = arguments);
@@ -1987,7 +1988,6 @@ component {
 	/*
 		Returns a wrapped object. Calling methods on this object will continue to return wrapped objects until value is used.
 	*/
-	// TODO: make this work
 	public any function chain(obj = this.obj) {
 		var instance = new Underscore(arguments.obj);
 		instance._chain = true;
