@@ -34,7 +34,6 @@ component {
 					obj;
 			};
 
-
 			if (! arrayContains(variables.functionsToLeaveUnwrapped, lcase(name))) {
 				_[name] = _.wrap(_[name], function() {
 					local.func = arguments.func;
