@@ -1175,9 +1175,13 @@ component {
 			isSorted = true;
 		}
 		_.reduce(initial, function (memo, value, index) {
-			if(isSorted && (_.last(memo) != value || !arrayLen(memo))) {
+			if(isSorted && (!arrayLen(memo))) {
 				arrayAppend(memo, value);
 				arrayAppend(results, array[index]);
+			}
+			else if(isSorted && _.last(memo) != value) {
+				arrayAppend(memo, value);
+				arrayAppend(results, array[index]);	
 			}
 			else if (!isSorted && !_.include(memo, value)) {
 				arrayAppend(memo, value);
