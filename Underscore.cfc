@@ -756,10 +756,12 @@ component {
 		else if (isXmlNode(arguments.obj)) {
 			var xmlToArray = function (xml) {
 				return _.map(xml.xmlChildren, function (node) {
-					if (!_.size(node.xmlChildren))
-						return node.xmlText;
-					else
+					if (_.size(node.xmlChildren))
 						return xmlToArray(node.xmlChildren);
+					else if (node.xmlName == 'array')
+						return [];
+					else
+						return node.xmlText;
 				});
 			};
 			var result = [];
