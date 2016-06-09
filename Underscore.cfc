@@ -29,9 +29,9 @@ component {
 
 		_.each(_.functions(this), function(name) {
 			var results = function(instance, obj) {
-				return arguments.instance._chain ? 
-					new Underscore(arguments.obj).chain() :
-					arguments.obj;
+				return instance._chain ? 
+					new Underscore(obj).chain() :
+					obj;
 			};
 
 			if (! arrayContains(variables.functionsToLeaveUnwrapped, name)) {
