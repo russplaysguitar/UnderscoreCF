@@ -830,7 +830,10 @@ component {
 			xmlString &= '<' & elementName & '>';
 
 			if (isSimpleValue(arguments.obj) || _.isFunction(arguments.obj)) {
-				xmlString &= _.result(arguments, 'obj');
+				var value = _.result(arguments, 'obj');
+
+				if(!isNull(value) && !(isStruct(value) && structIsEmpty(value)))
+					xmlString &= value;
 			}
 			else {
 				var remainingNames = _.rest(arguments.elementNames);
