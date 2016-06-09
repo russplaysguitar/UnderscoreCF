@@ -546,7 +546,7 @@ component extends="mxunit.framework.TestCase" {
 
 		assertEquals(xmlParse("<element>0</element>"), _.toXml(0), "Convert number 0");
 		assertEquals(xmlParse("<element>-1</element>"), _.toXml(-1), "Convert negative non-zero number");
-		assertEquals(xmlParse("<element>-0</element>"), _.toXml(-0), "Convert negative zero");
+		assertEquals(xmlParse("<element>-0</element>"), _.toXml('-0'), "Convert negative zero");
 		assertEquals(xmlParse("<element>1</element>"), _.toXml(1), "Convert non-zero number");
 		assertEquals(xmlParse("<element>A</element>"), _.toXml('A'), "Convert letter");
 
