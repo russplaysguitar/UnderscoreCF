@@ -1,13 +1,26 @@
 language: java
+sudo: false
+jdk:
+- oraclejdk8
 env:
   matrix:
-# currently the only way to do a multi-dimensional env matrix
-    - PLATFORM=railo40 TESTFRAMEWORK=mxunit
-    - PLATFORM=railo41 TESTFRAMEWORK=mxunit
-    - PLATFORM=railo42 TESTFRAMEWORK=mxunit
-    - PLATFORM=acf10-linux64 TESTFRAMEWORK=mxunit
-    - PLATFORM=lucee451 TESTFRAMEWORK=mxunit
-    - PLATFORM=lucee5_beta TESTFRAMEWORK=mxunit
-
-install: ant -Dtest.framework=$TESTFRAMEWORK -Dsource=remote -Dwork.dir=$HOME/work -Dbuild.dir=$TRAVIS_BUILD_DIR -Dplatform=$PLATFORM install-ci-deps
-script: ant -Dtest.framework=$TESTFRAMEWORK -Dsource=remote -Dwork.dir=$HOME/work -Dbuild.dir=$TRAVIS_BUILD_DIR -Dplatform=$PLATFORM test-ci
+    - ENGINE=lucee@4.5
+    - ENGINE=lucee@5
+    - ENGINE=adobe@2016
+    - ENGINE=adobe@11
+    - ENGINE=adobe@10
+before_install:
+- mkdir /tmp/bin
+- export PATH=$PATH:/tmp/bin
+install:
+- curl --location 'http://downloads.ortussolutions.com/ortussolutions/commandbox/3.2.0/commandbox-bin-3.2.0.zip' -o /tmp/box.zip
+- unzip /tmp/box.zip -d /tmp/bin
+- /tmp/bin/box install
+before_script:
+- box server start cfengine=$ENGINE port=8500
+script: >
+  testResults="$(box testbox run runner='http://127.0.0.1:8500/mxunit_tests/runTests.cfm' )";
+  echo "$testResults";
+  if grep -i "\[(Failures|Errors): [1-9][0-9]\?[0-9]\?\]\|\[Errors: [1-9][0-9]\?[0-9]\?\]\|<t[^>]*>\|<b[^>]*>" <<< $testResults;  then exit 1; fi
+notifications:
+    email: false
