@@ -6,8 +6,8 @@ env:
     - PLATFORM=railo41 TESTFRAMEWORK=mxunit
     - PLATFORM=railo42 TESTFRAMEWORK=mxunit
     - PLATFORM=acf10-linux64 TESTFRAMEWORK=mxunit
-    - PLATFORM=lucee451 TESTFRAMEWORK=mxunit
-    - PLATFORM=lucee5_beta TESTFRAMEWORK=mxunit
+    - PLATFORM=lucee453 TESTFRAMEWORK=mxunit
+    - PLATFORM=lucee5 TESTFRAMEWORK=mxunit
 
 install: ant -Dtest.framework=$TESTFRAMEWORK -Dsource=remote -Dwork.dir=$HOME/work -Dbuild.dir=$TRAVIS_BUILD_DIR -Dplatform=$PLATFORM install-ci-deps
 script: ant -Dtest.framework=$TESTFRAMEWORK -Dsource=remote -Dwork.dir=$HOME/work -Dbuild.dir=$TRAVIS_BUILD_DIR -Dplatform=$PLATFORM test-ci
