@@ -264,7 +264,7 @@ component extends="mxunit.framework.TestCase" {
 	    result = _.findWhere(list, {b: 3});
 	    assertEquals(1, result.a);
 	    result = _.findWhere(list, {a: 1, b: 3});
-	    assertEquals(1, result.a);
+	    assertEquals(3, result.b);
 	}
 
 	public void function testMax() {
