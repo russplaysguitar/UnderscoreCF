@@ -222,8 +222,8 @@ component {
 		return _.find(obj, function(value) {
 			for (var key in attrs) {
 				if (attrs[key] != value[key]) return false;
-				return true;
 			}
+			return true;
 		});
 	}
 
