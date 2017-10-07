@@ -1341,7 +1341,7 @@ component {
 		}
 
 		return function () {
-			var argStruct = {};
+			var argStruct = createObject('java', 'java.util.LinkedHashMap').init({});
 			if (arrayLen(boundArgs) > 0) {
 				var passedArgs = _.toArray(arguments);
 				var argsArray = _.concat(boundArgs, passedArgs);
@@ -1388,7 +1388,8 @@ component {
 			};
 		}
 		return function() {
-			var key = hasher(arguments);
+			var _args = createObject('java', 'java.util.LinkedHashMap').init(arguments);
+			var key = hasher(_args);
 			if (!structKeyExists(memo, key)) {
 				memo[key] = func(argumentCollection = arguments);
 			}
